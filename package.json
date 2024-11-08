@@ -1,0 +1,12 @@
+{
+  "name": "space-invaders",
+  "version": "1.0.0",
+  "description": "Space Invaders style browser game",
+  "main": "game.js",
+  "scripts": {
+    "start": "http-server -c-1"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}
