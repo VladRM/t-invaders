@@ -35,6 +35,7 @@ class GameScene extends Phaser.Scene {
         // Game logic will run here
     }
 }
+const config = {
     type: Phaser.AUTO,
     width: 800,
     height: 600,
