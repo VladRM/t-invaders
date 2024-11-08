@@ -18,17 +18,6 @@ class StartScene extends Phaser.Scene {
     }
 }
 
-const config = {
-    type: Phaser.AUTO,
-    width: 800,
-    height: 600,
-    parent: 'game',
-    backgroundColor: '#000000',
-    scene: [StartScene, GameScene]
-};
-
-const game = new Phaser.Game(config);
-
 class GameScene extends Phaser.Scene {
     constructor() {
         super({ key: 'GameScene' });
@@ -46,3 +35,12 @@ class GameScene extends Phaser.Scene {
         // Game logic will run here
     }
 }
+    type: Phaser.AUTO,
+    width: 800,
+    height: 600,
+    parent: 'game',
+    backgroundColor: '#000000',
+    scene: [StartScene, GameScene]
+};
+
+const game = new Phaser.Game(config);
