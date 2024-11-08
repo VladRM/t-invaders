@@ -1,6 +1,14 @@
 class StartScene extends Phaser.Scene {
     constructor() {
         super({ key: 'StartScene' });
+    update() {
+        if (this.cursors.left.isDown) {
+            this.player.setVelocityX(-160);
+        } else if (this.cursors.right.isDown) {
+            this.player.setVelocityX(160);
+        } else {
+            this.player.setVelocityX(0);
+        }
     }
 
     preload() {
