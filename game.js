@@ -3,26 +3,13 @@ class StartScene extends Phaser.Scene {
         super({ key: 'StartScene' });
     }
 
-    create() {
-        this.player = this.physics.add.sprite(400, 550, 'player');
-        this.cursors = this.input.keyboard.createCursorKeys();
-    }
-
-    update() {
-        if (this.cursors.left.isDown) {
-            this.player.setVelocityX(-160);
-        } else if (this.cursors.right.isDown) {
-            this.player.setVelocityX(160);
-        } else {
-            this.player.setVelocityX(0);
-        }
-    }
-
     preload() {
         // Load any assets needed for the start screen here
     }
 
     create() {
+        this.player = this.physics.add.sprite(400, 550, 'player');
+        this.cursors = this.input.keyboard.createCursorKeys();
         const startText = this.add.text(400, 300, 'Start Game', { fontSize: '32px', fill: '#fff' });
         startText.setOrigin(0.5, 0.5);
         startText.setInteractive();
