@@ -31,7 +31,6 @@ class GameScene extends Phaser.Scene {
     }
 
     update() {
-    update() {
         if (this.cursors.left.isDown) {
             this.player.setVelocityX(-160);
         } else if (this.cursors.right.isDown) {
