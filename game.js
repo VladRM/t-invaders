@@ -1,6 +1,8 @@
 class StartScene extends Phaser.Scene {
     constructor() {
         super({ key: 'StartScene' });
+    }
+
     preload() {
         // Load any assets needed for the start screen here
     }
@@ -14,6 +16,7 @@ class StartScene extends Phaser.Scene {
             this.scene.start('GameScene');
         });
     }
+}
 
 class GameScene extends Phaser.Scene {
     constructor() {
@@ -38,8 +41,8 @@ class GameScene extends Phaser.Scene {
             this.player.setVelocityX(0);
         }
     }
-    }
 }
+
 const config = {
     type: Phaser.AUTO,
     width: 800,
