@@ -15,13 +15,6 @@ class StartScene extends Phaser.Scene {
         startText.on('pointerdown', () => {
             this.scene.start('GameScene');
         });
-        const startText = this.add.text(400, 300, 'Start Game', { fontSize: '32px', fill: '#fff' });
-        startText.setOrigin(0.5, 0.5);
-        startText.setInteractive();
-
-        startText.on('pointerdown', () => {
-            this.scene.start('GameScene');
-        });
     }
 }
 
