@@ -4,6 +4,7 @@ class StartScene extends Phaser.Scene {
     preload() {
         // Load any assets needed for the start screen here
     }
+}
 
     create() {
         const startText = this.add.text(400, 300, 'Start Game', { fontSize: '32px', fill: '#fff' });
