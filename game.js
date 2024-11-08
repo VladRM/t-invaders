@@ -8,8 +8,13 @@ class StartScene extends Phaser.Scene {
     }
 
     create() {
-        this.player = this.physics.add.sprite(400, 550, 'player');
-        this.cursors = this.input.keyboard.createCursorKeys();
+        const startText = this.add.text(400, 300, 'Start Game', { fontSize: '32px', fill: '#fff' });
+        startText.setOrigin(0.5, 0.5);
+        startText.setInteractive();
+
+        startText.on('pointerdown', () => {
+            this.scene.start('GameScene');
+        });
         const startText = this.add.text(400, 300, 'Start Game', { fontSize: '32px', fill: '#fff' });
         startText.setOrigin(0.5, 0.5);
         startText.setInteractive();
@@ -26,11 +31,12 @@ class GameScene extends Phaser.Scene {
     }
 
     preload() {
-        // Assets will be loaded here
+        this.load.image('player', 'path/to/player/sprite.png');
     }
 
     create() {
-        // Game objects will be created here
+        this.player = this.physics.add.sprite(400, 550, 'player');
+        this.cursors = this.input.keyboard.createCursorKeys();
     }
 
     update() {
