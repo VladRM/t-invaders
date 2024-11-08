@@ -1,26 +1,48 @@
+class StartScene extends Phaser.Scene {
+    constructor() {
+        super({ key: 'StartScene' });
+    }
+
+    preload() {
+        // Load any assets needed for the start screen here
+    }
+
+    create() {
+        const startText = this.add.text(400, 300, 'Start Game', { fontSize: '32px', fill: '#fff' });
+        startText.setOrigin(0.5, 0.5);
+        startText.setInteractive();
+
+        startText.on('pointerdown', () => {
+            this.scene.start('GameScene');
+        });
+    }
+}
+
 const config = {
     type: Phaser.AUTO,
     width: 800,
     height: 600,
     parent: 'game',
     backgroundColor: '#000000',
-    scene: {
-        preload: preload,
-        create: create,
-        update: update
-    }
+    scene: [StartScene, GameScene]
 };
 
 const game = new Phaser.Game(config);
 
-function preload() {
-    // Assets will be loaded here
-}
+class GameScene extends Phaser.Scene {
+    constructor() {
+        super({ key: 'GameScene' });
+    }
 
-function create() {
-    // Game objects will be created here
-}
+    preload() {
+        // Assets will be loaded here
+    }
 
-function update() {
-    // Game logic will run here
+    create() {
+        // Game objects will be created here
+    }
+
+    update() {
+        // Game logic will run here
+    }
 }
