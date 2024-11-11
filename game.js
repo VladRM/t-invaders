@@ -75,7 +75,7 @@ class GameScene extends Phaser.Scene {
         // Laser properties
         this.laserSpeed = -400; // Negative for upward movement
         this.lastFired = 0;
-        this.fireDelay = 100; // Minimum time between shots in milliseconds
+        this.fireDelay = 200; // Minimum time between shots in milliseconds
     }
 
     update() {
