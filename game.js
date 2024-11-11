@@ -29,20 +29,27 @@ class GameScene extends Phaser.Scene {
     }
 
     create() {
+        const gameWidth = this.sys.game.config.width;
+        const gameHeight = this.sys.game.config.height;
+        
         // Create two background sprites for seamless scrolling
-        this.bg1 = this.add.tileSprite(400, 300, 800, 600, 'background');
-        this.bg2 = this.add.tileSprite(400, -300, 800, 600, 'background');
+        this.bg1 = this.add.tileSprite(gameWidth/2, gameHeight/2, gameWidth, gameHeight, 'background');
+        this.bg2 = this.add.tileSprite(gameWidth/2, -gameHeight/2, gameWidth, gameHeight, 'background');
         
         // Set background opacity to 75%
         this.bg1.setAlpha(0.5);
         this.bg2.setAlpha(0.5);
         
-        this.player = this.physics.add.sprite(400, 552, 'player').setDisplaySize(48, 48);
+        const gameWidth = this.sys.game.config.width;
+        const gameHeight = this.sys.game.config.height;
+        const playerSize = 48;
+        const halfPlayerSize = playerSize / 2;
+
+        this.player = this.physics.add.sprite(gameWidth/2, gameHeight - playerSize, 'player').setDisplaySize(playerSize, playerSize);
         // Set collision bounds for the player
         this.player.setCollideWorldBounds(true);
         // Adjust bounds to account for player sprite size
-        const halfWidth = 24; // half of 48
-        this.physics.world.setBounds(halfWidth, 0, 800 - halfWidth * 2, 600);
+        this.physics.world.setBounds(halfPlayerSize, 0, gameWidth - playerSize, gameHeight);
         
         this.cursors = this.input.keyboard.createCursorKeys();
         
