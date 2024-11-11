@@ -10,9 +10,7 @@ class StartScene extends Phaser.Scene {
     create() {
         // Create text first to get its dimensions
         const startText = this.add.text(400, 300, 'Start Game', { 
-            fontSize: '32px', 
-            fill: '#fff',
-            padding: { x: 1, y: 1 }
+            fontSize: '32px'
         });
         startText.setOrigin(0.5, 0.5);
         
