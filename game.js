@@ -32,13 +32,25 @@ class GameScene extends Phaser.Scene {
         const gameWidth = this.sys.game.config.width;
         const gameHeight = this.sys.game.config.height;
         
-        // Create two background sprites for seamless scrolling
-        this.bg1 = this.add.tileSprite(gameWidth/2, gameHeight/2, gameWidth, gameHeight, 'background');
-        this.bg2 = this.add.tileSprite(gameWidth/2, -gameHeight/2, gameWidth, gameHeight, 'background');
-        
-        // Set background opacity to 50%
-        this.bg1.setAlpha(0.5);
-        this.bg2.setAlpha(0.5);
+        // Get the background texture
+        const bgTexture = this.textures.get('background');
+        const bgWidth = bgTexture.getSourceImage().width;
+        const bgHeight = bgTexture.getSourceImage().height;
+
+        // Calculate how many tiles we need to cover the screen width
+        const tilesX = Math.ceil(gameWidth / bgWidth) + 1;
+        const tilesY = Math.ceil(gameHeight / bgHeight) + 2; // +2 for smooth scrolling
+
+        // Create tiled background using original resolution
+        this.bgTiles = [];
+        for (let y = 0; y < tilesY; y++) {
+            for (let x = 0; x < tilesX; x++) {
+                const bg = this.add.image(x * bgWidth, y * bgHeight, 'background');
+                bg.setOrigin(0, 0);
+                bg.setAlpha(0.5);
+                this.bgTiles.push(bg);
+            }
+        }
         
         const playerSize = 48;
 
@@ -55,9 +67,20 @@ class GameScene extends Phaser.Scene {
     }
 
     update() {
-        // Scroll both backgrounds upward
-        this.bg1.tilePositionY += this.scrollSpeed;
-        this.bg2.tilePositionY += this.scrollSpeed;
+        // Scroll background tiles
+        for (let bg of this.bgTiles) {
+            bg.y += this.scrollSpeed;
+            
+            // Reset position when tile goes off screen
+            const bgHeight = this.textures.get('background').getSourceImage().height;
+            if (bg.y >= this.sys.game.config.height) {
+                // Move to top
+                bg.y = -bgHeight + (bg.y % bgHeight);
+            } else if (bg.y <= -bgHeight) {
+                // Move to bottom
+                bg.y = this.sys.game.config.height + (bg.y % bgHeight);
+            }
+        }
 
         // Handle player movement
         if (this.cursors.left.isDown) {
