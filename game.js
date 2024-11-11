@@ -8,8 +8,25 @@ class StartScene extends Phaser.Scene {
     }
 
     create() {
-        const startText = this.add.text(400, 300, 'Start Game', { fontSize: '32px', fill: '#fff' });
+        // Create text first to get its dimensions
+        const startText = this.add.text(400, 300, 'Start Game', { 
+            fontSize: '32px', 
+            fill: '#fff',
+            padding: { x: 1, y: 1 }
+        });
         startText.setOrigin(0.5, 0.5);
+        
+        // Create border rectangle
+        const border = this.add.rectangle(
+            400,
+            300,
+            startText.width + 2, // Add 2 for 1px on each side
+            startText.height + 2,
+            0xffffff
+        );
+        border.setOrigin(0.5, 0.5);
+
+        // Add interactive area on the text
         startText.setInteractive({ cursor: 'pointer' });
 
         startText.on('pointerdown', () => {
