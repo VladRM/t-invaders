@@ -9,7 +9,7 @@ class StartScene extends Phaser.Scene {
 
     create() {
         const startText = this.add.text(400, 300, 'Start Game', { fontSize: '32px', fill: '#fff' });
-        startText.setOrigin(0.75, 0.75);
+        startText.setOrigin(0.5, 0.5);
         startText.setInteractive();
 
         startText.on('pointerdown', () => {
@@ -47,7 +47,7 @@ class GameScene extends Phaser.Scene {
             for (let x = 0; x < tilesX; x++) {
                 const bg = this.add.image(x * bgWidth, y * bgHeight, 'background');
                 bg.setOrigin(0, 0);
-                bg.setAlpha(0.5);
+                bg.setAlpha(0.75);
                 this.bgTiles.push(bg);
             }
         }
