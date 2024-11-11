@@ -33,15 +33,19 @@ class GameScene extends Phaser.Scene {
         this.bg1 = this.add.tileSprite(400, 300, 800, 600, 'background');
         this.bg2 = this.add.tileSprite(400, -300, 800, 600, 'background');
         
+        // Set background opacity to 75%
+        this.bg1.setAlpha(0.75);
+        this.bg2.setAlpha(0.75);
+        
         this.player = this.physics.add.sprite(400, 552, 'player').setDisplaySize(48, 48);
         this.cursors = this.input.keyboard.createCursorKeys();
         
         // Set scroll speed
-        this.scrollSpeed = 2;
+        this.scrollSpeed = -1;
     }
 
     update() {
-        // Scroll both backgrounds downward
+        // Scroll both backgrounds upward
         this.bg1.tilePositionY += this.scrollSpeed;
         this.bg2.tilePositionY += this.scrollSpeed;
 
