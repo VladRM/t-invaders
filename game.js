@@ -37,9 +37,9 @@ class GameScene extends Phaser.Scene {
         const bgWidth = bgTexture.getSourceImage().width;
         const bgHeight = bgTexture.getSourceImage().height;
 
-        // Calculate how many tiles we need to cover the screen width
+        // Calculate how many tiles we need to cover the screen width and height
         const tilesX = Math.ceil(gameWidth / bgWidth) + 1;
-        const tilesY = Math.ceil(gameHeight / bgHeight) + 2; // +2 for smooth scrolling
+        const tilesY = Math.ceil(gameHeight / bgHeight) + 1; // +1 for seamless scrolling
 
         // Create tiled background using original resolution
         this.bgTiles = [];
@@ -62,8 +62,8 @@ class GameScene extends Phaser.Scene {
         
         this.cursors = this.input.keyboard.createCursorKeys();
         
-        // Set scroll speed
-        this.scrollSpeed = -1;
+        // Set scroll speed (positive for downward scroll)
+        this.scrollSpeed = 2;
     }
 
     update() {
@@ -74,11 +74,8 @@ class GameScene extends Phaser.Scene {
             // Reset position when tile goes off screen
             const bgHeight = this.textures.get('background').getSourceImage().height;
             if (bg.y >= this.sys.game.config.height) {
-                // Move to top
-                bg.y = -bgHeight + (bg.y % bgHeight);
-            } else if (bg.y <= -bgHeight) {
-                // Move to bottom
-                bg.y = this.sys.game.config.height + (bg.y % bgHeight);
+                // Move tile to top of the screen minus one tile height
+                bg.y = -bgHeight;
             }
         }
 
