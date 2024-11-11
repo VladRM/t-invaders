@@ -83,6 +83,12 @@ class GameScene extends Phaser.Scene {
                 .setDisplaySize(enemySize, enemySize);
         }
 
+        // Add collision detection between lasers and enemies
+        this.physics.add.overlap(this.lasers, this.enemies, (laser, enemy) => {
+            laser.destroy();
+            enemy.destroy();
+        }, null, this);
+
         // Add spacebar for firing
         this.spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         
