@@ -27,6 +27,7 @@ class GameScene extends Phaser.Scene {
         this.load.image('player', 'assets/img/player/ship.png');
         this.load.image('background', 'assets/img/space/bg.jpg');
         this.load.image('laser', 'assets/img/player/weapons/laser_mini.png');
+        this.load.image('enemy', 'assets/img/enemies/1.png');
     }
 
     create() {
@@ -68,6 +69,19 @@ class GameScene extends Phaser.Scene {
 
         // Create laser group
         this.lasers = this.physics.add.group();
+
+        // Create enemies group
+        this.enemies = this.physics.add.group();
+        
+        // Add 5 enemies at the top
+        const enemySize = 48;
+        const spacing = 100;
+        const startX = (gameWidth - (spacing * 4)) / 2; // Center the row of enemies
+        
+        for (let i = 0; i < 5; i++) {
+            const enemy = this.enemies.create(startX + (i * spacing), enemySize, 'enemy')
+                .setDisplaySize(enemySize, enemySize);
+        }
 
         // Add spacebar for firing
         this.spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
