@@ -26,6 +26,7 @@ class GameScene extends Phaser.Scene {
     preload() {
         this.load.image('player', 'assets/img/player/ship.png');
         this.load.image('background', 'assets/img/space/bg.jpg');
+        this.load.image('laser', 'assets/img/player/weapons/laser_mini.png');
     }
 
     create() {
@@ -64,6 +65,17 @@ class GameScene extends Phaser.Scene {
         
         // Set scroll speed (positive for downward scroll)
         this.scrollSpeed = 1;
+
+        // Create laser group
+        this.lasers = this.physics.add.group();
+
+        // Add spacebar for firing
+        this.spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        
+        // Laser properties
+        this.laserSpeed = -400; // Negative for upward movement
+        this.lastFired = 0;
+        this.fireDelay = 250; // Minimum time between shots in milliseconds
     }
 
     update() {
@@ -78,6 +90,21 @@ class GameScene extends Phaser.Scene {
                 bg.y = -bgHeight;
             }
         }
+
+        // Handle laser firing
+        if (Phaser.Input.Keyboard.JustDown(this.spaceKey) && 
+            this.time.now > this.lastFired + this.fireDelay) {
+            const laser = this.lasers.create(this.player.x, this.player.y, 'laser');
+            laser.setVelocityY(this.laserSpeed);
+            this.lastFired = this.time.now;
+        }
+
+        // Clean up lasers that are off screen
+        this.lasers.children.each((laser) => {
+            if (laser.y < -laser.height) {
+                laser.destroy();
+            }
+        });
 
         // Handle player movement
         if (this.cursors.left.isDown) {
