@@ -67,8 +67,13 @@ class GameScene extends Phaser.Scene {
         // Set scroll speed (positive for downward scroll)
         this.scrollSpeed = 1;
 
-        // Create laser group
-        this.lasers = this.physics.add.group();
+        // Create laser group with circular hit detection
+        this.lasers = this.physics.add.group({
+            createCallback: (laser) => {
+                laser.body.setCircle(20); // Set 20px radius circular collision
+                laser.body.setOffset((laser.width - 40) / 2, (laser.height - 40) / 2); // Center the circle
+            }
+        });
 
         // Create enemies group
         this.enemies = this.physics.add.group();
