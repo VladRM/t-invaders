@@ -28,7 +28,7 @@ class GameScene extends Phaser.Scene {
     }
 
     create() {
-        this.player = this.physics.add.sprite(400, 536, 'player').setDisplaySize(32, 32);
+        this.player = this.physics.add.sprite(400, 536, 'player').setDisplaySize(64, 64);
         this.cursors = this.input.keyboard.createCursorKeys();
     }
 
