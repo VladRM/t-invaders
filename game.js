@@ -40,8 +40,6 @@ class GameScene extends Phaser.Scene {
         this.bg1.setAlpha(0.5);
         this.bg2.setAlpha(0.5);
         
-        const gameWidth = this.sys.game.config.width;
-        const gameHeight = this.sys.game.config.height;
         const playerSize = 48;
         const halfPlayerSize = playerSize / 2;
 
