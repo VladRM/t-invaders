@@ -38,6 +38,12 @@ class GameScene extends Phaser.Scene {
         this.bg2.setAlpha(0.5);
         
         this.player = this.physics.add.sprite(400, 552, 'player').setDisplaySize(48, 48);
+        // Set collision bounds for the player
+        this.player.setCollideWorldBounds(true);
+        // Adjust bounds to account for player sprite size
+        const halfWidth = 24; // half of 48
+        this.physics.world.setBounds(halfWidth, 0, 800 - halfWidth * 2, 600);
+        
         this.cursors = this.input.keyboard.createCursorKeys();
         
         // Set scroll speed
