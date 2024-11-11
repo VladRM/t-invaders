@@ -3,36 +3,33 @@ class StartScene extends Phaser.Scene {
         super({ key: 'StartScene' });
     }
 
-    preload() {
-        // Load any assets needed for the start screen here
-    }
-
-    create() {
+    createButton(x, y, text, onClick) {
         // Create temporary text to get dimensions
-        const tempText = this.add.text(400, 300, 'Start Game', { 
+        const tempText = this.add.text(0, 0, text, { 
             fontSize: '32px',
             fill: '#fff'
         });
         const textWidth = tempText.width;
         const textHeight = tempText.height;
+        const padding = 4; // 2px padding on each side
         tempText.destroy();
         
         // Create black background rectangle
         const background = this.add.rectangle(
-            400,
-            300,
-            textWidth + 2,
-            textHeight + 2,
+            x,
+            y,
+            textWidth + padding * 2,
+            textHeight + padding * 2,
             0x000000
         );
         background.setOrigin(0.5, 0.5);
 
         // Create white border rectangle
         const border = this.add.rectangle(
-            400,
-            300,
-            textWidth + 2,
-            textHeight + 2,
+            x,
+            y,
+            textWidth + padding * 2,
+            textHeight + padding * 2,
             0xffffff
         );
         border.setOrigin(0.5, 0.5);
@@ -40,14 +37,24 @@ class StartScene extends Phaser.Scene {
         border.setStrokeStyle(1, 0xffffff);
 
         // Create text last so it's on top
-        const startText = this.add.text(400, 300, 'Start Game', { 
+        const buttonText = this.add.text(x, y, text, { 
             fontSize: '32px',
             fill: '#fff'
         });
-        startText.setOrigin(0.5, 0.5);
-        startText.setInteractive({ cursor: 'pointer' });
+        buttonText.setOrigin(0.5, 0.5);
+        buttonText.setInteractive({ cursor: 'pointer' });
 
-        startText.on('pointerdown', () => {
+        buttonText.on('pointerdown', onClick);
+
+        return { background, border, text: buttonText };
+    }
+
+    preload() {
+        // Load any assets needed for the start screen here
+    }
+
+    create() {
+        this.createButton(400, 300, 'Start Game', () => {
             this.scene.start('GameScene');
         });
     }
