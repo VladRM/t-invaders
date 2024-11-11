@@ -28,6 +28,9 @@ class GameScene extends Phaser.Scene {
         this.load.image('background', 'assets/img/space/bg.jpg');
         this.load.image('laser', 'assets/img/player/weapons/laser_mini.png');
         this.load.image('enemy', 'assets/img/enemies/1.png');
+        
+        // Load the weapons system
+        this.load.script('weapons', 'weapons.js');
     }
 
     create() {
@@ -67,12 +70,12 @@ class GameScene extends Phaser.Scene {
         // Set scroll speed (positive for downward scroll)
         this.scrollSpeed = 1;
 
-        // Create laser group with circular hit detection
-        this.lasers = this.physics.add.group({
-            createCallback: (laser) => {
-                laser.body.setCircle(20); // Set 20px radius circular collision
-                laser.body.setOffset((laser.width - 40) / 2, (laser.height - 40) / 2); // Center the circle
-            }
+        // Initialize player weapon
+        this.playerWeapon = new Weapon(this, {
+            imageKey: 'laser',
+            damage: 1,
+            fireDelay: 200,
+            projectileSpeed: -400
         });
 
         // Create enemies group
@@ -88,19 +91,14 @@ class GameScene extends Phaser.Scene {
                 .setDisplaySize(enemySize, enemySize);
         }
 
-        // Add collision detection between lasers and enemies
-        this.physics.add.overlap(this.lasers, this.enemies, (laser, enemy) => {
-            laser.destroy();
+        // Add collision detection between weapon projectiles and enemies
+        this.physics.add.overlap(this.playerWeapon.getProjectileGroup(), this.enemies, (projectile, enemy) => {
+            projectile.destroy();
             enemy.destroy();
         }, null, this);
 
         // Add spacebar for firing
         this.spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-        
-        // Laser properties
-        this.laserSpeed = -400; // Negative for upward movement
-        this.lastFired = 0;
-        this.fireDelay = 200; // Minimum time between shots in milliseconds
     }
 
     update() {
@@ -116,19 +114,13 @@ class GameScene extends Phaser.Scene {
             }
         }
 
-        // Handle laser firing
-        if (this.spaceKey.isDown && this.time.now > this.lastFired + this.fireDelay) {
-            const laser = this.lasers.create(this.player.x, this.player.y, 'laser');
-            laser.setVelocityY(this.laserSpeed);
-            this.lastFired = this.time.now;
+        // Handle weapon firing
+        if (this.spaceKey.isDown) {
+            this.playerWeapon.fire(this.player.x, this.player.y);
         }
 
-        // Clean up lasers that are off screen
-        this.lasers.children.each((laser) => {
-            if (laser.y < -laser.height) {
-                laser.destroy();
-            }
-        });
+        // Clean up projectiles that are off screen
+        this.playerWeapon.cleanup();
 
         // Handle player movement
         if (this.cursors.left.isDown) {
