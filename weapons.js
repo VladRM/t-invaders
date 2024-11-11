@@ -10,8 +10,8 @@ class Weapon {
         // Create projectile group with circular hit detection
         this.projectiles = scene.physics.add.group({
             createCallback: (projectile) => {
-                projectile.body.setCircle(20);
-                projectile.body.setOffset((projectile.width - 40) / 2, (projectile.height - 40) / 2);
+                projectile.body.setCircle(10);
+                projectile.body.setOffset((projectile.width - 20) / 2, (projectile.height - 20) / 2);
             }
         });
     }
