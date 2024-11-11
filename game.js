@@ -29,6 +29,12 @@ class GameScene extends Phaser.Scene {
         this.load.image('projectile', 'assets/img/player/weapons/laser_mini.png');
         this.load.image('enemy', 'assets/img/enemies/1.png');
         
+        // Load explosion spritesheet
+        this.load.spritesheet('explosion', 'assets/img/space/explosion.png', {
+            frameWidth: 192,
+            frameHeight: 192
+        });
+        
         // Load the weapons system
         this.load.script('weapons', 'weapons.js');
     }
@@ -36,6 +42,14 @@ class GameScene extends Phaser.Scene {
     create() {
         const gameWidth = this.sys.game.config.width;
         const gameHeight = this.sys.game.config.height;
+
+        // Create explosion animation
+        this.anims.create({
+            key: 'explode',
+            frames: this.anims.generateFrameNumbers('explosion', { start: 0, end: 19 }),
+            frameRate: 32,
+            hideOnComplete: true
+        });
         
         // Get the background texture
         const bgTexture = this.textures.get('background');
@@ -95,6 +109,12 @@ class GameScene extends Phaser.Scene {
 
         // Add collision detection between weapon projectiles and enemies
         this.physics.add.overlap(this.playerWeapon.getProjectileGroup(), this.enemies, (projectile, enemy) => {
+            const explosion = this.add.sprite(enemy.x, enemy.y, 'explosion');
+            explosion.play('explode');
+            explosion.once('animationcomplete', () => {
+                explosion.destroy();
+            });
+            
             projectile.destroy();
             enemy.destroy();
         }, null, this);
