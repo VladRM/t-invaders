@@ -73,8 +73,8 @@ class GameScene extends Phaser.Scene {
         
         // Load explosion spritesheet
         this.load.spritesheet('explosion', 'assets/img/space/explosion.png', {
-            frameWidth: 192,
-            frameHeight: 192
+            frameWidth: 128,
+            frameHeight: 128
         });
         
         // Load the weapons system
