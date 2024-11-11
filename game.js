@@ -63,7 +63,7 @@ class GameScene extends Phaser.Scene {
         this.cursors = this.input.keyboard.createCursorKeys();
         
         // Set scroll speed (positive for downward scroll)
-        this.scrollSpeed = 2;
+        this.scrollSpeed = 1;
     }
 
     update() {
