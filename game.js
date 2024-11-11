@@ -70,12 +70,14 @@ class GameScene extends Phaser.Scene {
         // Set scroll speed (positive for downward scroll)
         this.scrollSpeed = 1;
 
-        // Initialize player weapon
+        // Initialize player weapon with circular collision
         this.playerWeapon = new Weapon(this, {
             imageKey: 'projectile',
             damage: 1,
             fireDelay: 200,
-            projectileSpeed: -400
+            projectileSpeed: -400,
+            collisionType: 'circle',
+            collisionRadius: 10  // Adjust this value based on your projectile size
         });
 
         // Create enemies group

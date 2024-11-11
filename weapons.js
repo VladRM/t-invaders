@@ -7,11 +7,33 @@ class Weapon {
         this.projectileSpeed = config.projectileSpeed || -400;
         this.lastFired = 0;
         
-        // Create projectile group with circular hit detection
+        // Store collision config
+        this.collisionType = config.collisionType || 'circle';
+        this.collisionWidth = config.collisionWidth;
+        this.collisionHeight = config.collisionHeight;
+        this.collisionRadius = config.collisionRadius;
+        
+        // Create projectile group with configured hit detection
         this.projectiles = scene.physics.add.group({
             createCallback: (projectile) => {
-                projectile.body.setCircle(10);
-                projectile.body.setOffset((projectile.width - 20) / 2, (projectile.height - 20) / 2);
+                if (this.collisionType === 'circle') {
+                    const radius = this.collisionRadius || projectile.width / 2;
+                    projectile.body.setCircle(radius);
+                    // Center the circle collision body
+                    projectile.body.setOffset(
+                        (projectile.width - radius * 2) / 2,
+                        (projectile.height - radius * 2) / 2
+                    );
+                } else if (this.collisionType === 'rectangle') {
+                    const width = this.collisionWidth || projectile.width;
+                    const height = this.collisionHeight || projectile.height;
+                    projectile.body.setSize(width, height);
+                    // Center the rectangle collision body
+                    projectile.body.setOffset(
+                        (projectile.width - width) / 2,
+                        (projectile.height - height) / 2
+                    );
+                }
             }
         });
     }
