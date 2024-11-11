@@ -46,8 +46,8 @@ class GameScene extends Phaser.Scene {
         this.player = this.physics.add.sprite(gameWidth/2, gameHeight - playerSize, 'player').setDisplaySize(playerSize, playerSize);
         // Set collision bounds for the player
         this.player.setCollideWorldBounds(true);
-        // Adjust bounds to account for player sprite size
-        this.physics.world.setBounds(halfPlayerSize, 0, gameWidth - playerSize, gameHeight);
+        // Set bounds to full game width
+        this.physics.world.setBounds(0, 0, gameWidth, gameHeight);
         
         this.cursors = this.input.keyboard.createCursorKeys();
         
