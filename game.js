@@ -9,7 +9,7 @@ class StartScene extends Phaser.Scene {
 
     create() {
         const startText = this.add.text(400, 300, 'Start Game', { fontSize: '32px', fill: '#fff' });
-        startText.setOrigin(0.5, 0.5);
+        startText.setOrigin(0.75, 0.75);
         startText.setInteractive();
 
         startText.on('pointerdown', () => {
@@ -25,7 +25,7 @@ class GameScene extends Phaser.Scene {
 
     preload() {
         this.load.image('player', 'assets/img/player.png');
-        this.load.image('background', 'assets/img/space/bg.jpg');
+        this.load.image('background', 'assets/img/space/bg2.jpg');
     }
 
     create() {
@@ -36,12 +36,11 @@ class GameScene extends Phaser.Scene {
         this.bg1 = this.add.tileSprite(gameWidth/2, gameHeight/2, gameWidth, gameHeight, 'background');
         this.bg2 = this.add.tileSprite(gameWidth/2, -gameHeight/2, gameWidth, gameHeight, 'background');
         
-        // Set background opacity to 75%
+        // Set background opacity to 50%
         this.bg1.setAlpha(0.5);
         this.bg2.setAlpha(0.5);
         
         const playerSize = 48;
-        const halfPlayerSize = playerSize / 2;
 
         this.player = this.physics.add.sprite(gameWidth/2, gameHeight - playerSize, 'player').setDisplaySize(playerSize, playerSize);
         // Set collision bounds for the player
