@@ -25,14 +25,27 @@ class GameScene extends Phaser.Scene {
 
     preload() {
         this.load.image('player', 'assets/img/player.png');
+        this.load.image('background', 'assets/img/space/bg.jpg');
     }
 
     create() {
+        // Create two background sprites for seamless scrolling
+        this.bg1 = this.add.tileSprite(400, 300, 800, 600, 'background');
+        this.bg2 = this.add.tileSprite(400, -300, 800, 600, 'background');
+        
         this.player = this.physics.add.sprite(400, 552, 'player').setDisplaySize(48, 48);
         this.cursors = this.input.keyboard.createCursorKeys();
+        
+        // Set scroll speed
+        this.scrollSpeed = 2;
     }
 
     update() {
+        // Scroll both backgrounds downward
+        this.bg1.tilePositionY += this.scrollSpeed;
+        this.bg2.tilePositionY += this.scrollSpeed;
+
+        // Handle player movement
         if (this.cursors.left.isDown) {
             this.player.setVelocityX(-160);
         } else if (this.cursors.right.isDown) {
