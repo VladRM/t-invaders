@@ -24,7 +24,7 @@ class GameScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('player', 'assets/img/player.png');
+        this.load.image('player', 'assets/img/player/ship.png');
         this.load.image('background', 'assets/img/space/bg.jpg');
     }
 
@@ -52,7 +52,7 @@ class GameScene extends Phaser.Scene {
             }
         }
         
-        const playerSize = 48;
+        const playerSize = 64;
 
         this.player = this.physics.add.sprite(gameWidth/2, gameHeight - playerSize, 'player').setDisplaySize(playerSize, playerSize);
         // Set collision bounds for the player
