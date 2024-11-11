@@ -26,7 +26,7 @@ class GameScene extends Phaser.Scene {
     preload() {
         this.load.image('player', 'assets/img/player/ship.png');
         this.load.image('background', 'assets/img/space/bg.jpg');
-        this.load.image('laser', 'assets/img/player/weapons/laser_mini.png');
+        this.load.image('projectile', 'assets/img/player/weapons/laser_mini.png');
         this.load.image('enemy', 'assets/img/enemies/1.png');
         
         // Load the weapons system
@@ -72,7 +72,7 @@ class GameScene extends Phaser.Scene {
 
         // Initialize player weapon
         this.playerWeapon = new Weapon(this, {
-            imageKey: 'laser',
+            imageKey: 'projectile',
             damage: 1,
             fireDelay: 200,
             projectileSpeed: -400
