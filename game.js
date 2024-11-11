@@ -75,7 +75,7 @@ class GameScene extends Phaser.Scene {
         // Laser properties
         this.laserSpeed = -400; // Negative for upward movement
         this.lastFired = 0;
-        this.fireDelay = 250; // Minimum time between shots in milliseconds
+        this.fireDelay = 100; // Minimum time between shots in milliseconds
     }
 
     update() {
@@ -92,8 +92,7 @@ class GameScene extends Phaser.Scene {
         }
 
         // Handle laser firing
-        if (Phaser.Input.Keyboard.JustDown(this.spaceKey) && 
-            this.time.now > this.lastFired + this.fireDelay) {
+        if (this.spaceKey.isDown && this.time.now > this.lastFired + this.fireDelay) {
             const laser = this.lasers.create(this.player.x, this.player.y, 'laser');
             laser.setVelocityY(this.laserSpeed);
             this.lastFired = this.time.now;
