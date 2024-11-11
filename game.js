@@ -73,8 +73,8 @@ class GameScene extends Phaser.Scene {
         
         // Load explosion spritesheet
         this.load.spritesheet('explosion', 'assets/img/space/explosion.png', {
-            frameWidth: 128,
-            frameHeight: 128
+            frameWidth: 192,
+            frameHeight: 192
         });
         
         // Load the weapons system
@@ -152,6 +152,7 @@ class GameScene extends Phaser.Scene {
         // Add collision detection between weapon projectiles and enemies
         this.physics.add.overlap(this.playerWeapon.getProjectileGroup(), this.enemies, (projectile, enemy) => {
             const explosion = this.add.sprite(enemy.x, enemy.y, 'explosion');
+            explosion.setDisplaySize(128, 128);
             explosion.play('explode');
             explosion.once('animationcomplete', () => {
                 explosion.destroy();
