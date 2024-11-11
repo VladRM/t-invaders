@@ -14,15 +14,27 @@ class StartScene extends Phaser.Scene {
         });
         startText.setOrigin(0.5, 0.5);
         
-        // Create border rectangle
+        // Create black background rectangle
+        const background = this.add.rectangle(
+            400,
+            300,
+            startText.width + 2,
+            startText.height + 2,
+            0x000000
+        );
+        background.setOrigin(0.5, 0.5);
+
+        // Create white border rectangle
         const border = this.add.rectangle(
             400,
             300,
-            startText.width + 2, // Add 2 for 1px on each side
+            startText.width + 2,
             startText.height + 2,
             0xffffff
         );
         border.setOrigin(0.5, 0.5);
+        border.setFillStyle(0x000000);
+        border.setStrokeStyle(1, 0xffffff);
 
         // Add interactive area on the text
         startText.setInteractive({ cursor: 'pointer' });
