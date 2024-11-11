@@ -34,8 +34,8 @@ class GameScene extends Phaser.Scene {
         this.bg2 = this.add.tileSprite(400, -300, 800, 600, 'background');
         
         // Set background opacity to 75%
-        this.bg1.setAlpha(0.75);
-        this.bg2.setAlpha(0.75);
+        this.bg1.setAlpha(0.5);
+        this.bg2.setAlpha(0.5);
         
         this.player = this.physics.add.sprite(400, 552, 'player').setDisplaySize(48, 48);
         this.cursors = this.input.keyboard.createCursorKeys();
