@@ -53,6 +53,17 @@ export class Enemy {
         }
 
         destroy() {
+            if (this.weapon) {
+                // Destroy all active projectiles
+                const projectileGroup = this.weapon.getProjectileGroup();
+                if (projectileGroup) {
+                    projectileGroup.getChildren().forEach(projectile => {
+                        projectile.destroy();
+                    });
+                }
+                // Clear references
+                this.weapon = null;
+            }
             this.sprite.destroy();
         }
 
@@ -131,12 +142,6 @@ export class EnemyGroup {
         destroy() {
             // Properly destroy all enemies and clear the array
             this.enemies.forEach(enemy => {
-                if (enemy.weapon && enemy.weapon.getProjectileGroup()) {
-                    const projectileGroup = enemy.weapon.getProjectileGroup();
-                    if (projectileGroup) {
-                        projectileGroup.clear(true, true);
-                    }
-                }
                 enemy.destroy();
             });
             this.enemies = [];
