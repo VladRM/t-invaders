@@ -174,6 +174,8 @@ class GameScene extends Phaser.Scene {
             (projectile, enemySprite) => {
                 // Only process collision if both objects still exist
                 if (projectile.active && enemySprite.active) {
+                    projectile.destroy();  // Destroy projectile immediately
+                    
                     const explosion = this.add.sprite(enemySprite.x, enemySprite.y, 'explosion');
                     explosion.setDisplaySize(128, 128);
                     explosion.play('explode');
@@ -181,7 +183,6 @@ class GameScene extends Phaser.Scene {
                         explosion.destroy();
                     });
                     
-                    projectile.destroy();
                     this.enemyGroup.removeEnemy(enemySprite);
                 }
             },
