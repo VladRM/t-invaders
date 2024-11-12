@@ -2,39 +2,19 @@ import { StartScene } from './startScene.js';
 import { GameScene } from './gameScene.js';
 
 const config = {
-    constructor() {
-        super({ key: 'StartScene' });
+    type: Phaser.AUTO,
+    width: 800,
+    height: 600,
+    parent: 'game',
+    backgroundColor: '#000000',
+    scene: [StartScene, GameScene],
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: { y: 0 },
+            debug: false
+        }
     }
-
-    preload() {
-        // Load any assets needed for the start screen here
-    }
-
-    create() {
-        // Create title
-        const title = this.add.text(
-            this.cameras.main.centerX,
-            100,
-            "Tudor's\nSpace Adventure",
-            {
-                fontSize: '48px',
-                fill: '#fff',
-                fontStyle: 'bold',
-                align: 'center'
-            }
-        ).setOrigin(0.5);
-
-        // Create menu items
-        UI.createMenu(this, [
-            {
-                text: 'Start Game',
-                onClick: () => this.scene.start('GameScene')
-            }
-        ]);
-    }
-}
-
-class GameScene extends Phaser.Scene {
     constructor() {
         super({ key: 'GameScene' });
         this.gameState = GameState.getInstance();
