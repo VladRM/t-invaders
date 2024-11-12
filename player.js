@@ -1,4 +1,5 @@
-class Player {
+if (typeof Player === 'undefined') {
+    class Player {
     constructor(scene, config) {
         this.scene = scene;
         const gameWidth = scene.sys.game.config.width;
@@ -102,5 +103,6 @@ class Player {
     
     getWeapon() {
         return this.weapon;
+    }
     }
 }

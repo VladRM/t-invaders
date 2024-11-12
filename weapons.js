@@ -1,4 +1,5 @@
-class Weapon {
+if (typeof Weapon === 'undefined') {
+    class Weapon {
     constructor(scene, config) {
         this.scene = scene;
         this.imageKey = config.imageKey;
@@ -102,5 +103,6 @@ class Weapon {
 
     getProjectileGroup() {
         return this.projectiles;
+    }
     }
 }

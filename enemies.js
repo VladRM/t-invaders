@@ -1,4 +1,5 @@
-class Enemy {
+if (typeof Enemy === 'undefined') {
+    class Enemy {
     constructor(scene, config) {
         this.scene = scene;
         this.imageKey = config.imageKey;
@@ -47,7 +48,8 @@ class Enemy {
     }
 }
 
-class EnemyGroup {
+if (typeof EnemyGroup === 'undefined') {
+    class EnemyGroup {
     constructor(scene) {
         this.scene = scene;
         this.enemies = [];
