@@ -7,8 +7,8 @@ export class Enemy {
             this.x = config.x;
             this.y = config.y;
             this.size = config.size || 48;
-            this.minFireDelay = config.minFireDelay || 4000;
-            this.maxFireDelay = config.maxFireDelay || 8000;
+            this.minFireDelay = config.minFireDelay || 40001111;
+            this.maxFireDelay = config.maxFireDelay || 80001111;
             this.nextFireDelay = this.getRandomFireDelay();
             // Initialize lastFired to current time plus a random delay
             this.lastFired = scene.time.now + Phaser.Math.Between(0, this.maxFireDelay);
@@ -87,21 +87,21 @@ export class EnemyGroup {
             const leftmost = Math.min(...positions);
             const rightmost = Math.max(...positions);
 
-            // // Move the entire group
-            // const moveAmount = this.moveSpeed * this.direction * (this.scene.game.loop.delta / 1000);
+            // Move the entire group
+            const moveAmount = this.moveSpeed * this.direction * (this.scene.game.loop.delta / 1000);
             
-            // // Check boundaries and change direction if needed
-            // const gameWidth = this.scene.sys.game.config.width;
-            // if (this.direction > 0 && rightmost + moveAmount > gameWidth - this.padding) {
-            //     this.direction = -1;
-            // } else if (this.direction < 0 && leftmost + moveAmount < this.padding) {
-            //     this.direction = 1;
-            // }
+            // Check boundaries and change direction if needed
+            const gameWidth = this.scene.sys.game.config.width;
+            if (this.direction > 0 && rightmost + moveAmount > gameWidth - this.padding) {
+                this.direction = -1;
+            } else if (this.direction < 0 && leftmost + moveAmount < this.padding) {
+                this.direction = 1;
+            }
 
-            // // Apply movement to all enemies
-            // this.enemies.forEach(enemy => {
-            //     enemy.sprite.x += moveAmount;
-            // });
+            // Apply movement to all enemies
+            this.enemies.forEach(enemy => {
+                enemy.sprite.x += moveAmount;
+            });
         }
 
         getSprites() {
