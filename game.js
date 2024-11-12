@@ -258,10 +258,10 @@ class GameScene extends Phaser.Scene {
 
         // Clean up projectiles that are off screen
         this.playerWeapon.cleanup();
-        this.enemyWeapon.cleanup();
         
         // Check for enemy projectile collisions with player
-        this.enemyWeapon.getProjectileGroup().getChildren().forEach(projectile => {
+        this.enemyGroup.enemies.forEach(enemy => {
+            enemy.weapon.getProjectileGroup().getChildren().forEach(projectile => {
             if (!projectile.active || !this.player.active) return;
             
             const dx = projectile.x - this.player.x;
