@@ -2,12 +2,12 @@ import { GameState } from './gameState.js';
 import { Player } from './player.js';
 import { EnemyGroup } from './enemies.js';
 
+import { UI } from './ui.js';
+
 class StartScene extends Phaser.Scene {
     constructor() {
         super({ key: 'StartScene' });
     }
-
-    import { UI } from './ui.js';
 
     preload() {
         // Load any assets needed for the start screen here
