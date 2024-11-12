@@ -165,6 +165,14 @@ class GameScene extends Phaser.Scene {
                 const enemyRadius = 24;       // Enemy collision radius
                 
                 if (distance < projectileRadius + enemyRadius) {
+                    // Create explosion at impact point
+                    const explosion = this.add.sprite(projectile.x, projectile.y, 'explosion');
+                    explosion.setDisplaySize(128, 128);
+                    explosion.on('animationcomplete', function(animation, frame) {
+                        this.destroy();
+                    }, explosion);
+                    explosion.play('explode');
+
                     // Destroy projectile
                     this.player.getWeapon().destroyProjectile(projectile);
                     
