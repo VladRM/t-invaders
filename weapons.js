@@ -15,7 +15,10 @@ class Weapon {
         
         // Create projectile group with configured hit detection
         this.projectiles = scene.physics.add.group({
+            classType: Phaser.Physics.Arcade.Sprite,
             createCallback: (projectile) => {
+                projectile.setActive(true);
+                projectile.setVisible(true);
                 if (this.collisionType === 'circle') {
                     const radius = this.collisionRadius || projectile.width / 2;
                     projectile.body.setCircle(radius);

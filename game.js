@@ -168,23 +168,20 @@ class GameScene extends Phaser.Scene {
         });
 
         // Add collision detection between weapon projectiles and enemies
-        this.physics.add.collider(
+        this.physics.add.overlap(
             this.playerWeapon.getProjectileGroup(),
             this.enemyGroup.getSprites(),
             (projectile, enemySprite) => {
-                // Only process collision if both objects still exist
-                if (projectile.active && enemySprite.active) {
-                    projectile.destroy();  // Destroy projectile immediately
-                    
-                    const explosion = this.add.sprite(enemySprite.x, enemySprite.y, 'explosion');
-                    explosion.setDisplaySize(128, 128);
-                    explosion.play('explode');
-                    explosion.once('animationcomplete', () => {
-                        explosion.destroy();
-                    });
-                    
-                    this.enemyGroup.removeEnemy(enemySprite);
-                }
+                projectile.destroy();  // Destroy projectile immediately
+                
+                const explosion = this.add.sprite(enemySprite.x, enemySprite.y, 'explosion');
+                explosion.setDisplaySize(128, 128);
+                explosion.play('explode');
+                explosion.once('animationcomplete', () => {
+                    explosion.destroy();
+                });
+                
+                this.enemyGroup.removeEnemy(enemySprite);
             },
             null,
             this
