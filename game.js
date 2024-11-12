@@ -239,8 +239,9 @@ class GameScene extends Phaser.Scene {
             enemy.weapon.getProjectileGroup().getChildren().forEach(projectile => {
                 if (!projectile.active || !this.player.active) return;
                 
-                const dx = projectile.x - this.player.x;
-                const dy = projectile.y - this.player.y;
+                const playerSprite = this.player.getSprite();
+                const dx = projectile.x - playerSprite.x;
+                const dy = projectile.y - playerSprite.y;
                 const distance = Math.sqrt(dx * dx + dy * dy);
                 
                 const projectileRadius = 5;  // Enemy projectile collision radius
