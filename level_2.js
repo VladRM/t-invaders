@@ -2,21 +2,19 @@ import { GameState } from './gameState.js';
 import { Player } from './player.js';
 import { EnemyGroup } from './enemies.js';
 
-export class Level1 extends Phaser.Scene {
+export class Level2 extends Phaser.Scene {
     constructor() {
-        super({ key: 'Level1' });
+        super({ key: 'Level2' });
         this.gameState = GameState.getInstance();
     }
 
     preload() {
-        // Load image assets
         this.load.image('player', 'assets/img/player/ship.png');
         this.load.image('background', 'assets/img/space/bg.jpg');
         this.load.image('projectile', 'assets/img/player/weapons/laser_mini_yellow.png');
         this.load.image('enemy_projectile', 'assets/img/enemies/weapons/red_dot.png');
-        this.load.image('enemy', 'assets/img/enemies/ships/1.png');
+        this.load.image('boss', 'assets/img/enemies/ships/boss_1.png');
         
-        // Load explosion spritesheet
         this.load.spritesheet('explosion', 'assets/img/space/explosion.png', {
             frameWidth: 192,
             frameHeight: 192
@@ -24,7 +22,6 @@ export class Level1 extends Phaser.Scene {
     }
 
     create() {
-        // Reset game state when scene starts
         this.gameState.reset();
         
         const gameWidth = this.sys.game.config.width;
@@ -38,16 +35,14 @@ export class Level1 extends Phaser.Scene {
             hideOnComplete: true
         });
         
-        // Get the background texture
+        // Background setup
         const bgTexture = this.textures.get('background');
         const bgWidth = bgTexture.getSourceImage().width;
         const bgHeight = bgTexture.getSourceImage().height;
 
-        // Calculate how many tiles we need to cover the screen width and height
         const tilesX = Math.ceil(gameWidth / bgWidth) + 1;
-        const tilesY = Math.ceil(gameHeight / bgHeight) + 1; // +1 for seamless scrolling
+        const tilesY = Math.ceil(gameHeight / bgHeight) + 1;
 
-        // Create tiled background using original resolution
         this.bgTiles = [];
         for (let y = 0; y < tilesY; y++) {
             for (let x = 0; x < tilesX; x++) {
@@ -63,51 +58,31 @@ export class Level1 extends Phaser.Scene {
             size: 64,
             lives: 3
         });
-        // Set bounds to full game width
+        
         this.physics.world.setBounds(0, 0, gameWidth, gameHeight);
-        
         this.cursors = this.input.keyboard.createCursorKeys();
-        
-        // Set scroll speed (positive for downward scroll)
         this.scrollSpeed = 1;
 
         // Create enemy group
         this.enemyGroup = new EnemyGroup(this);
         
-        // Add row of enemies
-        const enemySize = 48;
-        const spacing = 100;
-        const startX = (gameWidth - (spacing * 4)) / 2;
+        // Add two boss enemies
+        const bossSize = 96;
+        const spacing = gameWidth / 3;
         
-        // Create first row of enemies
         this.enemyGroup.createEnemyRow({
-            count: 5,
+            count: 2,
             spacing: spacing,
-            startX: startX,
-            y: enemySize,
+            startX: spacing,
+            y: bossSize,
             enemyConfig: {
-                imageKey: 'enemy',
-                size: enemySize,
-                minFireDelay: 2000,  // 2 seconds minimum
-                maxFireDelay: 6000   // 6 seconds maximum
+                imageKey: 'boss',
+                size: bossSize,
+                minFireDelay: 1500,  // Faster firing rate for bosses
+                maxFireDelay: 3000
             }
         });
 
-        // Create second row of enemies
-        this.enemyGroup.createEnemyRow({
-            count: 5,
-            spacing: spacing,
-            startX: startX,
-            y: enemySize * 2.5, // Position slightly below first row
-            enemyConfig: {
-                imageKey: 'enemy',
-                size: enemySize,
-                minFireDelay: 3000,  // 3 seconds minimum
-                maxFireDelay: 5000   // 5 seconds maximum
-            }
-        });
-
-        // Add spacebar for firing
         this.spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     }
 
@@ -120,16 +95,14 @@ export class Level1 extends Phaser.Scene {
                 this.enemyGroup.getSprites().forEach(enemySprite => {
                     if (!enemySprite.active) return;
                     
-                    // Check for intersection using circle collision
                     const dx = projectile.x - enemySprite.x;
                     const dy = projectile.y - enemySprite.y;
                     const distance = Math.sqrt(dx * dx + dy * dy);
                     
-                    const projectileRadius = 10;  // Projectile collision radius
-                    const enemyRadius = 24;       // Enemy collision radius
+                    const projectileRadius = 10;
+                    const enemyRadius = 48;  // Larger collision radius for boss
                     
                     if (distance < projectileRadius + enemyRadius) {
-                        // Create explosion at impact point
                         const explosion = this.add.sprite(projectile.x, projectile.y, 'explosion');
                         explosion.setDisplaySize(128, 128);
                         explosion.on('animationcomplete', function(animation, frame) {
@@ -137,31 +110,25 @@ export class Level1 extends Phaser.Scene {
                         }, explosion);
                         explosion.play('explode');
 
-                        // Destroy projectile
                         this.player.getWeapon().destroyProjectile(projectile);
-                        
-                        // Remove enemy
                         this.enemyGroup.removeEnemy(enemySprite);
                         
-                        return false; // Break the inner loop since we've handled this projectile
+                        return false;
                     }
                 });
             });
         }
 
-        // Scroll background tiles
+        // Scroll background
         for (let bg of this.bgTiles) {
             bg.y += this.scrollSpeed;
             
-            // Reset position when tile goes off screen
             const bgHeight = this.textures.get('background').getSourceImage().height;
             if (bg.y >= this.sys.game.config.height) {
-                // Move tile to top of the screen minus one tile height
                 bg.y = -bgHeight;
             }
         }
 
-        // Update player
         this.player.update(this.cursors, this.spaceKey);
         
         // Check for enemy projectile collisions with player
@@ -174,11 +141,10 @@ export class Level1 extends Phaser.Scene {
                 const dy = projectile.y - playerSprite.y;
                 const distance = Math.sqrt(dx * dx + dy * dy);
                 
-                const projectileRadius = 5;  // Enemy projectile collision radius
-                const playerRadius = 32;     // Player collision radius
+                const projectileRadius = 5;
+                const playerRadius = 32;
                 
                 if (distance < projectileRadius + playerRadius) {
-                    // Create explosion at impact point
                     const explosion = this.add.sprite(projectile.x, projectile.y, 'explosion');
                     explosion.setDisplaySize(128, 128);
                     explosion.on('animationcomplete', function(animation, frame) {
@@ -186,24 +152,21 @@ export class Level1 extends Phaser.Scene {
                     }, explosion);
                     explosion.play('explode');
 
-                    // Destroy the projectile
                     enemy.weapon.destroyProjectile(projectile);
                     
-                    // Handle player damage and check for game over
-                    const isGameOver = this.player.damage(false); // Pass false to skip explosion effect
+                    const isGameOver = this.player.damage(false);
                     if (isGameOver) {
-                        this.scene.start('StartScene');
+                        this.scene.start('SceneStart');
                     }
                 }
             });
         });
 
-        // Update enemies
         this.enemyGroup.update();
 
-        // Check if all enemies are destroyed to advance to Level 2
+        // Check if all enemies are destroyed
         if (this.enemyGroup.enemies.length === 0) {
-            this.scene.start('Level2');
+            this.scene.start('SceneStart');
         }
     }
 }
