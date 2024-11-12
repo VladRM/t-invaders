@@ -77,10 +77,6 @@ class GameScene extends Phaser.Scene {
             frameWidth: 192,
             frameHeight: 192
         });
-        
-        // Load the weapons system
-        this.load.script('weapons', 'weapons.js');
-        this.load.script('enemies', 'enemies.js');
     }
 
     create() {
