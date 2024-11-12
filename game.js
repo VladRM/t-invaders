@@ -197,10 +197,9 @@ class GameScene extends Phaser.Scene {
                 const explosionX = enemySprite.x;
                 const explosionY = enemySprite.y;
 
-                // Immediately set projectile as inactive to prevent multiple collisions
+                // Immediately destroy and deactivate projectile
                 projectile.active = false;
-                
-                // Remove projectile first
+                projectile.destroy();  // Immediate destruction
                 this.playerWeapon.destroyProjectile(projectile);
                 
                 // Remove enemy
