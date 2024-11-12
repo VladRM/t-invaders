@@ -168,23 +168,26 @@ class GameScene extends Phaser.Scene {
         });
 
         // Add collision detection between weapon projectiles and enemies
-        this.physics.add.overlap(
+        this.physics.add.collider(
             this.playerWeapon.getProjectileGroup(),
             this.enemyGroup.getSprites(),
             (projectile, enemySprite) => {
-            // Only process collision if both objects still exist
-            if (projectile.active && enemySprite.active) {
-                const explosion = this.add.sprite(enemySprite.x, enemySprite.y, 'explosion');
-                explosion.setDisplaySize(128, 128);
-                explosion.play('explode');
-                explosion.once('animationcomplete', () => {
-                    explosion.destroy();
-                });
-                
-                projectile.destroy();
-                this.enemyGroup.removeEnemy(enemySprite);
-            }
-        }, null, this);
+                // Only process collision if both objects still exist
+                if (projectile.active && enemySprite.active) {
+                    const explosion = this.add.sprite(enemySprite.x, enemySprite.y, 'explosion');
+                    explosion.setDisplaySize(128, 128);
+                    explosion.play('explode');
+                    explosion.once('animationcomplete', () => {
+                        explosion.destroy();
+                    });
+                    
+                    projectile.destroy();
+                    this.enemyGroup.removeEnemy(enemySprite);
+                }
+            },
+            null,
+            this
+        );
 
         // Add spacebar for firing
         this.spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
