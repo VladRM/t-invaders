@@ -69,6 +69,7 @@ class GameScene extends Phaser.Scene {
         this.load.image('player', 'assets/img/player/ship.png');
         this.load.image('background', 'assets/img/space/bg.jpg');
         this.load.image('projectile', 'assets/img/player/weapons/laser_mini_yellow.png');
+        this.load.image('enemy_projectile', 'assets/img/enemies/weapons/red_dot.png');
         this.load.image('enemy', 'assets/img/enemies/ships/1.png');
         
         // Load explosion spritesheet
@@ -139,12 +140,12 @@ class GameScene extends Phaser.Scene {
 
         // Create enemy weapon
         this.enemyWeapon = new Weapon(this, {
-            imageKey: 'projectile',
+            imageKey: 'enemy_projectile',
             damage: 1,
             fireDelay: 2000,
             projectileSpeed: 400, // Positive for downward movement
             collisionType: 'circle',
-            collisionRadius: 10
+            collisionRadius: 5
         });
 
         // Create enemy group
