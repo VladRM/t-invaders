@@ -6,14 +6,6 @@ export class GameState {
             return GameState.instance;
         }
         GameState.instance = this;
-        this.reset();
-    }
-
-    constructor() {
-        if (GameState.instance) {
-            return GameState.instance;
-        }
-        GameState.instance = this;
         this.lives = 3;  // Initialize lives
         this.reset();
     }
