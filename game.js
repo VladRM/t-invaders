@@ -7,60 +7,36 @@ class StartScene extends Phaser.Scene {
         super({ key: 'StartScene' });
     }
 
-    createButton(x, y, text, onClick) {
-        // Create temporary text to get dimensions
-        const tempText = this.add.text(0, 0, text, { 
-            fontSize: '32px',
-            fill: '#fff'
-        });
-        const textWidth = tempText.width;
-        const textHeight = tempText.height;
-        const padding = 4; // 2px padding on each side
-        tempText.destroy();
-        
-        // Create black background rectangle
-        const background = this.add.rectangle(
-            x,
-            y,
-            textWidth + padding * 2,
-            textHeight + padding * 2,
-            0x000000
-        );
-        background.setOrigin(0.5, 0.5);
-
-        // Create white border rectangle
-        const border = this.add.rectangle(
-            x,
-            y,
-            textWidth + padding * 2,
-            textHeight + padding * 2,
-            0xffffff
-        );
-        border.setOrigin(0.5, 0.5);
-        border.setFillStyle(0x000000);
-        border.setStrokeStyle(1, 0xffffff);
-
-        // Create text last so it's on top
-        const buttonText = this.add.text(x, y, text, { 
-            fontSize: '32px',
-            fill: '#fff'
-        });
-        buttonText.setOrigin(0.5, 0.5);
-        buttonText.setInteractive({ cursor: 'pointer' });
-
-        buttonText.on('pointerdown', onClick);
-
-        return { background, border, text: buttonText };
-    }
+    import { UI } from './ui.js';
 
     preload() {
         // Load any assets needed for the start screen here
     }
 
     create() {
-        this.createButton(400, 300, 'Start Game', () => {
-            this.scene.start('GameScene');
-        });
+        // Create title
+        const title = this.add.text(
+            this.cameras.main.centerX,
+            100,
+            'SPACE SHOOTER',
+            {
+                fontSize: '64px',
+                fill: '#fff',
+                fontStyle: 'bold'
+            }
+        ).setOrigin(0.5);
+
+        // Create menu items
+        UI.createMenu(this, [
+            {
+                text: 'Start Game',
+                onClick: () => this.scene.start('GameScene')
+            },
+            {
+                text: 'High Score: ' + GameState.getInstance().highScore,
+                onClick: () => {} // Read-only text
+            }
+        ]);
     }
 }
 
