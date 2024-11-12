@@ -170,7 +170,8 @@ class GameScene extends Phaser.Scene {
             enemyConfig: {
                 imageKey: 'enemy',
                 size: enemySize,
-                fireDelay: 2000
+                minFireDelay: 4000,  // 4 seconds minimum
+                maxFireDelay: 8000   // 8 seconds maximum
             }
         });
 
@@ -183,7 +184,8 @@ class GameScene extends Phaser.Scene {
             enemyConfig: {
                 imageKey: 'enemy',
                 size: enemySize,
-                fireDelay: 2500 // Slightly different firing pattern for variety
+                minFireDelay: 4000,  // 4 seconds minimum
+                maxFireDelay: 8000   // 8 seconds maximum
             }
         });
 
