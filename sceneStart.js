@@ -1,8 +1,8 @@
 import { UI } from './ui.js';
 
-export class StartScene extends Phaser.Scene {
+export class SceneStart extends Phaser.Scene {
     constructor() {
-        super({ key: 'StartScene' });
+        super({ key: 'SceneStart' });
     }
 
     preload() {
@@ -27,7 +27,7 @@ export class StartScene extends Phaser.Scene {
         UI.createMenu(this, [
             {
                 text: 'Start Game',
-                onClick: () => this.scene.start('GameScene')
+                onClick: () => this.scene.start('Level1')
             }
         ]);
     }

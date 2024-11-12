@@ -1,5 +1,5 @@
-import { StartScene } from './startScene.js';
-import { GameScene } from './gameScene.js';
+import { SceneStart } from './sceneStart.js';
+import { Level1 as Level1 } from './level_1.js';
 
 const config = {
     type: Phaser.AUTO,
@@ -7,7 +7,7 @@ const config = {
     height: 600,
     parent: 'game',
     backgroundColor: '#000000',
-    scene: [StartScene, GameScene],
+    scene: [SceneStart, Level1],
     physics: {
         default: 'arcade',
         arcade: {

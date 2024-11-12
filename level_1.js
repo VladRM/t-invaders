@@ -2,7 +2,7 @@ import { GameState } from './gameState.js';
 import { Player } from './player.js';
 import { EnemyGroup } from './enemies.js';
 
-export class GameScene extends Phaser.Scene {
+export class Level1 extends Phaser.Scene {
     constructor() {
         super({ key: 'GameScene' });
         this.gameState = GameState.getInstance();
