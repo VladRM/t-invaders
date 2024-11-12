@@ -5,9 +5,18 @@ class Enemy {
         this.x = config.x;
         this.y = config.y;
         this.size = config.size || 48;
-        this.weapon = config.weapon;
         this.lastFired = 0;
         this.fireDelay = config.fireDelay || 2000; // Default 2 second cooldown
+        
+        // Create a new weapon instance for this enemy
+        this.weapon = new Weapon(scene, {
+            imageKey: 'enemy_projectile',
+            damage: 1,
+            fireDelay: this.fireDelay,
+            projectileSpeed: 400,
+            collisionType: 'circle',
+            collisionRadius: 5
+        });
         
         this.sprite = scene.physics.add.sprite(this.x, this.y, this.imageKey)
             .setDisplaySize(this.size, this.size);

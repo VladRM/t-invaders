@@ -153,16 +153,6 @@ class GameScene extends Phaser.Scene {
             collisionRadius: 10  // Adjust this value based on your projectile size
         });
 
-        // Create enemy weapon
-        this.enemyWeapon = new Weapon(this, {
-            imageKey: 'enemy_projectile',
-            damage: 1,
-            fireDelay: 2000,
-            projectileSpeed: 400, // Positive for downward movement
-            collisionType: 'circle',
-            collisionRadius: 5
-        });
-
         // Create enemy group
         this.enemyGroup = new EnemyGroup(this);
         
@@ -180,7 +170,7 @@ class GameScene extends Phaser.Scene {
             enemyConfig: {
                 imageKey: 'enemy',
                 size: enemySize,
-                weapon: this.enemyWeapon
+                fireDelay: 2000
             }
         });
 
@@ -193,7 +183,6 @@ class GameScene extends Phaser.Scene {
             enemyConfig: {
                 imageKey: 'enemy',
                 size: enemySize,
-                weapon: this.enemyWeapon,
                 fireDelay: 2500 // Slightly different firing pattern for variety
             }
         });
