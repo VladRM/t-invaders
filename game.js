@@ -183,58 +183,55 @@ class GameScene extends Phaser.Scene {
             }
         });
 
-        // Add collision detection between weapon projectiles and enemies
-        this.physics.add.overlap(
-            this.playerWeapon.getProjectileGroup(),
-            this.enemyGroup.getSprites(),
-            (projectile, enemySprite) => {
-                console.log('Collision detected');
-                
-                // Skip if either object is already being destroyed
-                if (!projectile.active || !enemySprite.active || projectile.isBeingDestroyed) {
-                    console.log('Skipping collision - objects inactive or being destroyed');
-                    return;
-                }
-
-                // Set flag immediately to prevent multiple collisions
-                projectile.isBeingDestroyed = true;
-
-                // Store position for explosion
-                const explosionX = enemySprite.x;
-                const explosionY = enemySprite.y;
-
-                console.log('Attempting to destroy projectile...');
-                
-                // Disable physics body immediately
-                projectile.body.enable = false;
-                
-                // Remove from world immediately
-                this.physics.world.remove(projectile.body);
-                
-                this.playerWeapon.destroyProjectile(projectile);
-                console.log('After destroyProjectile call');
-                
-                console.log('Removing enemy...');
-                this.enemyGroup.removeEnemy(enemySprite);
-                console.log('Enemy removed');
-
-                // Create explosion
-                const explosion = this.add.sprite(explosionX, explosionY, 'explosion');
-                explosion.setDisplaySize(128, 128);
-                explosion.on('animationcomplete', function(animation, frame) {
-                    this.destroy();
-                }, explosion);
-                explosion.play('explode');
-            },
-            null,
-            this
-        );
 
         // Add spacebar for firing
         this.spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     }
 
     update() {
+        // Manual collision detection
+        this.playerWeapon.getProjectileGroup().children.each(projectile => {
+            if (!projectile.active || projectile.isBeingDestroyed) {
+                return;
+            }
+
+            this.enemyGroup.getSprites().forEach(enemySprite => {
+                if (!enemySprite.active) {
+                    return;
+                }
+
+                if (Phaser.Geom.Intersects.RectangleToRectangle(projectile.getBounds(), enemySprite.getBounds())) {
+                    console.log('Manual collision detected');
+                    
+                    // Set flag immediately
+                    projectile.isBeingDestroyed = true;
+
+                    // Store explosion position
+                    const explosionX = enemySprite.x;
+                    const explosionY = enemySprite.y;
+
+                    // Disable physics and destroy projectile
+                    projectile.body.enable = false;
+                    this.physics.world.remove(projectile.body);
+                    this.playerWeapon.destroyProjectile(projectile);
+
+                    // Remove enemy
+                    this.enemyGroup.removeEnemy(enemySprite);
+
+                    // Create explosion
+                    const explosion = this.add.sprite(explosionX, explosionY, 'explosion');
+                    explosion.setDisplaySize(128, 128);
+                    explosion.on('animationcomplete', function(animation, frame) {
+                        this.destroy();
+                    }, explosion);
+                    explosion.play('explode');
+
+                    // Exit the forEach loop after first collision
+                    return false;
+                }
+            });
+        });
+
         // Scroll background tiles
         for (let bg of this.bgTiles) {
             bg.y += this.scrollSpeed;
