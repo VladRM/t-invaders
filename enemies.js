@@ -8,12 +8,12 @@ export class Enemy {
             this.y = config.y;
             this.size = config.size || 48;
             this.hitPoints = config.hitPoints || 1;
-            this.minFireDelay = config.minFireDelay || 4000;
-            this.maxFireDelay = config.maxFireDelay || 8000;
-            this.nextFireDelay = this.getRandomFireDelay();
-            // Set initial lastFired to current time
-            // This ensures enemies wait for their first delay period
-            this.lastFired = scene.time.now;
+            // Ensure we always use the provided delays or defaults
+            this.minFireDelay = typeof config.minFireDelay === 'number' ? config.minFireDelay : 4000;
+            this.maxFireDelay = typeof config.maxFireDelay === 'number' ? config.maxFireDelay : 8000;
+            
+            // Initialize firing state
+            this.resetFiringState();
 
             // Create a new weapon instance for this enemy
             this.weapon = new Weapon(scene, {
@@ -27,6 +27,13 @@ export class Enemy {
 
             this.sprite = scene.physics.add.sprite(this.x, this.y, this.imageKey)
                 .setDisplaySize(this.size, this.size);
+        }
+
+        resetFiringState() {
+            this.nextFireDelay = this.getRandomFireDelay();
+            // Set initial lastFired to current time
+            // This ensures enemies wait for their first delay period
+            this.lastFired = this.scene.time.now;
         }
 
         getRandomFireDelay() {
