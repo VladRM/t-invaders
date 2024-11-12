@@ -124,8 +124,8 @@ class GameScene extends Phaser.Scene {
 
         // Create lives display with ship icons
         this.livesDisplay = [];
-        const iconSize = 32;
-        const padding = 10;
+        const iconSize = 24;
+        const padding = 8;
         for (let i = 0; i < this.player.lives; i++) {
             const lifeIcon = this.add.image(
                 gameWidth - (iconSize/2 + padding) - (i * (iconSize + padding)),
