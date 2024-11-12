@@ -18,11 +18,11 @@ class StartScene extends Phaser.Scene {
         const title = this.add.text(
             this.cameras.main.centerX,
             100,
-            'SPACE SHOOTER',
+            "Tudor's\nSpace Adventure",
             {
-                fontSize: '64px',
+                fontSize: '48px',
                 fill: '#fff',
-                fontStyle: 'bold'
+                fontStyle: 'bold',
             }
         ).setOrigin(0.5);
 
