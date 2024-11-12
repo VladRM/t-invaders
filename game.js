@@ -188,17 +188,30 @@ class GameScene extends Phaser.Scene {
             this.playerWeapon.getProjectileGroup(),
             this.enemyGroup.getSprites(),
             (projectile, enemySprite) => {
-                // Immediately disable physics body and destroy projectile
+                // Skip if either object is already being processed
+                if (!projectile.active || !enemySprite.active) {
+                    return;
+                }
+
+                // Immediately disable physics and mark as inactive
                 projectile.body.enable = false;
-                projectile.destroy();
+                projectile.active = false;
                 
+                // Remove from physics world immediately
+                this.physics.world.disable(projectile);
+                
+                // Create explosion before destroying projectile
                 const explosion = this.add.sprite(enemySprite.x, enemySprite.y, 'explosion');
                 explosion.setDisplaySize(128, 128);
                 explosion.play('explode');
                 explosion.once('animationcomplete', () => {
                     explosion.destroy();
                 });
+
+                // Destroy projectile
+                projectile.destroy(true); // true forces immediate destroy
                 
+                // Handle enemy removal
                 this.enemyGroup.removeEnemy(enemySprite);
             },
             null,
