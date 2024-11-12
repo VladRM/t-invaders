@@ -78,8 +78,9 @@ export class Level2 extends Phaser.Scene {
             enemyConfig: {
                 imageKey: 'boss',
                 size: bossSize,
-                minFireDelay: 1500,  // Faster firing rate for bosses
-                maxFireDelay: 3000
+                hitPoints: 10,
+                minFireDelay: 1000,  // 1 second minimum delay
+                maxFireDelay: 2000   // 2 second maximum delay
             }
         });
 
