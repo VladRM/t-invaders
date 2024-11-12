@@ -237,7 +237,7 @@ class GameScene extends Phaser.Scene {
         // Check for enemy projectile collisions with player
         this.enemyGroup.enemies.forEach(enemy => {
             enemy.weapon.getProjectileGroup().getChildren().forEach(projectile => {
-                if (!projectile.active || !this.player.active) return;
+                if (!projectile.active || !this.player.getSprite().active) return;
                 
                 const playerSprite = this.player.getSprite();
                 const dx = projectile.x - playerSprite.x;

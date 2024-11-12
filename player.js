@@ -6,6 +6,7 @@ class Player {
         
         this.playerSize = config.size || 64;
         this.lives = config.lives || 3;
+        this.active = true;
         
         // Create player sprite
         this.sprite = scene.physics.add.sprite(
@@ -58,6 +59,11 @@ class Player {
         if (this.livesDisplay.length > 0) {
             const iconToRemove = this.livesDisplay.pop();
             iconToRemove.destroy();
+        }
+        
+        if (this.lives <= 0) {
+            this.active = false;
+            this.sprite.setActive(false);
         }
         
         // Create explosion effect
