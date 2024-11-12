@@ -55,10 +55,24 @@ class Weapon {
     }
 
     cleanup() {
+        const gameHeight = this.scene.sys.game.config.height;
+        const gameWidth = this.scene.sys.game.config.width;
+        
         this.projectiles.children.each((projectile) => {
-            if (projectile.y < -projectile.height) {
-                projectile.destroy();
+            // Check if projectile is out of bounds in any direction
+            if (projectile.y < -projectile.height || // Top
+                projectile.y > gameHeight + projectile.height || // Bottom
+                projectile.x < -projectile.width || // Left
+                projectile.x > gameWidth + projectile.width) { // Right
+                
+                // Use the same thorough cleanup as destroyProjectile
+                projectile.setActive(false);
+                projectile.setVisible(false);
+                projectile.body.enable = false;
+                this.scene.physics.world.disable(projectile);
+                projectile.body.destroy();
                 this.projectiles.remove(projectile, true, true);
+                projectile.destroy();
             }
         });
     }
