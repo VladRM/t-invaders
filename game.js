@@ -1,10 +1,7 @@
-import { GameState } from './gameState.js';
-import { Player } from './player.js';
-import { EnemyGroup } from './enemies.js';
+import { StartScene } from './startScene.js';
+import { GameScene } from './gameScene.js';
 
-import { UI } from './ui.js';
-
-class StartScene extends Phaser.Scene {
+const config = {
     constructor() {
         super({ key: 'StartScene' });
     }
