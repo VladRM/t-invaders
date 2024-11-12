@@ -69,7 +69,7 @@ export class Player {
             if (this.lives <= 0) {
                 this.active = false;
                 this.sprite.setActive(false);
-                SceneManager.getInstance().goToNextScene(this.scene);
+                this.scene.scene.start('SceneGameOver');
             }
 
             return this.lives <= 0;

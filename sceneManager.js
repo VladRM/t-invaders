@@ -11,7 +11,8 @@ export class SceneManager {
             'SceneStart': 'Level1',
             'Level1': 'Level2',
             'Level2': 'SceneWin',
-            'SceneWin': 'Level1'
+            'SceneWin': 'Level1',
+            'SceneGameOver': 'SceneStart'
         };
     }
 
