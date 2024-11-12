@@ -189,48 +189,39 @@ class GameScene extends Phaser.Scene {
     }
 
     update() {
-        // Manual collision detection
-        this.playerWeapon.getProjectileGroup().children.each(projectile => {
-            if (!projectile.active || projectile.isBeingDestroyed) {
-                return;
-            }
-
-            this.enemyGroup.getSprites().forEach(enemySprite => {
-                if (!enemySprite.active) {
+        // Physics-based collision detection
+        this.physics.add.overlap(
+            this.playerWeapon.getProjectileGroup(),
+            this.enemyGroup.getSprites(),
+            (projectile, enemySprite) => {
+                if (!projectile.active || !enemySprite.active) {
                     return;
                 }
 
-                if (Phaser.Geom.Intersects.RectangleToRectangle(projectile.getBounds(), enemySprite.getBounds())) {
-                    console.log('Manual collision detected');
-                    
-                    // Set flag immediately
-                    projectile.isBeingDestroyed = true;
+                // Immediately disable physics and remove from world
+                projectile.body.enable = false;
+                this.physics.world.remove(projectile.body);
 
-                    // Store explosion position
-                    const explosionX = enemySprite.x;
-                    const explosionY = enemySprite.y;
+                // Store explosion position before destroying objects
+                const explosionX = enemySprite.x;
+                const explosionY = enemySprite.y;
 
-                    // Disable physics and destroy projectile
-                    projectile.body.enable = false;
-                    this.physics.world.remove(projectile.body);
-                    this.playerWeapon.destroyProjectile(projectile);
-
-                    // Remove enemy
-                    this.enemyGroup.removeEnemy(enemySprite);
-
-                    // Create explosion
-                    const explosion = this.add.sprite(explosionX, explosionY, 'explosion');
-                    explosion.setDisplaySize(128, 128);
-                    explosion.on('animationcomplete', function(animation, frame) {
-                        this.destroy();
-                    }, explosion);
-                    explosion.play('explode');
-
-                    // Exit the forEach loop after first collision
-                    return false;
-                }
-            });
-        });
+                // Destroy projectile first
+                this.playerWeapon.destroyProjectile(projectile);
+                
+                // Then handle enemy and explosion
+                this.enemyGroup.removeEnemy(enemySprite);
+                
+                const explosion = this.add.sprite(explosionX, explosionY, 'explosion');
+                explosion.setDisplaySize(128, 128);
+                explosion.on('animationcomplete', function(animation, frame) {
+                    this.destroy();
+                }, explosion);
+                explosion.play('explode');
+            },
+            null,
+            this
+        );
 
         // Scroll background tiles
         for (let bg of this.bgTiles) {
