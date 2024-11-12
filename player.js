@@ -1,5 +1,6 @@
-if (typeof Player === 'undefined') {
-    class Player {
+import { Weapon } from './weapons.js';
+
+export class Player {
         constructor(scene, config) {
             this.scene = scene;
             const gameWidth = scene.sys.game.config.width;

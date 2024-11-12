@@ -1,5 +1,6 @@
-if (typeof Enemy === 'undefined') {
-    class Enemy {
+import { Weapon } from './weapons.js';
+
+export class Enemy {
         constructor(scene, config) {
             this.scene = scene;
             this.imageKey = config.imageKey;
@@ -49,8 +50,7 @@ if (typeof Enemy === 'undefined') {
     }
 }
 
-if (typeof EnemyGroup === 'undefined') {
-    class EnemyGroup {
+export class EnemyGroup {
         constructor(scene) {
             this.scene = scene;
             this.enemies = [];

@@ -1,5 +1,4 @@
-if (typeof Weapon === 'undefined') {
-    class Weapon {
+export class Weapon {
         constructor(scene, config) {
             this.scene = scene;
             this.imageKey = config.imageKey;

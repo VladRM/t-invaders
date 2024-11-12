@@ -63,15 +63,11 @@ class StartScene extends Phaser.Scene {
 class GameScene extends Phaser.Scene {
     constructor() {
         super({ key: 'GameScene' });
+        this.gameState = GameState.getInstance();
     }
 
     preload() {
-        // Load script files first
-        this.load.script('weapons', 'weapons.js');
-        this.load.script('enemies', 'enemies.js');
-        this.load.script('player', 'player.js');
-
-        // Then load image assets
+        // Load image assets
         this.load.image('player', 'assets/img/player/ship.png');
         this.load.image('background', 'assets/img/space/bg.jpg');
         this.load.image('projectile', 'assets/img/player/weapons/laser_mini_yellow.png');
@@ -86,6 +82,9 @@ class GameScene extends Phaser.Scene {
     }
 
     create() {
+        // Reset game state when scene starts
+        this.gameState.reset();
+        
         const gameWidth = this.sys.game.config.width;
         const gameHeight = this.sys.game.config.height;
 
