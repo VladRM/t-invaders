@@ -11,8 +11,9 @@ export class Enemy {
             this.minFireDelay = config.minFireDelay || 40001111;
             this.maxFireDelay = config.maxFireDelay || 80001111;
             this.nextFireDelay = this.getRandomFireDelay();
-            // Initialize lastFired to current time plus a random delay between min and max
-            this.lastFired = scene.time.now + Phaser.Math.Between(this.minFireDelay, this.maxFireDelay);
+            // Always set initial lastFired to be in the past by the fire delay amount
+            // This ensures consistent behavior on both first start and restart
+            this.lastFired = scene.time.now - this.nextFireDelay;
 
             // Create a new weapon instance for this enemy
             this.weapon = new Weapon(scene, {
