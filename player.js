@@ -68,14 +68,6 @@ export class Player {
                 this.sprite.setActive(false);
             }
 
-            // Create explosion effect
-            const explosion = this.scene.add.sprite(this.sprite.x, this.sprite.y, 'explosion');
-            explosion.setDisplaySize(128, 128);
-            explosion.on('animationcomplete', function (animation, frame) {
-                this.destroy();
-            }, explosion);
-            explosion.play('explode');
-
             return this.lives <= 0;
         }
 
