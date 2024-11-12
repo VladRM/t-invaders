@@ -273,7 +273,7 @@ class GameScene extends Phaser.Scene {
             
             if (distance < projectileRadius + playerRadius) {
                 // Destroy the projectile
-                this.enemyWeapon.destroyProjectile(projectile);
+                enemy.weapon.destroyProjectile(projectile);
                 
                 // Reduce player lives and update display
                 this.player.lives--;
