@@ -53,10 +53,17 @@ export class EnemyGroup {
         constructor(scene) {
             this.scene = scene;
             this.enemies = [];
+            this.direction = 1; // 1 for right, -1 for left
+            this.moveSpeed = 50; // pixels per second
+            this.moveDistance = 100; // pixels to move before changing direction
+            this.startX = 0; // will be set when enemies are created
         }
 
         createEnemyRow(config) {
             const { count, spacing, startX, y, enemyConfig } = config;
+            
+            // Store the initial x position for movement boundaries
+            this.startX = startX;
 
             for (let i = 0; i < count; i++) {
                 const enemy = new Enemy(this.scene, {
@@ -69,7 +76,31 @@ export class EnemyGroup {
         }
 
         update() {
+            // Update individual enemies
             this.enemies.forEach(enemy => enemy.update());
+
+            // Skip movement if no enemies
+            if (this.enemies.length === 0) return;
+
+            // Get the leftmost and rightmost enemies
+            const positions = this.enemies.map(e => e.sprite.x);
+            const leftmost = Math.min(...positions);
+            const rightmost = Math.max(...positions);
+
+            // Move the entire group
+            const moveAmount = this.moveSpeed * this.direction * (this.scene.game.loop.delta / 1000);
+            
+            // Check boundaries and change direction if needed
+            if (this.direction > 0 && rightmost + moveAmount > this.startX + this.moveDistance) {
+                this.direction = -1;
+            } else if (this.direction < 0 && leftmost + moveAmount < this.startX) {
+                this.direction = 1;
+            }
+
+            // Apply movement to all enemies
+            this.enemies.forEach(enemy => {
+                enemy.sprite.x += moveAmount;
+            });
         }
 
         getSprites() {
