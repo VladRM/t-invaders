@@ -66,6 +66,11 @@ class GameScene extends Phaser.Scene {
     }
 
     preload() {
+        // Load script files first
+        this.load.script('weapons', 'weapons.js');
+        this.load.script('enemies', 'enemies.js');
+
+        // Then load image assets
         this.load.image('player', 'assets/img/player/ship.png');
         this.load.image('background', 'assets/img/space/bg.jpg');
         this.load.image('projectile', 'assets/img/player/weapons/laser_mini_yellow.png');
