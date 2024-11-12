@@ -188,6 +188,9 @@ class GameScene extends Phaser.Scene {
             this.playerWeapon.getProjectileGroup(),
             this.enemyGroup.getSprites(),
             (projectile, enemySprite) => {
+                console.log('Collision detected!');
+                console.log('Projectile active:', projectile.active);
+                console.log('Enemy active:', enemySprite.active);
                 projectile.destroy();  // Destroy projectile immediately
                 
                 const explosion = this.add.sprite(enemySprite.x, enemySprite.y, 'explosion');
@@ -254,7 +257,7 @@ const config = {
         default: 'arcade',
         arcade: {
             gravity: { y: 0 },
-            debug: false
+            debug: true
         }
     }
 };
