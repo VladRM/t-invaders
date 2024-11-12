@@ -172,7 +172,7 @@ class GameScene extends Phaser.Scene {
             this.playerWeapon.getProjectileGroup(),
             this.enemyGroup.getSprites(),
             (projectile, enemySprite) => {
-            const explosion = this.add.sprite(enemy.x, enemy.y, 'explosion');
+            const explosion = this.add.sprite(enemySprite.x, enemySprite.y, 'explosion');
             explosion.setDisplaySize(128, 128);
             explosion.play('explode');
             explosion.once('animationcomplete', () => {
