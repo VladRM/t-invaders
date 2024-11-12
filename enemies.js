@@ -17,7 +17,7 @@ export class Enemy {
                 imageKey: 'enemy_projectile',
                 damage: 1,
                 fireDelay: this.nextFireDelay,
-                projectileSpeed: 400,
+                projectileSpeed: 300,
                 collisionType: 'circle',
                 collisionRadius: 5
             });
