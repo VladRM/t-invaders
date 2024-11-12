@@ -6,8 +6,9 @@ export class Player {
             const gameWidth = scene.sys.game.config.width;
             const gameHeight = scene.sys.game.config.height;
 
+            this.gameState = scene.gameState;
             this.playerSize = config.size || 64;
-            this.lives = config.lives || 3;
+            this.lives = this.gameState.lives;
             this.active = true;
 
             // Create player sprite
@@ -58,6 +59,7 @@ export class Player {
 
         damage() {
             this.lives--;
+            this.gameState.lives = this.lives; // Update gameState lives
             if (this.livesDisplay.length > 0) {
                 const iconToRemove = this.livesDisplay.pop();
                 iconToRemove.destroy();
