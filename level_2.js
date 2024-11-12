@@ -112,7 +112,15 @@ export class Level2 extends Phaser.Scene {
                         explosion.play('explode');
 
                         this.player.getWeapon().destroyProjectile(projectile);
-                        this.enemyGroup.removeEnemy(enemySprite);
+                        
+                        // Find the enemy and reduce its hit points
+                        const enemy = this.enemyGroup.enemies.find(e => e.sprite === enemySprite);
+                        if (enemy) {
+                            enemy.hitPoints--;
+                            if (enemy.hitPoints <= 0) {
+                                this.enemyGroup.removeEnemy(enemySprite);
+                            }
+                        }
                         
                         return false;
                     }

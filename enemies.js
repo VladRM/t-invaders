@@ -7,6 +7,7 @@ export class Enemy {
             this.x = config.x;
             this.y = config.y;
             this.size = config.size || 48;
+            this.hitPoints = config.hitPoints || 1;
             this.minFireDelay = config.minFireDelay || 40001111;
             this.maxFireDelay = config.maxFireDelay || 80001111;
             this.nextFireDelay = this.getRandomFireDelay();
