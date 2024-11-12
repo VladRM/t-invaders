@@ -197,8 +197,8 @@ class GameScene extends Phaser.Scene {
                 const explosionX = enemySprite.x;
                 const explosionY = enemySprite.y;
 
-                // Immediately destroy projectile first
-                projectile.destroy();
+                // Use the weapon's method to destroy the projectile
+                this.playerWeapon.destroyProjectile(projectile);
                 
                 // Remove enemy
                 this.enemyGroup.removeEnemy(enemySprite);
