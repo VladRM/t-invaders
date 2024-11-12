@@ -191,16 +191,26 @@ class GameScene extends Phaser.Scene {
                 console.log('Collision detected');
                 
                 // Skip if either object is already being destroyed
-                if (!projectile.active || !enemySprite.active) {
-                    console.log('Skipping collision - objects inactive');
+                if (!projectile.active || !enemySprite.active || projectile.isBeingDestroyed) {
+                    console.log('Skipping collision - objects inactive or being destroyed');
                     return;
                 }
+
+                // Set flag immediately to prevent multiple collisions
+                projectile.isBeingDestroyed = true;
 
                 // Store position for explosion
                 const explosionX = enemySprite.x;
                 const explosionY = enemySprite.y;
 
                 console.log('Attempting to destroy projectile...');
+                
+                // Disable physics body immediately
+                projectile.body.enable = false;
+                
+                // Remove from world immediately
+                this.physics.world.remove(projectile.body);
+                
                 this.playerWeapon.destroyProjectile(projectile);
                 console.log('After destroyProjectile call');
                 
