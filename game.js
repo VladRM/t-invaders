@@ -262,39 +262,40 @@ class GameScene extends Phaser.Scene {
         // Check for enemy projectile collisions with player
         this.enemyGroup.enemies.forEach(enemy => {
             enemy.weapon.getProjectileGroup().getChildren().forEach(projectile => {
-            if (!projectile.active || !this.player.active) return;
-            
-            const dx = projectile.x - this.player.x;
-            const dy = projectile.y - this.player.y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-            
-            const projectileRadius = 5;  // Enemy projectile collision radius
-            const playerRadius = 32;     // Player collision radius
-            
-            if (distance < projectileRadius + playerRadius) {
-                // Destroy the projectile
-                enemy.weapon.destroyProjectile(projectile);
+                if (!projectile.active || !this.player.active) return;
                 
-                // Reduce player lives and update display
-                this.player.lives--;
-                if (this.livesDisplay.length > 0) {
-                    const iconToRemove = this.livesDisplay.pop();
-                    iconToRemove.destroy();
+                const dx = projectile.x - this.player.x;
+                const dy = projectile.y - this.player.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                const projectileRadius = 5;  // Enemy projectile collision radius
+                const playerRadius = 32;     // Player collision radius
+                
+                if (distance < projectileRadius + playerRadius) {
+                    // Destroy the projectile
+                    enemy.weapon.destroyProjectile(projectile);
+                    
+                    // Reduce player lives and update display
+                    this.player.lives--;
+                    if (this.livesDisplay.length > 0) {
+                        const iconToRemove = this.livesDisplay.pop();
+                        iconToRemove.destroy();
+                    }
+                    
+                    // Create explosion effect at player position
+                    const explosion = this.add.sprite(this.player.x, this.player.y, 'explosion');
+                    explosion.setDisplaySize(128, 128);
+                    explosion.on('animationcomplete', function(animation, frame) {
+                        this.destroy();
+                    }, explosion);
+                    explosion.play('explode');
+                    
+                    // Check for game over
+                    if (this.player.lives <= 0) {
+                        this.scene.start('StartScene');
+                    }
                 }
-                
-                // Create explosion effect at player position
-                const explosion = this.add.sprite(this.player.x, this.player.y, 'explosion');
-                explosion.setDisplaySize(128, 128);
-                explosion.on('animationcomplete', function(animation, frame) {
-                    this.destroy();
-                }, explosion);
-                explosion.play('explode');
-                
-                // Check for game over
-                if (this.player.lives <= 0) {
-                    this.scene.start('StartScene');
-                }
-            }
+            });
         });
 
         // Update enemies
