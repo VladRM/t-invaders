@@ -23,6 +23,7 @@ class StartScene extends Phaser.Scene {
                 fontSize: '48px',
                 fill: '#fff',
                 fontStyle: 'bold',
+                align: 'center'
             }
         ).setOrigin(0.5);
 
