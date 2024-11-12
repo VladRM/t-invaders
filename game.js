@@ -1,4 +1,6 @@
 import { GameState } from './gameState.js';
+import { Player } from './player.js';
+import { EnemyGroup } from './enemies.js';
 
 class StartScene extends Phaser.Scene {
     constructor() {
