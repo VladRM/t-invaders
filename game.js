@@ -172,15 +172,18 @@ class GameScene extends Phaser.Scene {
             this.playerWeapon.getProjectileGroup(),
             this.enemyGroup.getSprites(),
             (projectile, enemySprite) => {
-            const explosion = this.add.sprite(enemySprite.x, enemySprite.y, 'explosion');
-            explosion.setDisplaySize(128, 128);
-            explosion.play('explode');
-            explosion.once('animationcomplete', () => {
-                explosion.destroy();
-            });
-            
-            projectile.destroy();
-            this.enemyGroup.removeEnemy(enemySprite);
+            // Only process collision if both objects still exist
+            if (projectile.active && enemySprite.active) {
+                const explosion = this.add.sprite(enemySprite.x, enemySprite.y, 'explosion');
+                explosion.setDisplaySize(128, 128);
+                explosion.play('explode');
+                explosion.once('animationcomplete', () => {
+                    explosion.destroy();
+                });
+                
+                projectile.destroy();
+                this.enemyGroup.removeEnemy(enemySprite);
+            }
         }, null, this);
 
         // Add spacebar for firing
