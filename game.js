@@ -1,3 +1,5 @@
+import { GameState } from './gameState.js';
+
 class StartScene extends Phaser.Scene {
     constructor() {
         super({ key: 'StartScene' });

@@ -1,4 +1,4 @@
-class GameState {
+export class GameState {
     static instance = null;
     
     constructor() {
