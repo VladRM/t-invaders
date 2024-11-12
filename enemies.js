@@ -131,10 +131,10 @@ export class EnemyGroup {
         destroy() {
             // Properly destroy all enemies and clear the array
             this.enemies.forEach(enemy => {
-                enemy.destroy();
                 if (enemy.weapon) {
-                    enemy.weapon.destroy();
+                    enemy.weapon.getProjectileGroup().clear(true, true);
                 }
+                enemy.destroy();
             });
             this.enemies = [];
         }
