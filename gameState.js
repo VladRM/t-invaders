@@ -6,7 +6,6 @@ export class GameState {
             return GameState.instance;
         }
         GameState.instance = this;
-        this.lives = 3;  // Initialize lives
         this.reset();
     }
 
@@ -14,7 +13,7 @@ export class GameState {
         this.score = 0;
         this.highScore = localStorage.getItem('highScore') || 0;
         this.currentLevel = 1;
-        // Don't reset lives here anymore
+        this.lives = 3;  // Reset lives here instead
     }
 
     static getInstance() {
