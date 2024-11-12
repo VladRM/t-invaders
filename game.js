@@ -188,7 +188,7 @@ class GameScene extends Phaser.Scene {
             this.playerWeapon.getProjectileGroup(),
             this.enemyGroup.getSprites(),
             (projectile, enemySprite) => {
-                // Skip if either object is already processed
+                // Skip if either object is already being destroyed
                 if (!projectile.active || !enemySprite.active) {
                     return;
                 }
@@ -197,13 +197,16 @@ class GameScene extends Phaser.Scene {
                 const explosionX = enemySprite.x;
                 const explosionY = enemySprite.y;
 
-                // Remove projectile from group and physics world
+                // Immediately set projectile as inactive to prevent multiple collisions
+                projectile.active = false;
+                
+                // Remove projectile first
                 this.playerWeapon.destroyProjectile(projectile);
                 
                 // Remove enemy
                 this.enemyGroup.removeEnemy(enemySprite);
 
-                // Create explosion after objects are destroyed
+                // Create explosion
                 const explosion = this.add.sprite(explosionX, explosionY, 'explosion');
                 explosion.setDisplaySize(128, 128);
                 explosion.on('animationcomplete', function(animation, frame) {
