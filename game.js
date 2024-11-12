@@ -188,15 +188,8 @@ class GameScene extends Phaser.Scene {
             this.playerWeapon.getProjectileGroup(),
             this.enemyGroup.getSprites(),
             (projectile, enemySprite) => {
-                // Skip if projectile is already being destroyed
-                if (!projectile.active || projectile.isBeingDestroyed) {
-                    return;
-                }
-                
-                // Mark projectile as being destroyed to prevent multiple collisions
-                projectile.isBeingDestroyed = true;
-                
-                console.log('Processing collision');
+                // Immediately disable physics body and destroy projectile
+                projectile.body.enable = false;
                 projectile.destroy();
                 
                 const explosion = this.add.sprite(enemySprite.x, enemySprite.y, 'explosion');
