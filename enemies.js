@@ -57,11 +57,12 @@ class EnemyGroup {
         return this.enemies.map(enemy => enemy.getSprite());
     }
 
-    removeEnemy(enemy) {
-        const index = this.enemies.findIndex(e => e.getSprite() === enemy);
-        if (index !== -1) {
-            this.enemies[index].destroy();
-            this.enemies.splice(index, 1);
+    removeEnemy(enemySprite) {
+        // Find the enemy whose sprite matches the one that was hit
+        const enemy = this.enemies.find(e => e.sprite === enemySprite);
+        if (enemy) {
+            enemy.destroy();
+            this.enemies = this.enemies.filter(e => e !== enemy);
         }
     }
 }
