@@ -46,6 +46,7 @@ if (typeof Enemy === 'undefined') {
     getSprite() {
         return this.sprite;
     }
+    }
 }
 
 if (typeof EnemyGroup === 'undefined') {
