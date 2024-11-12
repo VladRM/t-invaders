@@ -64,14 +64,22 @@ class Weapon {
     }
 
     destroyProjectile(projectile) {
+        console.log('destroyProjectile called with:', projectile);
+        console.log('Projectile active status before:', projectile.active);
+        
         // Immediately deactivate the projectile's physics body
         projectile.body.enable = false;
         projectile.active = false;
         projectile.visible = false;
         
+        console.log('Projectile properties set to inactive');
+        
         // Remove from group and destroy
         this.projectiles.remove(projectile, true, true);
+        console.log('Projectile removed from group');
+        
         projectile.destroy();
+        console.log('Projectile destroyed');
     }
 
     getProjectileGroup() {
