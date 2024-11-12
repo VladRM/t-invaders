@@ -54,7 +54,8 @@ class Weapon {
     cleanup() {
         this.projectiles.children.each((projectile) => {
             if (projectile.y < -projectile.height) {
-                projectile.destroy();
+                projectile.destroy(true);
+                this.projectiles.remove(projectile, true, true);
             }
         });
     }
