@@ -163,6 +163,7 @@ export class Level2 extends Phaser.Scene {
                     
                     const isGameOver = this.player.damage(false);
                     if (isGameOver) {
+                        this.gameState.lives = 3; // Reset lives
                         this.scene.start('SceneStart');
                     }
                 }
@@ -173,6 +174,7 @@ export class Level2 extends Phaser.Scene {
 
         // Check if all enemies are destroyed
         if (this.enemyGroup.enemies.length === 0) {
+            this.gameState.lives = 3; // Reset lives on victory too
             this.scene.start('SceneStart');
         }
     }
