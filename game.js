@@ -188,10 +188,16 @@ class GameScene extends Phaser.Scene {
             this.playerWeapon.getProjectileGroup(),
             this.enemyGroup.getSprites(),
             (projectile, enemySprite) => {
-                console.log('Collision detected!');
-                console.log('Projectile active:', projectile.active);
-                console.log('Enemy active:', enemySprite.active);
-                projectile.destroy();  // Destroy projectile immediately
+                // Skip if projectile is already being destroyed
+                if (!projectile.active || projectile.isBeingDestroyed) {
+                    return;
+                }
+                
+                // Mark projectile as being destroyed to prevent multiple collisions
+                projectile.isBeingDestroyed = true;
+                
+                console.log('Processing collision');
+                projectile.destroy();
                 
                 const explosion = this.add.sprite(enemySprite.x, enemySprite.y, 'explosion');
                 explosion.setDisplaySize(128, 128);
