@@ -31,10 +31,6 @@ class StartScene extends Phaser.Scene {
             {
                 text: 'Start Game',
                 onClick: () => this.scene.start('GameScene')
-            },
-            {
-                text: 'High Score: ' + GameState.getInstance().highScore,
-                onClick: () => {} // Read-only text
             }
         ]);
     }
