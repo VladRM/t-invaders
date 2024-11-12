@@ -79,6 +79,7 @@ class GameScene extends Phaser.Scene {
         
         // Load the weapons system
         this.load.script('weapons', 'weapons.js');
+        this.load.script('enemies', 'enemies.js');
     }
 
     create() {
@@ -136,21 +137,41 @@ class GameScene extends Phaser.Scene {
             collisionRadius: 10  // Adjust this value based on your projectile size
         });
 
-        // Create enemies group
-        this.enemies = this.physics.add.group();
+        // Create enemy weapon
+        this.enemyWeapon = new Weapon(this, {
+            imageKey: 'projectile',
+            damage: 1,
+            fireDelay: 2000,
+            projectileSpeed: 400, // Positive for downward movement
+            collisionType: 'circle',
+            collisionRadius: 10
+        });
+
+        // Create enemy group
+        this.enemyGroup = new EnemyGroup(this);
         
-        // Add 5 enemies at the top
+        // Add row of enemies
         const enemySize = 48;
         const spacing = 100;
-        const startX = (gameWidth - (spacing * 4)) / 2; // Center the row of enemies
+        const startX = (gameWidth - (spacing * 4)) / 2;
         
-        for (let i = 0; i < 5; i++) {
-            const enemy = this.enemies.create(startX + (i * spacing), enemySize, 'enemy')
-                .setDisplaySize(enemySize, enemySize);
-        }
+        this.enemyGroup.createEnemyRow({
+            count: 5,
+            spacing: spacing,
+            startX: startX,
+            y: enemySize,
+            enemyConfig: {
+                imageKey: 'enemy',
+                size: enemySize,
+                weapon: this.enemyWeapon
+            }
+        });
 
         // Add collision detection between weapon projectiles and enemies
-        this.physics.add.overlap(this.playerWeapon.getProjectileGroup(), this.enemies, (projectile, enemy) => {
+        this.physics.add.overlap(
+            this.playerWeapon.getProjectileGroup(),
+            this.enemyGroup.getSprites(),
+            (projectile, enemySprite) => {
             const explosion = this.add.sprite(enemy.x, enemy.y, 'explosion');
             explosion.setDisplaySize(128, 128);
             explosion.play('explode');
@@ -159,7 +180,7 @@ class GameScene extends Phaser.Scene {
             });
             
             projectile.destroy();
-            enemy.destroy();
+            this.enemyGroup.removeEnemy(enemySprite);
         }, null, this);
 
         // Add spacebar for firing
@@ -186,6 +207,10 @@ class GameScene extends Phaser.Scene {
 
         // Clean up projectiles that are off screen
         this.playerWeapon.cleanup();
+        this.enemyWeapon.cleanup();
+        
+        // Update enemies
+        this.enemyGroup.update();
 
         // Handle player movement
         if (this.cursors.left.isDown) {
