@@ -11,15 +11,14 @@ export class Enemy {
             this.minFireDelay = config.minFireDelay || 40001111;
             this.maxFireDelay = config.maxFireDelay || 80001111;
             this.nextFireDelay = this.getRandomFireDelay();
-            // Set initial lastFired to current time plus random delay
-            // This ensures enemies wait before first shot on both start and restart
-            this.lastFired = scene.time.now + this.nextFireDelay;
+            // Set initial lastFired to current time
+            this.lastFired = scene.time.now;
 
             // Create a new weapon instance for this enemy
             this.weapon = new Weapon(scene, {
                 imageKey: 'enemy_projectile',
                 damage: 1,
-                fireDelay: this.nextFireDelay,
+                fireDelay: 0, // We'll handle the delay in Enemy class
                 projectileSpeed: 300,
                 collisionType: 'circle',
                 collisionRadius: 5
@@ -35,11 +34,13 @@ export class Enemy {
 
         update() {
             // Handle weapon firing
-            if (this.weapon && this.scene.time.now > this.lastFired + this.nextFireDelay) {
-                this.weapon.fire(this.sprite.x, this.sprite.y);
-                this.lastFired = this.scene.time.now;
-                // Set new random delay for next shot
-                this.nextFireDelay = this.getRandomFireDelay();
+            const currentTime = this.scene.time.now;
+            if (this.weapon && currentTime > this.lastFired + this.nextFireDelay) {
+                if (this.weapon.fire(this.sprite.x, this.sprite.y)) {
+                    this.lastFired = currentTime;
+                    // Set new random delay for next shot
+                    this.nextFireDelay = this.getRandomFireDelay();
+                }
             }
         }
 
