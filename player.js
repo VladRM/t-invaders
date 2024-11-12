@@ -106,4 +106,3 @@ export class Player {
             return this.weapon;
         }
     }
-}

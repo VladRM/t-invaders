@@ -48,7 +48,6 @@ export class Enemy {
             return this.sprite;
         }
     }
-}
 
 export class EnemyGroup {
         constructor(scene) {
@@ -86,4 +85,3 @@ export class EnemyGroup {
             }
         }
     }
-}

@@ -104,4 +104,3 @@ export class Weapon {
             return this.projectiles;
         }
     }
-}
