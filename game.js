@@ -120,6 +120,15 @@ class GameScene extends Phaser.Scene {
         this.player = this.physics.add.sprite(gameWidth/2, gameHeight - playerSize, 'player').setDisplaySize(playerSize, playerSize);
         // Set collision bounds for the player
         this.player.setCollideWorldBounds(true);
+        this.player.lives = 3;
+
+        // Create lives display
+        this.livesText = this.add.text(
+            gameWidth - 20, 
+            gameHeight - 20, 
+            `Lives: ${this.player.lives}`, 
+            { fontSize: '24px', fill: '#fff' }
+        ).setOrigin(1, 1);
         // Set bounds to full game width
         this.physics.world.setBounds(0, 0, gameWidth, gameHeight);
         
@@ -256,6 +265,40 @@ class GameScene extends Phaser.Scene {
         this.playerWeapon.cleanup();
         this.enemyWeapon.cleanup();
         
+        // Check for enemy projectile collisions with player
+        this.enemyWeapon.getProjectileGroup().getChildren().forEach(projectile => {
+            if (!projectile.active || !this.player.active) return;
+            
+            const dx = projectile.x - this.player.x;
+            const dy = projectile.y - this.player.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            
+            const projectileRadius = 5;  // Enemy projectile collision radius
+            const playerRadius = 32;     // Player collision radius
+            
+            if (distance < projectileRadius + playerRadius) {
+                // Destroy the projectile
+                this.enemyWeapon.destroyProjectile(projectile);
+                
+                // Reduce player lives
+                this.player.lives--;
+                this.livesText.setText(`Lives: ${this.player.lives}`);
+                
+                // Create explosion effect at player position
+                const explosion = this.add.sprite(this.player.x, this.player.y, 'explosion');
+                explosion.setDisplaySize(128, 128);
+                explosion.on('animationcomplete', function(animation, frame) {
+                    this.destroy();
+                }, explosion);
+                explosion.play('explode');
+                
+                // Check for game over
+                if (this.player.lives <= 0) {
+                    this.scene.start('StartScene');
+                }
+            }
+        });
+
         // Update enemies
         this.enemyGroup.update();
 
