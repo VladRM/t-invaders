@@ -1,4 +1,5 @@
 import { Weapon } from './weapons.js';
+import { SceneManager } from './sceneManager.js';
 
 export class Player {
         constructor(scene, config) {
@@ -68,7 +69,7 @@ export class Player {
             if (this.lives <= 0) {
                 this.active = false;
                 this.sprite.setActive(false);
-                this.scene.scene.start('SceneStart');
+                SceneManager.getInstance().goToNextScene(this.scene);
             }
 
             return this.lives <= 0;

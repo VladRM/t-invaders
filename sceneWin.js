@@ -1,4 +1,5 @@
 import { UI } from './ui.js';
+import { SceneManager } from './sceneManager.js';
 
 export class SceneWin extends Phaser.Scene {
     constructor() {
@@ -24,7 +25,7 @@ export class SceneWin extends Phaser.Scene {
         UI.createMenu(this, [
             {
                 text: 'Play Again',
-                onClick: () => this.scene.start('Level1')
+                onClick: () => SceneManager.getInstance().goToNextScene(this)
             }
         ]);
     }

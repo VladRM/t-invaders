@@ -1,6 +1,7 @@
 import { GameState } from './gameState.js';
 import { Player } from './player.js';
 import { EnemyGroup } from './enemies.js';
+import { SceneManager } from './sceneManager.js';
 
 export class Level2 extends Phaser.Scene {
     constructor() {
@@ -175,7 +176,7 @@ export class Level2 extends Phaser.Scene {
         // Check if all enemies are destroyed
         if (this.enemyGroup.enemies.length === 0) {
             this.gameState.lives = 3; // Reset lives on victory
-            this.scene.start('SceneWin');
+            SceneManager.getInstance().goToNextScene(this);
         }
     }
 }
