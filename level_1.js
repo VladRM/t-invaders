@@ -88,8 +88,8 @@ export class Level1 extends Phaser.Scene {
             enemyConfig: {
                 imageKey: 'enemy',
                 size: enemySize,
-                minFireDelay: 4000,  // 2 seconds minimum
-                maxFireDelay: 5000   // 6 seconds maximum
+                minFireDelay: 4000,  // 4 seconds minimum
+                maxFireDelay: 5000   // 5 seconds maximum
             }
         });
 
@@ -102,7 +102,7 @@ export class Level1 extends Phaser.Scene {
             enemyConfig: {
                 imageKey: 'enemy',
                 size: enemySize,
-                minFireDelay: 4000,  // 3 seconds minimum
+                minFireDelay: 4000,  // 4 seconds minimum
                 maxFireDelay: 5000   // 5 seconds maximum
             }
         });
