@@ -155,6 +155,7 @@ class GameScene extends Phaser.Scene {
         const spacing = 100;
         const startX = (gameWidth - (spacing * 4)) / 2;
         
+        // Create first row of enemies
         this.enemyGroup.createEnemyRow({
             count: 5,
             spacing: spacing,
@@ -164,6 +165,20 @@ class GameScene extends Phaser.Scene {
                 imageKey: 'enemy',
                 size: enemySize,
                 weapon: this.enemyWeapon
+            }
+        });
+
+        // Create second row of enemies
+        this.enemyGroup.createEnemyRow({
+            count: 5,
+            spacing: spacing,
+            startX: startX,
+            y: enemySize * 2.5, // Position slightly below first row
+            enemyConfig: {
+                imageKey: 'enemy',
+                size: enemySize,
+                weapon: this.enemyWeapon,
+                fireDelay: 2500 // Slightly different firing pattern for variety
             }
         });
 
