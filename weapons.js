@@ -44,6 +44,9 @@ class Weapon {
     fire(x, y) {
         if (this.scene.time.now > this.lastFired + this.fireDelay) {
             const projectile = this.projectiles.create(x, y, this.imageKey);
+            projectile.setActive(true);
+            projectile.setVisible(true);
+            projectile.body.enable = true;
             projectile.setVelocityY(this.projectileSpeed);
             this.lastFired = this.scene.time.now;
             return true;
@@ -61,8 +64,14 @@ class Weapon {
     }
 
     destroyProjectile(projectile) {
-        projectile.destroy();
+        // Immediately deactivate the projectile's physics body
+        projectile.body.enable = false;
+        projectile.active = false;
+        projectile.visible = false;
+        
+        // Remove from group and destroy
         this.projectiles.remove(projectile, true, true);
+        projectile.destroy();
     }
 
     getProjectileGroup() {
