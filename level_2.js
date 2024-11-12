@@ -22,8 +22,6 @@ export class Level2 extends Phaser.Scene {
     }
 
     create() {
-        this.gameState.reset();
-        
         const gameWidth = this.sys.game.config.width;
         const gameHeight = this.sys.game.config.height;
 
