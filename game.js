@@ -198,17 +198,21 @@ class GameScene extends Phaser.Scene {
                     return;
                 }
 
+                // Immediately disable physics and mark inactive
+                projectile.body.enable = false;
+                projectile.setActive(false);
+                this.physics.world.remove(projectile.body);
+
                 // Store explosion position before destroying objects
                 const explosionX = enemySprite.x;
                 const explosionY = enemySprite.y;
 
-                // First destroy the projectile
+                // Destroy projectile first
                 this.playerWeapon.destroyProjectile(projectile);
                 
-                // Then remove the enemy
+                // Then handle enemy and explosion
                 this.enemyGroup.removeEnemy(enemySprite);
                 
-                // Create explosion last
                 const explosion = this.add.sprite(explosionX, explosionY, 'explosion');
                 explosion.setDisplaySize(128, 128);
                 explosion.on('animationcomplete', function(animation, frame) {
