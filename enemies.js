@@ -127,4 +127,15 @@ export class EnemyGroup {
                 this.enemies = this.enemies.filter(e => e !== enemy);
             }
         }
+
+        destroy() {
+            // Properly destroy all enemies and clear the array
+            this.enemies.forEach(enemy => {
+                enemy.destroy();
+                if (enemy.weapon) {
+                    enemy.weapon.destroy();
+                }
+            });
+            this.enemies = [];
+        }
     }

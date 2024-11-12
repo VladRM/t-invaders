@@ -24,6 +24,11 @@ export class Level1 extends Phaser.Scene {
     }
 
     create() {
+        // If we have an existing enemy group, destroy it properly
+        if (this.enemyGroup) {
+            this.enemyGroup.destroy();
+        }
+        
         // Reset game state when scene starts
         this.gameState.reset();
         
