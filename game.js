@@ -124,8 +124,8 @@ class GameScene extends Phaser.Scene {
             enemyConfig: {
                 imageKey: 'enemy',
                 size: enemySize,
-                minFireDelay: 4000,  // 4 seconds minimum
-                maxFireDelay: 8000   // 8 seconds maximum
+                minFireDelay: 20001111,  // 2 seconds minimum
+                maxFireDelay: 60001111   // 6 seconds maximum
             }
         });
 
@@ -205,13 +205,13 @@ class GameScene extends Phaser.Scene {
                 const playerRadius = 32;     // Player collision radius
                 
                 if (distance < projectileRadius + playerRadius) {
-                    // Create explosion at impact point
-                    const explosion = this.add.sprite(projectile.x, projectile.y, 'explosion');
-                    explosion.setDisplaySize(128, 128);
-                    explosion.on('animationcomplete', function(animation, frame) {
-                        this.destroy();
-                    }, explosion);
-                    explosion.play('explode');
+                    // // Create explosion at impact point
+                    // const explosion = this.add.sprite(projectile.x, projectile.y, 'explosion');
+                    // explosion.setDisplaySize(128, 128);
+                    // explosion.on('animationcomplete', function(animation, frame) {
+                    //     this.destroy();
+                    // }, explosion);
+                    // explosion.play('explode');
 
                     // Destroy the projectile
                     enemy.weapon.destroyProjectile(projectile);
