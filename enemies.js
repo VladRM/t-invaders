@@ -8,8 +8,8 @@ export class Enemy {
             this.y = config.y;
             this.size = config.size || 48;
             this.hitPoints = config.hitPoints || 1;
-            this.minFireDelay = config.minFireDelay || 40001111;
-            this.maxFireDelay = config.maxFireDelay || 80001111;
+            this.minFireDelay = config.minFireDelay || 4000;
+            this.maxFireDelay = config.maxFireDelay || 8000;
             this.nextFireDelay = this.getRandomFireDelay();
             // Set initial lastFired to current time
             this.lastFired = scene.time.now;
