@@ -4,7 +4,7 @@ import { EnemyGroup } from './enemies.js';
 
 export class Level1 extends Phaser.Scene {
     constructor() {
-        super({ key: 'GameScene' });
+        super({ key: 'Level1' });
         this.gameState = GameState.getInstance();
     }
 
