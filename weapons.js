@@ -67,14 +67,21 @@ class Weapon {
         console.log('destroyProjectile called with:', projectile);
         console.log('Projectile active status before:', projectile.active);
         
-        // First remove from physics world
+        // Immediately set inactive and invisible
+        projectile.setActive(false);
+        projectile.setVisible(false);
+        
+        // Disable physics and remove from world
+        projectile.body.enable = false;
         this.scene.physics.world.disable(projectile);
+        projectile.body.destroy();
         
-        // Then remove from group
-        this.projectiles.remove(projectile, true);
+        // Remove from group first
+        this.projectiles.killAndHide(projectile);
+        this.projectiles.remove(projectile, true, true);
         
-        // Finally destroy the sprite completely
-        projectile.destroy(true);
+        // Finally destroy the sprite
+        projectile.destroy();
         
         console.log('Projectile destroyed');
     }
