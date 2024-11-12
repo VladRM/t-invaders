@@ -69,6 +69,7 @@ class GameScene extends Phaser.Scene {
         // Load script files first
         this.load.script('weapons', 'weapons.js');
         this.load.script('enemies', 'enemies.js');
+        this.load.script('player', 'player.js');
 
         // Then load image assets
         this.load.image('player', 'assets/img/player/ship.png');
@@ -116,25 +117,11 @@ class GameScene extends Phaser.Scene {
             }
         }
         
-        const playerSize = 64;
-
-        this.player = this.physics.add.sprite(gameWidth/2, gameHeight - playerSize, 'player').setDisplaySize(playerSize, playerSize);
-        // Set collision bounds for the player
-        this.player.setCollideWorldBounds(true);
-        this.player.lives = 3;
-
-        // Create lives display with ship icons
-        this.livesDisplay = [];
-        const iconSize = 24;
-        const padding = 8;
-        for (let i = 0; i < this.player.lives; i++) {
-            const lifeIcon = this.add.image(
-                gameWidth - (iconSize/2 + padding) - (i * (iconSize + padding)),
-                gameHeight - (iconSize/2 + padding),
-                'player'
-            ).setDisplaySize(iconSize, iconSize);
-            this.livesDisplay.push(lifeIcon);
-        }
+        // Initialize player
+        this.player = new Player(this, {
+            size: 64,
+            lives: 3
+        });
         // Set bounds to full game width
         this.physics.world.setBounds(0, 0, gameWidth, gameHeight);
         
@@ -143,15 +130,6 @@ class GameScene extends Phaser.Scene {
         // Set scroll speed (positive for downward scroll)
         this.scrollSpeed = 1;
 
-        // Initialize player weapon with circular collision
-        this.playerWeapon = new Weapon(this, {
-            imageKey: 'projectile',
-            damage: 1,
-            fireDelay: 200,
-            projectileSpeed: -400,
-            collisionType: 'circle',
-            collisionRadius: 10  // Adjust this value based on your projectile size
-        });
 
         // Create enemy group
         this.enemyGroup = new EnemyGroup(this);
@@ -196,7 +174,7 @@ class GameScene extends Phaser.Scene {
 
     update() {
         // Custom collision detection
-        this.playerWeapon.getProjectileGroup().getChildren().forEach(projectile => {
+        this.player.getWeapon().getProjectileGroup().getChildren().forEach(projectile => {
             if (!projectile.active) return;
             
             this.enemyGroup.getSprites().forEach(enemySprite => {
@@ -222,7 +200,7 @@ class GameScene extends Phaser.Scene {
                     this.physics.world.remove(projectile.body);
                     
                     // Destroy projectile first
-                    this.playerWeapon.destroyProjectile(projectile);
+                    this.player.getWeapon().destroyProjectile(projectile);
                     
                     // Then handle enemy and explosion
                     this.enemyGroup.removeEnemy(enemySprite);
@@ -253,13 +231,8 @@ class GameScene extends Phaser.Scene {
             }
         }
 
-        // Handle weapon firing
-        if (this.spaceKey.isDown) {
-            this.playerWeapon.fire(this.player.x, this.player.y);
-        }
-
-        // Clean up projectiles that are off screen
-        this.playerWeapon.cleanup();
+        // Update player
+        this.player.update(this.cursors, this.spaceKey);
         
         // Check for enemy projectile collisions with player
         this.enemyGroup.enemies.forEach(enemy => {
@@ -277,23 +250,9 @@ class GameScene extends Phaser.Scene {
                     // Destroy the projectile
                     enemy.weapon.destroyProjectile(projectile);
                     
-                    // Reduce player lives and update display
-                    this.player.lives--;
-                    if (this.livesDisplay.length > 0) {
-                        const iconToRemove = this.livesDisplay.pop();
-                        iconToRemove.destroy();
-                    }
-                    
-                    // Create explosion effect at player position
-                    const explosion = this.add.sprite(this.player.x, this.player.y, 'explosion');
-                    explosion.setDisplaySize(128, 128);
-                    explosion.on('animationcomplete', function(animation, frame) {
-                        this.destroy();
-                    }, explosion);
-                    explosion.play('explode');
-                    
-                    // Check for game over
-                    if (this.player.lives <= 0) {
+                    // Handle player damage and check for game over
+                    const isGameOver = this.player.damage();
+                    if (isGameOver) {
                         this.scene.start('StartScene');
                     }
                 }
@@ -303,14 +262,6 @@ class GameScene extends Phaser.Scene {
         // Update enemies
         this.enemyGroup.update();
 
-        // Handle player movement
-        if (this.cursors.left.isDown) {
-            this.player.setVelocityX(-160);
-        } else if (this.cursors.right.isDown) {
-            this.player.setVelocityX(160);
-        } else {
-            this.player.setVelocityX(0);
-        }
     }
 }
 
@@ -325,7 +276,7 @@ const config = {
         default: 'arcade',
         arcade: {
             gravity: { y: 0 },
-            debug: true
+            debug: false
         }
     }
 };
