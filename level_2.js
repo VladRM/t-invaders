@@ -53,10 +53,10 @@ export class Level2 extends Phaser.Scene {
             }
         }
         
-        // Initialize player
+        // Initialize player with current lives from game state
         this.player = new Player(this, {
             size: 64,
-            lives: 3
+            lives: this.gameState.lives
         });
         
         this.physics.world.setBounds(0, 0, gameWidth, gameHeight);
