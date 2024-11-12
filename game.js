@@ -229,7 +229,7 @@ class GameScene extends Phaser.Scene {
                     enemy.weapon.destroyProjectile(projectile);
                     
                     // Handle player damage and check for game over
-                    const isGameOver = this.player.damage();
+                    const isGameOver = this.player.damage(false); // Pass false to skip explosion effect
                     if (isGameOver) {
                         this.scene.start('StartScene');
                     }
