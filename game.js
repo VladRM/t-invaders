@@ -198,8 +198,7 @@ class GameScene extends Phaser.Scene {
                 const explosionY = enemySprite.y;
 
                 // Remove projectile from group and physics world
-                this.playerWeapon.getProjectileGroup().remove(projectile, true, true);
-                projectile.destroy(true);
+                this.playerWeapon.destroyProjectile(projectile);
                 
                 // Remove enemy
                 this.enemyGroup.removeEnemy(enemySprite);
