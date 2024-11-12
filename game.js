@@ -175,14 +175,6 @@ class GameScene extends Phaser.Scene {
                     // Handle enemy and explosion
                     this.enemyGroup.removeEnemy(enemySprite);
                     
-                    // Create explosion effect
-                    const explosion = this.add.sprite(explosionX, explosionY, 'explosion');
-                    explosion.setDisplaySize(128, 128);
-                    explosion.on('animationcomplete', function(animation, frame) {
-                        this.destroy();
-                    }, explosion);
-                    explosion.play('explode');
-                    
                     return false; // Break the inner loop since we've handled this projectile
                 }
             });
