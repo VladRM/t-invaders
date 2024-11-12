@@ -165,14 +165,10 @@ class GameScene extends Phaser.Scene {
                 const enemyRadius = 24;       // Enemy collision radius
                 
                 if (distance < projectileRadius + enemyRadius) {
-                    // Store explosion position
-                    const explosionX = enemySprite.x;
-                    const explosionY = enemySprite.y;
-                    
                     // Destroy projectile
                     this.player.getWeapon().destroyProjectile(projectile);
                     
-                    // Handle enemy and explosion
+                    // Remove enemy
                     this.enemyGroup.removeEnemy(enemySprite);
                     
                     return false; // Break the inner loop since we've handled this projectile
