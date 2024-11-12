@@ -11,9 +11,9 @@ export class Enemy {
             this.minFireDelay = config.minFireDelay || 40001111;
             this.maxFireDelay = config.maxFireDelay || 80001111;
             this.nextFireDelay = this.getRandomFireDelay();
-            // Always set initial lastFired to be in the past by the fire delay amount
-            // This ensures consistent behavior on both first start and restart
-            this.lastFired = scene.time.now - this.nextFireDelay;
+            // Set initial lastFired to current time plus random delay
+            // This ensures enemies wait before first shot on both start and restart
+            this.lastFired = scene.time.now + this.nextFireDelay;
 
             // Create a new weapon instance for this enemy
             this.weapon = new Weapon(scene, {
