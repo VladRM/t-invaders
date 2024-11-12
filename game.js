@@ -122,13 +122,18 @@ class GameScene extends Phaser.Scene {
         this.player.setCollideWorldBounds(true);
         this.player.lives = 3;
 
-        // Create lives display
-        this.livesText = this.add.text(
-            gameWidth - 20, 
-            gameHeight - 20, 
-            `Lives: ${this.player.lives}`, 
-            { fontSize: '24px', fill: '#fff' }
-        ).setOrigin(1, 1);
+        // Create lives display with ship icons
+        this.livesDisplay = [];
+        const iconSize = 32;
+        const padding = 10;
+        for (let i = 0; i < this.player.lives; i++) {
+            const lifeIcon = this.add.image(
+                gameWidth - (iconSize/2 + padding) - (i * (iconSize + padding)),
+                gameHeight - (iconSize/2 + padding),
+                'player'
+            ).setDisplaySize(iconSize, iconSize);
+            this.livesDisplay.push(lifeIcon);
+        }
         // Set bounds to full game width
         this.physics.world.setBounds(0, 0, gameWidth, gameHeight);
         
@@ -280,9 +285,12 @@ class GameScene extends Phaser.Scene {
                 // Destroy the projectile
                 this.enemyWeapon.destroyProjectile(projectile);
                 
-                // Reduce player lives
+                // Reduce player lives and update display
                 this.player.lives--;
-                this.livesText.setText(`Lives: ${this.player.lives}`);
+                if (this.livesDisplay.length > 0) {
+                    const iconToRemove = this.livesDisplay.pop();
+                    iconToRemove.destroy();
+                }
                 
                 // Create explosion effect at player position
                 const explosion = this.add.sprite(this.player.x, this.player.y, 'explosion');
