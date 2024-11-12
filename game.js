@@ -207,10 +207,10 @@ class GameScene extends Phaser.Scene {
                 // Create explosion after objects are destroyed
                 const explosion = this.add.sprite(explosionX, explosionY, 'explosion');
                 explosion.setDisplaySize(128, 128);
+                explosion.on('animationcomplete', function(animation, frame) {
+                    this.destroy();
+                }, explosion);
                 explosion.play('explode');
-                explosion.once('animationcomplete', () => {
-                    explosion.destroy();
-                });
             },
             null,
             this
