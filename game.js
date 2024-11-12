@@ -1,6 +1,7 @@
 import { SceneStart } from './sceneStart.js';
 import { Level1 } from './level_1.js';
 import { Level2 } from './level_2.js';
+import { SceneWin } from './sceneWin.js';
 
 const config = {
     type: Phaser.AUTO,
@@ -8,7 +9,7 @@ const config = {
     height: 600,
     parent: 'game',
     backgroundColor: '#000000',
-    scene: [SceneStart, Level1, Level2],
+    scene: [SceneStart, Level1, Level2, SceneWin],
     physics: {
         default: 'arcade',
         arcade: {
