@@ -6,13 +6,15 @@ class Enemy {
         this.y = config.y;
         this.size = config.size || 48;
         this.lastFired = 0;
-        this.fireDelay = config.fireDelay || 2000; // Default 2 second cooldown
+        this.minFireDelay = config.minFireDelay || 4000;
+        this.maxFireDelay = config.maxFireDelay || 8000;
+        this.nextFireDelay = this.getRandomFireDelay();
         
         // Create a new weapon instance for this enemy
         this.weapon = new Weapon(scene, {
             imageKey: 'enemy_projectile',
             damage: 1,
-            fireDelay: this.fireDelay,
+            fireDelay: this.nextFireDelay,
             projectileSpeed: 400,
             collisionType: 'circle',
             collisionRadius: 5
@@ -22,11 +24,17 @@ class Enemy {
             .setDisplaySize(this.size, this.size);
     }
 
+    getRandomFireDelay() {
+        return Phaser.Math.Between(this.minFireDelay, this.maxFireDelay);
+    }
+
     update() {
         // Handle weapon firing
-        if (this.weapon && this.scene.time.now > this.lastFired + this.fireDelay) {
+        if (this.weapon && this.scene.time.now > this.lastFired + this.nextFireDelay) {
             this.weapon.fire(this.sprite.x, this.sprite.y);
             this.lastFired = this.scene.time.now;
+            // Set new random delay for next shot
+            this.nextFireDelay = this.getRandomFireDelay();
         }
     }
 
