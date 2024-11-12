@@ -7,10 +7,11 @@ export class Enemy {
             this.x = config.x;
             this.y = config.y;
             this.size = config.size || 48;
-            this.lastFired = 0;
             this.minFireDelay = config.minFireDelay || 4000;
             this.maxFireDelay = config.maxFireDelay || 8000;
             this.nextFireDelay = this.getRandomFireDelay();
+            // Initialize lastFired to current time plus a random delay
+            this.lastFired = scene.time.now + Phaser.Math.Between(0, this.maxFireDelay);
 
             // Create a new weapon instance for this enemy
             this.weapon = new Weapon(scene, {
