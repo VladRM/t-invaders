@@ -54,9 +54,8 @@ export class EnemyGroup {
             this.scene = scene;
             this.enemies = [];
             this.direction = 1; // 1 for right, -1 for left
-            this.moveSpeed = 50; // pixels per second
-            this.moveDistance = 100; // pixels to move before changing direction
-            this.startX = 0; // will be set when enemies are created
+            this.moveSpeed = 100; // pixels per second
+            this.padding = 50; // padding from screen edges
         }
 
         createEnemyRow(config) {
@@ -91,9 +90,10 @@ export class EnemyGroup {
             const moveAmount = this.moveSpeed * this.direction * (this.scene.game.loop.delta / 1000);
             
             // Check boundaries and change direction if needed
-            if (this.direction > 0 && rightmost + moveAmount > this.startX + this.moveDistance) {
+            const gameWidth = this.scene.sys.game.config.width;
+            if (this.direction > 0 && rightmost + moveAmount > gameWidth - this.padding) {
                 this.direction = -1;
-            } else if (this.direction < 0 && leftmost + moveAmount < this.startX) {
+            } else if (this.direction < 0 && leftmost + moveAmount < this.padding) {
                 this.direction = 1;
             }
 
