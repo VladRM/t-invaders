@@ -173,34 +173,44 @@ class GameScene extends Phaser.Scene {
     }
 
     update() {
-        // Sprite-based collision detection for player projectiles and enemies
-        this.physics.overlap(
-            this.player.getWeapon().getProjectileGroup(),
-            this.enemyGroup.getSprites(),
-            (projectile, enemySprite) => {
-                if (!projectile.active || !enemySprite.active) return;
-
-                // Store explosion position
-                const explosionX = enemySprite.x;
-                const explosionY = enemySprite.y;
-
-                // Destroy projectile
-                this.player.getWeapon().destroyProjectile(projectile);
-
-                // Handle enemy and explosion
-                this.enemyGroup.removeEnemy(enemySprite);
-
-                // Create explosion effect
-                const explosion = this.add.sprite(explosionX, explosionY, 'explosion');
-                explosion.setDisplaySize(128, 128);
-                explosion.on('animationcomplete', function(animation, frame) {
-                    this.destroy();
-                }, explosion);
-                explosion.play('explode');
-            },
-            null,
-            this
-        );
+        // Circle-based collision detection for player projectiles and enemies
+        this.player.getWeapon().getProjectileGroup().getChildren().forEach(projectile => {
+            if (!projectile.active) return;
+            
+            this.enemyGroup.getSprites().forEach(enemySprite => {
+                if (!enemySprite.active) return;
+                
+                // Check for intersection using circle collision
+                const dx = projectile.x - enemySprite.x;
+                const dy = projectile.y - enemySprite.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                const projectileRadius = 10;  // Projectile collision radius
+                const enemyRadius = 24;       // Enemy collision radius
+                
+                if (distance < projectileRadius + enemyRadius) {
+                    // Store explosion position
+                    const explosionX = enemySprite.x;
+                    const explosionY = enemySprite.y;
+                    
+                    // Destroy projectile
+                    this.player.getWeapon().destroyProjectile(projectile);
+                    
+                    // Handle enemy and explosion
+                    this.enemyGroup.removeEnemy(enemySprite);
+                    
+                    // Create explosion effect
+                    const explosion = this.add.sprite(explosionX, explosionY, 'explosion');
+                    explosion.setDisplaySize(128, 128);
+                    explosion.on('animationcomplete', function(animation, frame) {
+                        this.destroy();
+                    }, explosion);
+                    explosion.play('explode');
+                    
+                    return false; // Break the inner loop since we've handled this projectile
+                }
+            });
+        });
 
         // Scroll background tiles
         for (let bg of this.bgTiles) {
