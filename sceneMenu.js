@@ -10,8 +10,9 @@ export class SceneMenu extends Phaser.Scene {
         this.load.image('background', 'assets/img/space/bg.jpg');
     }
 
-    init(data) {
+    init(data = {}) {
         this.sceneState = data.state || 'start'; // 'start', 'gameover', or 'win'
+        console.log('SceneMenu init with state:', this.sceneState); // Debug log
     }
 
     create() {

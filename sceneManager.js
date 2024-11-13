@@ -25,9 +25,9 @@ export class SceneManager {
         const nextSceneKey = this.sceneFlow[currentScene.scene.key];
         if (nextSceneKey) {
             if (nextSceneKey === 'SceneMenu') {
-                // If going to menu, determine if it's a win or game over
-                const state = currentScene.scene.key === 'Level2' ? 'win' : 'gameover';
-                currentScene.scene.start(nextSceneKey, { state: state });
+                // If going to menu from a level, it's game over
+                const state = currentScene.gameState?.won ? 'win' : 'gameover';
+                currentScene.scene.start(nextSceneKey, { state });
             } else {
                 currentScene.scene.start(nextSceneKey);
             }
