@@ -103,13 +103,6 @@ export class Level2 extends Phaser.Scene {
                     const enemyRadius = 48;  // Larger collision radius for boss
                     
                     if (distance < projectileRadius + enemyRadius) {
-                        const explosion = this.add.sprite(projectile.x, projectile.y, 'explosion');
-                        explosion.setDisplaySize(64, 64);
-                        explosion.on('animationcomplete', function(animation, frame) {
-                            this.destroy();
-                        }, explosion);
-                        explosion.play('explode');
-
                         this.player.getWeapon().destroyProjectile(projectile);
                         
                         // Find the enemy and reduce its hit points
