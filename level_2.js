@@ -7,6 +7,7 @@ export class Level2 extends Phaser.Scene {
     constructor() {
         super({ key: 'Level2' });
         this.gameState = GameState.getInstance();
+        this.isTransitioning = false;
     }
 
     preload() {
@@ -193,7 +194,8 @@ export class Level2 extends Phaser.Scene {
         this.enemyGroup.update();
 
         // Check if all enemies are destroyed
-        if (this.enemyGroup.enemies.length === 0) {
+        if (this.enemyGroup.enemies.length === 0 && !this.isTransitioning) {
+            this.isTransitioning = true;
             this.gameState.won = true;  // Set won state
             this.gameState.lives = 3; // Reset lives on victory
             console.log('Level 2 complete, transitioning to win screen'); // Debug log

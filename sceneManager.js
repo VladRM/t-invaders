@@ -40,6 +40,7 @@ export class SceneManager {
             currentScene.cameras.main.once('camerafadeoutcomplete', () => {
                 const state = nextSceneKey === 'SceneMenu' && currentScene.gameState?.won ? 'win' : undefined;
                 console.log('Transitioning to:', nextSceneKey, 'with state:', state); // Debug log
+                currentScene.scene.stop();  // Stop the current scene first
                 currentScene.scene.start(nextSceneKey, { state: state });
                 if (nextSceneKey !== 'SceneMenu') {
                     currentScene.cameras.main.fadeIn(1000);
