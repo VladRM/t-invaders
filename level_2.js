@@ -104,7 +104,7 @@ export class Level2 extends Phaser.Scene {
                     
                     if (distance < projectileRadius + enemyRadius) {
                         const explosion = this.add.sprite(projectile.x, projectile.y, 'explosion');
-                        explosion.setDisplaySize(128, 128);
+                        explosion.setDisplaySize(64, 64);
                         explosion.on('animationcomplete', function(animation, frame) {
                             this.destroy();
                         }, explosion);
@@ -171,7 +171,7 @@ export class Level2 extends Phaser.Scene {
                 
                 if (distance < projectileRadius + playerRadius) {
                     const explosion = this.add.sprite(projectile.x, projectile.y, 'explosion');
-                    explosion.setDisplaySize(128, 128);
+                    explosion.setDisplaySize(64, 64);
                     explosion.on('animationcomplete', function(animation, frame) {
                         this.destroy();
                     }, explosion);

@@ -134,9 +134,9 @@ export class Level1 extends Phaser.Scene {
                     const enemyRadius = 24;       // Enemy collision radius
                     
                     if (distance < projectileRadius + enemyRadius) {
-                        // Create explosion at impact point
+                        // Create small explosion at impact point
                         const explosion = this.add.sprite(projectile.x, projectile.y, 'explosion');
-                        explosion.setDisplaySize(128, 128);
+                        explosion.setDisplaySize(64, 64);
                         explosion.on('animationcomplete', function(animation, frame) {
                             this.destroy();
                         }, explosion);
@@ -145,9 +145,9 @@ export class Level1 extends Phaser.Scene {
                         // Destroy projectile
                         this.player.getWeapon().destroyProjectile(projectile);
                         
-                        // Create centered explosion
+                        // Create medium explosion for enemy destruction
                         const bigExplosion = this.add.sprite(enemySprite.x, enemySprite.y, 'explosion');
-                        bigExplosion.setDisplaySize(192, 192);
+                        bigExplosion.setDisplaySize(128, 128);
                         bigExplosion.on('animationcomplete', function(animation, frame) {
                             this.destroy();
                         }, bigExplosion);
@@ -201,7 +201,7 @@ export class Level1 extends Phaser.Scene {
                 if (distance < projectileRadius + playerRadius) {
                     // Create explosion at impact point
                     const explosion = this.add.sprite(projectile.x, projectile.y, 'explosion');
-                    explosion.setDisplaySize(128, 128);
+                    explosion.setDisplaySize(64, 64);
                     explosion.on('animationcomplete', function(animation, frame) {
                         this.destroy();
                     }, explosion);
