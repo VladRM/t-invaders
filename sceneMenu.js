@@ -6,11 +6,20 @@ export class SceneMenu extends Phaser.Scene {
         super({ key: 'SceneMenu' });
     }
 
+    preload() {
+        this.load.image('background', 'assets/img/space/bg.jpg');
+    }
+
     init(data) {
         this.sceneState = data.state || 'start'; // 'start', 'gameover', or 'win'
     }
 
     create() {
+        // Add background
+        this.add.image(0, 0, 'background')
+            .setOrigin(0, 0)
+            .setDisplaySize(this.cameras.main.width, this.cameras.main.height);
+
         const gameTitle = this.add.text(
             this.cameras.main.centerX,
             80,
