@@ -33,21 +33,17 @@ export class SceneManager {
 
         // Handle normal progression
         const nextSceneKey = this.sceneFlow[currentScene.scene.key];
-        console.log('Next scene key:', nextSceneKey); // Debug log
         
         if (nextSceneKey) {
             currentScene.cameras.main.fadeOut(1000);
             currentScene.cameras.main.once('camerafadeoutcomplete', () => {
                 const state = nextSceneKey === 'SceneMenu' && currentScene.gameState?.won ? 'win' : undefined;
-                console.log('Transitioning to:', nextSceneKey, 'with state:', state); // Debug log
                 currentScene.scene.stop();  // Stop the current scene first
                 currentScene.scene.start(nextSceneKey, { state: state });
                 if (nextSceneKey !== 'SceneMenu') {
                     currentScene.cameras.main.fadeIn(1000);
                 }
             });
-        } else {
-            console.warn(`No next scene defined for ${currentScene.scene.key}`);
         }
     }
 }

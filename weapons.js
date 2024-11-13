@@ -78,9 +78,6 @@ export class Weapon {
         }
 
         destroyProjectile(projectile) {
-            console.log('destroyProjectile called with:', projectile);
-            console.log('Projectile active status before:', projectile.active);
-
             // Immediately set inactive and invisible
             projectile.setActive(false);
             projectile.setVisible(false);
@@ -96,8 +93,6 @@ export class Weapon {
 
             // Finally destroy the sprite
             projectile.destroy();
-
-            console.log('Projectile destroyed');
         }
 
         getProjectileGroup() {
