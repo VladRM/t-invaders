@@ -22,15 +22,22 @@ export class SceneManager {
     }
 
     goToNextScene(currentScene) {
+        // Handle game over state
+        if (!currentScene.gameState?.won) {
+            currentScene.cameras.main.fadeOut(1000);
+            currentScene.cameras.main.once('camerafadeoutcomplete', () => {
+                currentScene.scene.start('SceneMenu', { state: 'gameover' });
+            });
+            return;
+        }
+
+        // Handle normal progression
         const nextSceneKey = this.sceneFlow[currentScene.scene.key];
         if (nextSceneKey) {
-            // Always use fade transition
             currentScene.cameras.main.fadeOut(1000);
             currentScene.cameras.main.once('camerafadeoutcomplete', () => {
                 if (nextSceneKey === 'SceneMenu') {
-                    // If going to menu from a level, it's game over
-                    const state = currentScene.gameState?.won ? 'win' : 'gameover';
-                    currentScene.scene.start(nextSceneKey, { state });
+                    currentScene.scene.start(nextSceneKey, { state: 'win' });
                 } else {
                     currentScene.scene.start(nextSceneKey);
                 }
