@@ -215,7 +215,7 @@ export class Level1 extends Phaser.Scene {
                     const isGameOver = this.player.damage(false); // Pass false to skip explosion effect
                     if (isGameOver) {
                         this.gameState.won = false;
-                        SceneManager.getInstance().goToNextScene(this);
+                        this.scene.start('SceneMenu', { state: 'gameover' });
                     }
                 }
             });
