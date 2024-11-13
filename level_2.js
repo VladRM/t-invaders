@@ -182,8 +182,9 @@ export class Level2 extends Phaser.Scene {
                     
                     const isGameOver = this.player.damage(false);
                     if (isGameOver) {
+                        this.gameState.won = false;
                         this.gameState.lives = 3; // Reset lives
-                        this.scene.start('SceneStart');
+                        SceneManager.getInstance().goToNextScene(this);
                     }
                 }
             });
