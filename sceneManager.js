@@ -8,11 +8,9 @@ export class SceneManager {
         SceneManager.instance = this;
         
         this.sceneFlow = {
-            'SceneStart': 'Level1',
+            'SceneMenu': 'Level1',
             'Level1': 'Level2',
-            'Level2': 'SceneWin',
-            'SceneWin': 'Level1',
-            'SceneGameOver': 'SceneStart'
+            'Level2': 'SceneMenu'
         };
     }
 
@@ -26,7 +24,13 @@ export class SceneManager {
     goToNextScene(currentScene) {
         const nextSceneKey = this.sceneFlow[currentScene.scene.key];
         if (nextSceneKey) {
-            currentScene.scene.start(nextSceneKey);
+            if (nextSceneKey === 'SceneMenu') {
+                // If going to menu, determine if it's a win or game over
+                const state = currentScene.scene.key === 'Level2' ? 'win' : 'gameover';
+                currentScene.scene.start(nextSceneKey, { state: state });
+            } else {
+                currentScene.scene.start(nextSceneKey);
+            }
         } else {
             console.warn(`No next scene defined for ${currentScene.scene.key}`);
         }
