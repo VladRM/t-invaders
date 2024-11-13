@@ -7,10 +7,24 @@ export class SceneGameOver extends Phaser.Scene {
     }
 
     create() {
-        // Create game over text
-        const title = this.add.text(
+        // Create title text
+        const gameTitle = this.add.text(
             this.cameras.main.centerX,
-            100,
+            80,
+            "Tudor's\nSpace Adventure",
+            {
+                fontSize: '48px',
+                fill: '#fff',
+                fontStyle: 'bold',
+                align: 'center'
+            }
+        );
+        gameTitle.setOrigin(0.5);
+
+        // Create game over text
+        const gameOverText = this.add.text(
+            this.cameras.main.centerX,
+            gameTitle.y + 100,
             "Game Over!",
             {
                 fontSize: '64px',
@@ -19,9 +33,9 @@ export class SceneGameOver extends Phaser.Scene {
                 align: 'center'
             }
         );
-        title.setOrigin(0.5);
+        gameOverText.setOrigin(0.5);
 
-        // Create menu with try again option
+        // Create menu with try again option in consistent style
         UI.createMenu(this, [
             {
                 text: 'Try Again',
