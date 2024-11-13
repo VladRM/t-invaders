@@ -1,6 +1,7 @@
 import { GameState } from './gameState.js';
 import { Player } from './player.js';
 import { EnemyGroup } from './enemies.js';
+import { SceneManager } from './sceneManager.js';
 
 export class Level1 extends Phaser.Scene {
     constructor() {
