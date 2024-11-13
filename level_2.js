@@ -194,7 +194,9 @@ export class Level2 extends Phaser.Scene {
 
         // Check if all enemies are destroyed
         if (this.enemyGroup.enemies.length === 0) {
+            this.gameState.won = true;  // Set won state
             this.gameState.lives = 3; // Reset lives on victory
+            console.log('Level 2 complete, transitioning to win screen'); // Debug log
             SceneManager.getInstance().goToNextScene(this);
         }
     }
