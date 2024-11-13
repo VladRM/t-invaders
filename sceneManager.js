@@ -33,17 +33,18 @@ export class SceneManager {
 
         // Handle normal progression
         const nextSceneKey = this.sceneFlow[currentScene.scene.key];
+        console.log('Next scene key:', nextSceneKey); // Debug log
+        
         if (nextSceneKey) {
-            currentScene.cameras.main.fadeOut(1000);
-            currentScene.cameras.main.once('camerafadeoutcomplete', () => {
-                if (nextSceneKey === 'SceneMenu') {
+            if (nextSceneKey === 'SceneMenu') {
+                currentScene.cameras.main.fadeOut(1000);
+                currentScene.cameras.main.once('camerafadeoutcomplete', () => {
                     currentScene.scene.start(nextSceneKey, { state: 'win' });
-                } else {
-                    console.log('Starting next scene:', nextSceneKey); // Debug log
-                    currentScene.scene.start(nextSceneKey);
-                    currentScene.cameras.main.fadeIn(1000);
-                }
-            });
+                });
+            } else {
+                // Direct transition for levels
+                currentScene.scene.start(nextSceneKey);
+            }
         } else {
             console.warn(`No next scene defined for ${currentScene.scene.key}`);
         }

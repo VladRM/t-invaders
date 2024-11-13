@@ -228,7 +228,8 @@ export class Level1 extends Phaser.Scene {
         if (this.enemyGroup.enemies.length === 0) {
             this.gameState.won = true;
             this.gameState.currentLevel = 2;  // Update current level
-            SceneManager.getInstance().goToNextScene(this);
+            console.log('Level 1 complete, transitioning to Level 2'); // Debug log
+            this.scene.start('Level2');
         }
     }
 }
