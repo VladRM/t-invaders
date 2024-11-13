@@ -117,7 +117,24 @@ export class Level2 extends Phaser.Scene {
                         if (enemy) {
                             enemy.hitPoints--;
                             if (enemy.hitPoints <= 0) {
-                                this.enemyGroup.removeEnemy(enemySprite);
+                                // Create centered explosion
+                                const bigExplosion = this.add.sprite(enemySprite.x, enemySprite.y, 'explosion');
+                                bigExplosion.setDisplaySize(192, 192);
+                                bigExplosion.on('animationcomplete', function(animation, frame) {
+                                    this.destroy();
+                                }, bigExplosion);
+                                bigExplosion.play('explode');
+                            
+                                // Fade out enemy sprite
+                                this.tweens.add({
+                                    targets: enemySprite,
+                                    alpha: 0,
+                                    duration: 250,
+                                    ease: 'Power1',
+                                    onComplete: () => {
+                                        this.enemyGroup.removeEnemy(enemySprite);
+                                    }
+                                });
                             }
                         }
                         

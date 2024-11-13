@@ -145,8 +145,24 @@ export class Level1 extends Phaser.Scene {
                         // Destroy projectile
                         this.player.getWeapon().destroyProjectile(projectile);
                         
-                        // Remove enemy
-                        this.enemyGroup.removeEnemy(enemySprite);
+                        // Create centered explosion
+                        const bigExplosion = this.add.sprite(enemySprite.x, enemySprite.y, 'explosion');
+                        bigExplosion.setDisplaySize(192, 192);
+                        bigExplosion.on('animationcomplete', function(animation, frame) {
+                            this.destroy();
+                        }, bigExplosion);
+                        bigExplosion.play('explode');
+                        
+                        // Fade out enemy sprite
+                        this.tweens.add({
+                            targets: enemySprite,
+                            alpha: 0,
+                            duration: 250,
+                            ease: 'Power1',
+                            onComplete: () => {
+                                this.enemyGroup.removeEnemy(enemySprite);
+                            }
+                        });
                         
                         return false; // Break the inner loop since we've handled this projectile
                     }
