@@ -39,7 +39,9 @@ export class SceneManager {
                 if (nextSceneKey === 'SceneMenu') {
                     currentScene.scene.start(nextSceneKey, { state: 'win' });
                 } else {
+                    console.log('Starting next scene:', nextSceneKey); // Debug log
                     currentScene.scene.start(nextSceneKey);
+                    currentScene.cameras.main.fadeIn(1000);
                 }
             });
         } else {
