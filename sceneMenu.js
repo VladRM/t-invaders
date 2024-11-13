@@ -16,6 +16,7 @@ export class SceneMenu extends Phaser.Scene {
     }
 
     create() {
+        this.cameras.main.fadeIn(1000);
         // Add background
         this.add.image(0, 0, 'background')
             .setOrigin(0, 0)

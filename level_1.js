@@ -215,7 +215,10 @@ export class Level1 extends Phaser.Scene {
                     const isGameOver = this.player.damage(false); // Pass false to skip explosion effect
                     if (isGameOver) {
                         this.gameState.won = false;
-                        this.scene.start('SceneMenu', { state: 'gameover' });
+                        this.cameras.main.fadeOut(1000);
+                        this.cameras.main.once('camerafadeoutcomplete', () => {
+                            this.scene.start('SceneMenu', { state: 'gameover' });
+                        });
                     }
                 }
             });
