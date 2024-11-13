@@ -25,32 +25,19 @@ export class SceneMenu extends Phaser.Scene {
         gameTitle.setOrigin(0.5);
 
         // Add state-specific text
-        if (this.sceneState === 'gameover') {
-            const gameOverText = this.add.text(
+        if (this.sceneState === 'gameover' || this.sceneState === 'win') {
+            const messageText = this.add.text(
                 this.cameras.main.centerX,
                 gameTitle.y + 100,
-                "Game Over!",
+                this.sceneState === 'gameover' ? "Game Over!" : "You Won!",
                 {
                     fontSize: '64px',
-                    fill: '#ff0000',
+                    fill: this.sceneState === 'gameover' ? '#ff0000' : '#00ff00',
                     fontStyle: 'bold',
                     align: 'center'
                 }
             );
-            gameOverText.setOrigin(0.5);
-        } else if (this.sceneState === 'win') {
-            const winText = this.add.text(
-                this.cameras.main.centerX,
-                gameTitle.y + 100,
-                "Congratulations!\nYou Won!",
-                {
-                    fontSize: '48px',
-                    fill: '#fff',
-                    fontStyle: 'bold',
-                    align: 'center'
-                }
-            );
-            winText.setOrigin(0.5);
+            messageText.setOrigin(0.5);
         }
 
         // Create appropriate menu button
