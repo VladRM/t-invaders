@@ -139,4 +139,8 @@ export class EnemyGroup {
             });
             this.enemies = [];
         }
+
+        resetEnemyFiringStates() {
+            this.enemies.forEach(enemy => enemy.resetFiringState());
+        }
     }
