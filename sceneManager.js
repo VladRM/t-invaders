@@ -40,14 +40,7 @@ export class SceneManager {
             // Start the menu scene, passing state and gameState values
             // Stop any existing instance of SceneMenu so that parameters aren't lost
             currentScene.scene.stop('SceneMenu');
-            currentScene.scene.start('SceneMenu', { 
-                state: nextState,
-                gameStateValues: {
-                    currentLevel: gameState.currentLevel,
-                    lives: gameState.lives,
-                    won: gameState.won
-                }
-            });
+            currentScene.scene.start('SceneMenu', { state: nextState });
             
             this.isTransitioning = false;
         });
