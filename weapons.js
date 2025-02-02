@@ -85,7 +85,7 @@ export class Weapon {
             const autoFire = () => {
                 if (this.owner && this.owner.active && this.scene) {
                     if (this.fire(this.owner.x, this.owner.y)) {
-                        // For enemy weapons, immediately allow the next fire
+                        // For enemy weapons, immediately allow the next shot (reset canFire)
                         this.canFire = true;
                         // Schedule next shot with a random delay
                         const delay = Phaser.Math.Between(this.minFireDelay, this.maxFireDelay);
@@ -96,7 +96,9 @@ export class Weapon {
                     }
                 }
             };
-            autoFire();
+            // Instead of calling autoFire() immediately, schedule it with an initial delay:
+            const initialDelay = Phaser.Math.Between(this.minFireDelay, this.maxFireDelay);
+            this.scene.time.delayedCall(initialDelay, autoFire, [], this);
         }
 
         cleanup() {
