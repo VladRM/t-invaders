@@ -29,9 +29,10 @@ export class Enemy {
                 .setDisplaySize(this.size, this.size);
         }
 
-        resetFiringState() {
+        resetFiringState(baseTime) {
             // New version: set nextShotTime in the future with extra delay to prevent immediate firing
-            this.nextShotTime = this.scene.time.now + this.getRandomFireDelay() + 1000;
+            let timeBase = baseTime || this.scene.time.now;
+            this.nextShotTime = timeBase + this.getRandomFireDelay() + 1000;
         }
 
         getRandomFireDelay() {
@@ -141,6 +142,7 @@ export class EnemyGroup {
         }
 
         resetEnemyFiringStates() {
-            this.enemies.forEach(enemy => enemy.resetFiringState());
+            const baseTime = this.scene.time.now;
+            this.enemies.forEach(enemy => enemy.resetFiringState(baseTime));
         }
     }
