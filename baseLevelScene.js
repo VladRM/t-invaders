@@ -90,6 +90,12 @@ export class BaseLevelScene extends Phaser.Scene {
                         if (enemy) {
                             enemy.hitPoints--;
                             if (enemy.hitPoints <= 0) {
+                                // Immediately disable enemy collisions
+                                enemySprite.active = false;
+                                if (enemySprite.body) {
+                                    enemySprite.body.enable = false;
+                                }
+                                
                                 // Create a big explosion for enemy destruction
                                 createExplosion(this, enemySprite.x, enemySprite.y, EXPLOSION.BIG.size);
                                 

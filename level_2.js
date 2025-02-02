@@ -117,6 +117,9 @@ export class Level2 extends Phaser.Scene {
                             if (enemy.hitPoints <= 0) {
                                 // Mark enemy as inactive to avoid duplicate processing
                                 enemySprite.active = false;
+                                if (enemySprite.body) {
+                                    enemySprite.body.enable = false;
+                                }
                                 
                                 // Create centered explosion
                                 createExplosion(this, enemySprite.x, enemySprite.y, EXPLOSION.BIG.size);
