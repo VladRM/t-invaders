@@ -12,8 +12,9 @@ export class Enemy {
             this.minFireDelay = typeof config.minFireDelay === 'number' ? config.minFireDelay : 4000;
             this.maxFireDelay = typeof config.maxFireDelay === 'number' ? config.maxFireDelay : 8000;
             
-            // Record enemy spawn time
+            // Record enemy spawn time and initialize last fire time
             this.spawnTime = scene.time.now;
+            this.lastFireTime = scene.time.now;
             
             // Create a new weapon instance for this enemy
             this.weapon = new Weapon(scene, {
@@ -30,10 +31,9 @@ export class Enemy {
                 .setDisplaySize(this.size, this.size);
         }
 
-        resetFiringState(baseTime) {
-            let base = baseTime !== undefined ? baseTime : this.scene.time.now;
-            this.weapon.lastFired = 0;
-            this.nextShotTime = base + Math.max(this.getRandomFireDelay() + 1000, 5000);
+        resetFiringState() {
+            this.lastFireTime = this.scene.time.now;
+            this.nextShotTime = this.lastFireTime + Math.max(this.getRandomFireDelay() + 1000, 5000);
         }
 
         getRandomFireDelay() {
