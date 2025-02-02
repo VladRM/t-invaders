@@ -12,10 +12,6 @@ export class Enemy {
             this.minFireDelay = typeof config.minFireDelay === 'number' ? config.minFireDelay : 4000;
             this.maxFireDelay = typeof config.maxFireDelay === 'number' ? config.maxFireDelay : 8000;
             
-            // Initialize firing state
-            this.nextShotTime = scene.time.now + this.getRandomFireDelay();
-            console.log(`[Enemy] Created at ${scene.time.now}, nextShotDelay: ${this.getRandomFireDelay()}`);
-            
             // Create a new weapon instance for this enemy
             this.weapon = new Weapon(scene, {
                 imageKey: 'enemy_projectile',
@@ -25,7 +21,11 @@ export class Enemy {
                 collisionType: 'circle',
                 collisionRadius: 5
             });
-            this.resetFiringState();
+
+            // Initialize firing state with random delay from spawn time
+            const initialDelay = this.getRandomFireDelay();
+            this.nextShotTime = scene.time.now + initialDelay;
+            console.log(`[Enemy] Created at ${scene.time.now}, initialDelay: ${initialDelay}, will fire at: ${this.nextShotTime}`);
             
             this.sprite = scene.physics.add.sprite(this.x, this.y, this.imageKey)
                 .setDisplaySize(this.size, this.size);
