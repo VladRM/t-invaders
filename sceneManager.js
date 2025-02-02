@@ -20,7 +20,7 @@ export class SceneManager {
 
     goToNextScene(currentScene) {
         if (this.isTransitioning) {
-            console.log('[SceneManager] Ignoring transition request - already transitioning');
+            // Ignore transition request - already transitioning
             return;
         }
         this.isTransitioning = true;
@@ -37,9 +37,7 @@ export class SceneManager {
         currentScene.cameras.main.fadeOut(1000);
         currentScene.cameras.main.once('camerafadeoutcomplete', () => {
             const nextState = isWin ? 'win' : 'gameover';
-            console.log('[SceneManager] Fade complete, transitioning to menu with state:', nextState);
-            
-            // Start the menu scene first, passing both state and current gameState values
+            // Start the menu scene, passing state and gameState values
             currentScene.scene.start('SceneMenu', { 
                 state: nextState,
                 gameStateValues: {
@@ -50,7 +48,6 @@ export class SceneManager {
             });
             
             this.isTransitioning = false;
-            console.log('[SceneManager] Transition complete, ready for next transition');
         });
     }
 }

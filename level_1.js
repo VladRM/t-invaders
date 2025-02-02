@@ -30,8 +30,10 @@ export class Level1 extends Phaser.Scene {
             this.enemyGroup.destroy();
         }
         
-        // Reset game state when scene starts
-        this.gameState.reset();
+        // Only reset game state if not coming from a win
+        if (!this.gameState.won) {
+            this.gameState.reset();
+        }
         
         const gameWidth = this.sys.game.config.width;
         const gameHeight = this.sys.game.config.height;
