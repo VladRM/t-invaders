@@ -3,6 +3,7 @@ import { Player } from './player.js';
 import { EnemyGroup } from './enemies.js';
 import { SceneManager } from './sceneManager.js';
 import { COLLISION, EXPLOSION } from './config.js';
+import { createExplosion } from './explosion.js';
 
 export class BaseLevelScene extends Phaser.Scene {
     constructor(config) {
@@ -61,15 +62,6 @@ export class BaseLevelScene extends Phaser.Scene {
         this.spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     }
 
-    // Helper: Create an explosion (handles sprite creation, animation, and cleanup)
-    createExplosion(x, y, explosionSize) {
-        const explosion = this.add.sprite(x, y, 'explosion');
-        explosion.setDisplaySize(explosionSize, explosionSize);
-        explosion.on('animationcomplete', function(animation, frame) {
-            this.destroy();
-        }, explosion);
-        explosion.play('explode');
-    }
 
     // Helper: Check circular collision between two objects
     checkCollision(obj1, obj2, radius1, radius2) {
@@ -88,7 +80,7 @@ export class BaseLevelScene extends Phaser.Scene {
                     
                     if (this.checkCollision(projectile, enemySprite, COLLISION.PROJECTILE_RADIUS, COLLISION.ENEMY_RADIUS)) {
                         // Create a small explosion for the projectile impact
-                        this.createExplosion(projectile.x, projectile.y, EXPLOSION.SMALL.size);
+                        createExplosion(this, projectile.x, projectile.y, EXPLOSION.SMALL.size);
                         
                         // Destroy the projectile using the weapon method
                         this.player.getWeapon().destroyProjectile(projectile);
@@ -99,7 +91,7 @@ export class BaseLevelScene extends Phaser.Scene {
                             enemy.hitPoints--;
                             if (enemy.hitPoints <= 0) {
                                 // Create a big explosion for enemy destruction
-                                this.createExplosion(enemySprite.x, enemySprite.y, EXPLOSION.BIG.size);
+                                createExplosion(this, enemySprite.x, enemySprite.y, EXPLOSION.BIG.size);
                                 
                                 // Fade out and remove enemy sprite
                                 this.tweens.add({
@@ -127,7 +119,7 @@ export class BaseLevelScene extends Phaser.Scene {
                 
                 if (this.checkCollision(projectile, this.player.getSprite(), COLLISION.ENEMY_PROJECTILE_RADIUS, COLLISION.PLAYER_RADIUS)) {
                     // Create a small explosion at impact
-                    this.createExplosion(projectile.x, projectile.y, EXPLOSION.SMALL.size);
+                    createExplosion(this, projectile.x, projectile.y, EXPLOSION.SMALL.size);
                     
                     enemy.weapon.destroyProjectile(projectile);
                     
