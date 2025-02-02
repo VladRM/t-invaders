@@ -1,4 +1,5 @@
 import { Weapon } from './weapons.js';
+import { COLLISION } from './config.js';
 
 export class Enemy {
         constructor(scene, config) {
@@ -19,7 +20,7 @@ export class Enemy {
                 fireDelay: 0, // We'll handle the delay in Enemy class
                 projectileSpeed: 300,
                 collisionType: 'circle',
-                collisionRadius: 5,
+                collisionRadius: COLLISION.ENEMY_PROJECTILE_RADIUS,
                 isEnemy: true
             });
 

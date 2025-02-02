@@ -110,8 +110,8 @@ export class Level2 extends Phaser.Scene {
                     const dy = projectile.y - enemySprite.y;
                     const distance = Math.sqrt(dx * dx + dy * dy);
                     
-                    const projectileRadius = 10;
-                    const enemyRadius = 48;  // Larger collision radius for boss
+                    const projectileRadius = COLLISION.PROJECTILE_RADIUS;
+                    const enemyRadius = COLLISION.ENEMY_RADIUS;
                     
                     if (distance < projectileRadius + enemyRadius) {
                         // Create small explosion at impact point
@@ -186,8 +186,8 @@ export class Level2 extends Phaser.Scene {
             const dx = projectile.x - playerSprite.x;
             const dy = projectile.y - playerSprite.y;
             const distance = Math.sqrt(dx * dx + dy * dy);
-            const projectileRadius = 5;
-            const playerRadius = 32;
+            const projectileRadius = COLLISION.ENEMY_PROJECTILE_RADIUS;
+            const playerRadius = COLLISION.PLAYER_RADIUS;
             if (distance < projectileRadius + playerRadius) {
                 const explosion = this.add.sprite(projectile.x, projectile.y, 'explosion');
                 explosion.setDisplaySize(64, 64);

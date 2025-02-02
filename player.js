@@ -1,5 +1,6 @@
 import { Weapon } from './weapons.js';
 import { SceneManager } from './sceneManager.js';
+import { COLLISION } from './config.js';
 
 export class Player {
         constructor(scene, config) {
@@ -29,7 +30,7 @@ export class Player {
                 fireDelay: 200,
                 projectileSpeed: -400,
                 collisionType: 'circle',
-                collisionRadius: 10
+                collisionRadius: COLLISION.PROJECTILE_RADIUS
             });
 
             // Create lives display

@@ -1,3 +1,5 @@
+import { COLLISION } from './config.js';
+
 export class Weapon {
         constructor(scene, config) {
             this.scene = scene;
@@ -23,7 +25,7 @@ export class Weapon {
                         projectile.setActive(true);
                         projectile.setVisible(true);
                         if (this.collisionType === 'circle') {
-                            const radius = this.collisionRadius || projectile.width / 2;
+                            const radius = this.collisionRadius || COLLISION.PROJECTILE_RADIUS;
                             projectile.body.setCircle(radius);
                             projectile.body.setOffset(
                                 (projectile.width - radius * 2) / 2,

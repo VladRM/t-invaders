@@ -2,6 +2,7 @@ import { GameState } from './gameState.js';
 import { Player } from './player.js';
 import { EnemyGroup } from './enemies.js';
 import { SceneManager } from './sceneManager.js';
+import { COLLISION } from './config.js';
 
 export class Level1 extends Phaser.Scene {
     constructor() {
@@ -137,8 +138,8 @@ export class Level1 extends Phaser.Scene {
                     const dy = projectile.y - enemySprite.y;
                     const distance = Math.sqrt(dx * dx + dy * dy);
                     
-                    const projectileRadius = 10;  // Projectile collision radius
-                    const enemyRadius = 24;       // Enemy collision radius
+                    const projectileRadius = COLLISION.PROJECTILE_RADIUS;
+                    const enemyRadius = COLLISION.ENEMY_RADIUS;
                     
                     if (distance < projectileRadius + enemyRadius) {
                         // Create small explosion at impact point
