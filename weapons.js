@@ -5,8 +5,8 @@ export class Weapon {
             this.damage = config.damage || 1;
             this.fireDelay = config.fireDelay || 200;
             this.projectileSpeed = config.projectileSpeed || -400;
-            this.lastFired = 0;
-            console.log(`[Weapon] Created at ${scene.time.now}, lastFired: ${this.lastFired}`);
+            this.canFire = true;
+            console.log(`[Weapon] Created at ${scene.time.now}`);
 
             // Store collision config
             this.collisionType = config.collisionType || 'circle';
@@ -43,13 +43,19 @@ export class Weapon {
         }
 
         fire(x, y) {
-            if (this.scene.time.now > this.lastFired + this.fireDelay) {
+            if (this.canFire) {
                 const projectile = this.projectiles.create(x, y, this.imageKey);
                 projectile.setActive(true);
                 projectile.setVisible(true);
                 projectile.body.enable = true;
                 projectile.setVelocityY(this.projectileSpeed);
-                this.lastFired = this.scene.time.now;
+                this.canFire = false;
+                
+                // Use scene's time event for delay
+                this.scene.time.delayedCall(this.fireDelay, () => {
+                    this.canFire = true;
+                });
+                
                 return true;
             }
             return false;
