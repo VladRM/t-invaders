@@ -13,32 +13,34 @@ export class Weapon {
             this.collisionHeight = config.collisionHeight;
             this.collisionRadius = config.collisionRadius;
 
-            // Create projectile group with configured hit detection
-            this.projectiles = scene.physics.add.group({
-                classType: Phaser.Physics.Arcade.Sprite,
-                createCallback: (projectile) => {
-                    projectile.setActive(true);
-                    projectile.setVisible(true);
-                    if (this.collisionType === 'circle') {
-                        const radius = this.collisionRadius || projectile.width / 2;
-                        projectile.body.setCircle(radius);
-                        // Center the circle collision body
-                        projectile.body.setOffset(
-                            (projectile.width - radius * 2) / 2,
-                            (projectile.height - radius * 2) / 2
-                        );
-                    } else if (this.collisionType === 'rectangle') {
-                        const width = this.collisionWidth || projectile.width;
-                        const height = this.collisionHeight || projectile.height;
-                        projectile.body.setSize(width, height);
-                        // Center the rectangle collision body
-                        projectile.body.setOffset(
-                            (projectile.width - width) / 2,
-                            (projectile.height - height) / 2
-                        );
+            // Create or use existing projectile group
+            if (config.isEnemy && scene.enemyBullets) {
+                this.projectiles = scene.enemyBullets;
+            } else {
+                this.projectiles = scene.physics.add.group({
+                    classType: Phaser.Physics.Arcade.Sprite,
+                    createCallback: (projectile) => {
+                        projectile.setActive(true);
+                        projectile.setVisible(true);
+                        if (this.collisionType === 'circle') {
+                            const radius = this.collisionRadius || projectile.width / 2;
+                            projectile.body.setCircle(radius);
+                            projectile.body.setOffset(
+                                (projectile.width - radius * 2) / 2,
+                                (projectile.height - radius * 2) / 2
+                            );
+                        } else if (this.collisionType === 'rectangle') {
+                            const width = this.collisionWidth || projectile.width;
+                            const height = this.collisionHeight || projectile.height;
+                            projectile.body.setSize(width, height);
+                            projectile.body.setOffset(
+                                (projectile.width - width) / 2,
+                                (projectile.height - height) / 2
+                            );
+                        }
                     }
-                }
-            });
+                });
+            }
         }
 
         fire(x, y) {

@@ -65,6 +65,10 @@ export class Level2 extends Phaser.Scene {
         });
         
         this.physics.world.setBounds(0, 0, gameWidth, gameHeight);
+        
+        // Initialize global enemy bullets group
+        this.enemyBullets = this.physics.add.group();
+        
         this.cursors = this.input.keyboard.createCursorKeys();
         this.scrollSpeed = 1;
 
@@ -85,7 +89,8 @@ export class Level2 extends Phaser.Scene {
                 size: bossSize,
                 hitPoints: 10,
                 minFireDelay: 1000,  // 1 second minimum delay
-                maxFireDelay: 2000   // 2 second maximum delay
+                maxFireDelay: 2000,   // 2 second maximum delay
+                isEnemy: true
             }
         });
 
@@ -175,36 +180,32 @@ export class Level2 extends Phaser.Scene {
         this.player.update(this.cursors, this.spaceKey);
         
         // Check for enemy projectile collisions with player
-        this.enemyGroup.enemies.forEach(enemy => {
-            enemy.weapon.getProjectileGroup().getChildren().forEach(projectile => {
-                if (!projectile.active || !this.player.getSprite().active) return;
-                
-                const playerSprite = this.player.getSprite();
-                const dx = projectile.x - playerSprite.x;
-                const dy = projectile.y - playerSprite.y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-                
-                const projectileRadius = 5;
-                const playerRadius = 32;
-                
-                if (distance < projectileRadius + playerRadius) {
-                    const explosion = this.add.sprite(projectile.x, projectile.y, 'explosion');
-                    explosion.setDisplaySize(64, 64);
-                    explosion.on('animationcomplete', function(animation, frame) {
-                        this.destroy();
-                    }, explosion);
-                    explosion.play('explode');
-
-                    enemy.weapon.destroyProjectile(projectile);
-                    
-                    const isGameOver = this.player.damage(false);
-                    if (isGameOver && !this.isTransitioning) {
-                        this.isTransitioning = true;
-                        this.gameState.won = false;
-                        SceneManager.getInstance().goToNextScene(this);
-                    }
+        this.enemyBullets.getChildren().forEach(projectile => {
+            if (!projectile.active || !this.player.getSprite().active) return;
+            const playerSprite = this.player.getSprite();
+            const dx = projectile.x - playerSprite.x;
+            const dy = projectile.y - playerSprite.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            const projectileRadius = 5;
+            const playerRadius = 32;
+            if (distance < projectileRadius + playerRadius) {
+                const explosion = this.add.sprite(projectile.x, projectile.y, 'explosion');
+                explosion.setDisplaySize(64, 64);
+                explosion.on('animationcomplete', function() {
+                    this.destroy();
+                }, explosion);
+                explosion.play('explode');
+                // Disable and destroy the projectile
+                projectile.setActive(false);
+                projectile.setVisible(false);
+                projectile.destroy();
+                const isGameOver = this.player.damage(false);
+                if (isGameOver && !this.isTransitioning) {
+                    this.isTransitioning = true;
+                    this.gameState.won = false;
+                    SceneManager.getInstance().goToNextScene(this);
                 }
-            });
+            }
         });
 
         this.enemyGroup.update();

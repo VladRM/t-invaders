@@ -72,6 +72,9 @@ export class Level1 extends Phaser.Scene {
         // Set bounds to full game width
         this.physics.world.setBounds(0, 0, gameWidth, gameHeight);
         
+        // Initialize global enemy bullets group
+        this.enemyBullets = this.physics.add.group();
+        
         this.cursors = this.input.keyboard.createCursorKeys();
         
         // Set scroll speed (positive for downward scroll)
@@ -95,7 +98,8 @@ export class Level1 extends Phaser.Scene {
                 imageKey: 'enemy',
                 size: enemySize,
                 minFireDelay: 4000,  // 4 seconds minimum
-                maxFireDelay: 5000   // 5 seconds maximum
+                maxFireDelay: 5000,   // 5 seconds maximum
+                isEnemy: true
             }
         });
 
@@ -189,38 +193,31 @@ export class Level1 extends Phaser.Scene {
         this.player.update(this.cursors, this.spaceKey);
         
         // Check for enemy projectile collisions with player
-        this.enemyGroup.enemies.forEach(enemy => {
-            enemy.weapon.getProjectileGroup().getChildren().forEach(projectile => {
-                if (!projectile.active || !this.player.getSprite().active) return;
-                
-                const playerSprite = this.player.getSprite();
-                const dx = projectile.x - playerSprite.x;
-                const dy = projectile.y - playerSprite.y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-                
-                const projectileRadius = 5;  // Enemy projectile collision radius
-                const playerRadius = 32;     // Player collision radius
-                
-                if (distance < projectileRadius + playerRadius) {
-                    // Create explosion at impact point
-                    const explosion = this.add.sprite(projectile.x, projectile.y, 'explosion');
-                    explosion.setDisplaySize(64, 64);
-                    explosion.on('animationcomplete', function(animation, frame) {
-                        this.destroy();
-                    }, explosion);
-                    explosion.play('explode');
-
-                    // Destroy the projectile
-                    enemy.weapon.destroyProjectile(projectile);
-                    
-                    // Handle player damage and check for game over
-                    const isGameOver = this.player.damage(false); // Pass false to skip explosion effect
-                    if (isGameOver) {
-                        this.gameState.won = false;
-                        SceneManager.getInstance().goToNextScene(this);
-                    }
+        this.enemyBullets.getChildren().forEach(projectile => {
+            if (!projectile.active || !this.player.getSprite().active) return;
+            const playerSprite = this.player.getSprite();
+            const dx = projectile.x - playerSprite.x;
+            const dy = projectile.y - playerSprite.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            const projectileRadius = 5;  // Use same values as before
+            const playerRadius = 32;
+            if (distance < projectileRadius + playerRadius) {
+                const explosion = this.add.sprite(projectile.x, projectile.y, 'explosion');
+                explosion.setDisplaySize(64, 64);
+                explosion.on('animationcomplete', function() {
+                    this.destroy();
+                }, explosion);
+                explosion.play('explode');
+                // Disable and destroy the projectile
+                projectile.setActive(false);
+                projectile.setVisible(false);
+                projectile.destroy();
+                const isGameOver = this.player.damage(false);
+                if (isGameOver) {
+                    this.gameState.won = false;
+                    SceneManager.getInstance().goToNextScene(this);
                 }
-            });
+            }
         });
 
         // Update enemies

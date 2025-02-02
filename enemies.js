@@ -19,7 +19,8 @@ export class Enemy {
                 fireDelay: 0, // We'll handle the delay in Enemy class
                 projectileSpeed: 300,
                 collisionType: 'circle',
-                collisionRadius: 5
+                collisionRadius: 5,
+                isEnemy: true
             });
 
             // Initialize firing state
@@ -59,10 +60,6 @@ export class Enemy {
         }
 
         destroy() {
-            if (this.weapon && this.weapon.getProjectileGroup()) {
-                const projectiles = this.weapon.getProjectileGroup();
-                projectiles.destroy(true);
-            }
             if (this.sprite) {
                 this.sprite.destroy();
             }
