@@ -30,8 +30,9 @@ export class Enemy {
         }
 
         resetFiringState(baseTime) {
-            // New version: set nextShotTime in the future with extra delay to prevent immediate firing
+            // New version: set weapon's lastFired and nextShotTime in the future with extra delay to prevent immediate firing
             let timeBase = baseTime || this.scene.time.now;
+            this.weapon.lastFired = timeBase;
             this.nextShotTime = timeBase + this.getRandomFireDelay() + 1000;
         }
 
