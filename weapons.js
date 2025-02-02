@@ -6,7 +6,6 @@ export class Weapon {
             this.fireDelay = config.fireDelay || 200;
             this.projectileSpeed = config.projectileSpeed || -400;
             this.canFire = true;
-            console.log(`[Weapon] Created at ${scene.time.now}`);
 
             // Store collision config
             this.collisionType = config.collisionType || 'circle';

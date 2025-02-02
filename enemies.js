@@ -24,7 +24,6 @@ export class Enemy {
 
             // Initialize firing state
             this.canFire = false;
-            console.log(`[Enemy] Created at ${scene.time.now}`);
             
             // Set initial firing delay
             const initialDelay = this.getRandomFireDelay();
