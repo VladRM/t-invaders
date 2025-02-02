@@ -13,7 +13,12 @@ export class SceneMenu extends Phaser.Scene {
 
     init(data = {}) {
         this.sceneState = data.state || 'start'; // 'start', 'gameover', or 'win'
-        console.log('[SceneMenu] Initialized with state:', this.sceneState, 'data:', data);
+        const gameState = GameState.getInstance();
+        console.log('[SceneMenu] Initialized with state:', this.sceneState, 'data:', data, 'gameState:', {
+            currentLevel: gameState.currentLevel,
+            lives: gameState.lives,
+            won: gameState.won
+        });
     }
 
     create() {
