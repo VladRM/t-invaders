@@ -67,8 +67,15 @@ export class Player {
             }
 
             if (this.lives <= 0) {
+                // Create a big explosion at the player's current location  
+                const explosion = this.scene.add.sprite(this.sprite.x, this.sprite.y, 'explosion');
+                explosion.setScale(2); // Adjust scale as needed for a big explosion  
+                explosion.play('explode');  
+                
+                // Remove the player ship from the scene  
+                this.sprite.destroy();  
+                
                 this.active = false;
-                this.sprite.setActive(false);
             }
 
             return this.lives <= 0;
