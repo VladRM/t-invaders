@@ -113,6 +113,9 @@ export class Level1 extends Phaser.Scene {
             }
         });
 
+        // Reset enemy firing states to prevent immediate firing
+        this.enemyGroup.resetEnemyFiringStates();
+
         // Add spacebar for firing
         this.spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     }
