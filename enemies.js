@@ -12,10 +12,12 @@ export class Enemy {
             this.minFireDelay = typeof config.minFireDelay === 'number' ? config.minFireDelay : 4000;
             this.maxFireDelay = typeof config.maxFireDelay === 'number' ? config.maxFireDelay : 8000;
             
-            // Record spawn time and initialize firing state
+            // Record spawn time and initialize firing state with staggered delay
             this.spawnTime = scene.time.now;
-            this.firstShotDelay = Math.max(this.getRandomFireDelay() + 1000, 5000);
+            // Add random stagger between 0-2000ms to prevent synchronized firing
+            this.firstShotDelay = Math.max(this.getRandomFireDelay() + 1000, 5000) + Phaser.Math.Between(0, 2000);
             this.hasFirstShot = false;
+            this.initialDelay = true; // Flag to track if this is the first delay period
             console.log(`[Enemy] Created at ${scene.time.now}, firstShotDelay: ${this.firstShotDelay}`);
             
             // Create a new weapon instance for this enemy
@@ -34,13 +36,16 @@ export class Enemy {
         }
 
         resetFiringState(baseTime) {
-            // If baseTime provided (e.g. on scene restart), update spawn time
             if (baseTime !== undefined) {
                 this.spawnTime = baseTime;
                 this.hasFirstShot = false;
+                this.initialDelay = true;
+                // Recompute first shot delay with stagger on reset
+                this.firstShotDelay = Math.max(this.getRandomFireDelay() + 1000, 5000) + Phaser.Math.Between(0, 2000);
+            } else if (!this.initialDelay) {
+                // For subsequent shots, use normal delay without stagger
+                this.nextShotDelay = this.getRandomFireDelay();
             }
-            // Reset first shot delay
-            this.firstShotDelay = Math.max(this.getRandomFireDelay() + 1000, 5000);
         }
 
         getRandomFireDelay() {
@@ -58,6 +63,7 @@ export class Enemy {
                         if (this.weapon.fire(this.sprite.x, this.sprite.y)) {
                             console.log(`[Enemy] First shot successful`);
                             this.hasFirstShot = true;
+                            this.initialDelay = false;
                             this.lastFireTime = this.scene.time.now;
                             this.nextShotDelay = this.getRandomFireDelay();
                         }
