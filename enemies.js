@@ -9,11 +9,15 @@ export class Enemy {
             this.y = config.y;
             this.size = config.size || 48;
             this.hitPoints = config.hitPoints || 1;
-            // Ensure we always use the provided delays or defaults
+            // Create sprite first
+            this.sprite = scene.physics.add.sprite(this.x, this.y, this.imageKey)
+                .setDisplaySize(this.size, this.size);
+            
+            // Ensure firing delays are present
             this.minFireDelay = typeof config.minFireDelay === 'number' ? config.minFireDelay : 4000;
             this.maxFireDelay = typeof config.maxFireDelay === 'number' ? config.maxFireDelay : 8000;
             
-            // Create a new weapon instance for this enemy
+            // Then create the weapon using the already-created sprite as owner
             this.weapon = new Weapon(scene, {
                 imageKey: 'enemy_projectile',
                 damage: 1,
@@ -28,9 +32,6 @@ export class Enemy {
             if (this.weapon.isEnemy) {
                 this.weapon.startAutoFire();
             }
-
-            this.sprite = scene.physics.add.sprite(this.x, this.y, this.imageKey)
-                .setDisplaySize(this.size, this.size);
         }
 
         resetFiringState(baseTime) {

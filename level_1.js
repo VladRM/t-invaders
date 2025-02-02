@@ -134,7 +134,7 @@ export class Level1 extends Phaser.Scene {
                         this.player.getWeapon().destroyProjectile(projectile);
                         
                         // Create medium explosion for enemy destruction
-                        createExplosion(this, enemySprite.x, enemySprite.y, EXPLOSION.BIG.size);
+                        createExplosion(this, enemySprite.x, enemySprite.y, 128);
                         
                         // Fade out enemy sprite
                         this.tweens.add({
