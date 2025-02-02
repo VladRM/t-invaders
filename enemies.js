@@ -17,22 +17,18 @@ export class Enemy {
             this.weapon = new Weapon(scene, {
                 imageKey: 'enemy_projectile',
                 damage: 1,
-                fireDelay: 0, // We'll handle the delay in Enemy class
                 projectileSpeed: 300,
                 collisionType: 'circle',
                 collisionRadius: COLLISION.ENEMY_PROJECTILE_RADIUS,
-                isEnemy: true
+                isEnemy: true,
+                minFireDelay: this.minFireDelay,
+                maxFireDelay: this.maxFireDelay
             });
+            this.weapon.owner = this.sprite;
+            if (this.weapon.isEnemy) {
+                this.weapon.startAutoFire();
+            }
 
-            // Initialize firing state
-            this.canFire = false;
-            
-            // Set initial firing delay
-            const initialDelay = this.getRandomFireDelay();
-            scene.time.delayedCall(initialDelay, () => {
-                this.canFire = true;
-            });
-            
             this.sprite = scene.physics.add.sprite(this.x, this.y, this.imageKey)
                 .setDisplaySize(this.size, this.size);
         }
@@ -48,16 +44,6 @@ export class Enemy {
         }
 
         update() {
-            if (this.weapon && this.canFire) {
-                if (this.weapon.fire(this.sprite.x, this.sprite.y)) {
-                    this.canFire = false;
-                    // Schedule next shot
-                    const nextDelay = this.getRandomFireDelay();
-                    this.scene.time.delayedCall(nextDelay, () => {
-                        this.canFire = true;
-                    });
-                }
-            }
         }
 
         destroy() {

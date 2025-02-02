@@ -8,6 +8,14 @@ export class Weapon {
             this.fireDelay = config.fireDelay || 200;
             this.projectileSpeed = config.projectileSpeed || -400;
             this.canFire = true;
+            
+            if (config.isEnemy) {
+                this.isEnemy = true;
+                this.minFireDelay = config.minFireDelay;
+                this.maxFireDelay = config.maxFireDelay;
+            } else {
+                this.isEnemy = false;
+            }
 
             // Store collision config
             this.collisionType = config.collisionType || 'circle';
@@ -54,14 +62,34 @@ export class Weapon {
                 projectile.setVelocityY(this.projectileSpeed);
                 this.canFire = false;
                 
-                // Use scene's time event for delay
-                this.scene.time.delayedCall(this.fireDelay, () => {
-                    this.canFire = true;
-                });
+                if (!this.isEnemy) {
+                    // For player, use the fixed delay to allow next shot
+                    this.scene.time.delayedCall(this.fireDelay, () => { 
+                        this.canFire = true; 
+                    });
+                }
                 
                 return true;
             }
             return false;
+        }
+
+        startAutoFire() {
+            const autoFire = () => {
+                if (this.owner && this.owner.active && this.scene) {
+                    if (this.fire(this.owner.x, this.owner.y)) {
+                        // For enemy weapons, immediately allow the next fire
+                        this.canFire = true;
+                        // Schedule next shot with a random delay
+                        const delay = Phaser.Math.Between(this.minFireDelay, this.maxFireDelay);
+                        this.scene.time.delayedCall(delay, autoFire, [], this);
+                    } else {
+                        // If unable to fire, try again very shortly
+                        this.scene.time.delayedCall(100, autoFire, [], this);
+                    }
+                }
+            };
+            autoFire();
         }
 
         cleanup() {
