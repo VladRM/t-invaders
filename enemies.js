@@ -12,7 +12,9 @@ export class Enemy {
             this.minFireDelay = typeof config.minFireDelay === 'number' ? config.minFireDelay : 4000;
             this.maxFireDelay = typeof config.maxFireDelay === 'number' ? config.maxFireDelay : 8000;
             
-
+            // Record enemy spawn time
+            this.spawnTime = scene.time.now;
+            
             // Create a new weapon instance for this enemy
             this.weapon = new Weapon(scene, {
                 imageKey: 'enemy_projectile',
@@ -23,7 +25,7 @@ export class Enemy {
                 collisionRadius: 5
             });
             this.resetFiringState();
-
+            
             this.sprite = scene.physics.add.sprite(this.x, this.y, this.imageKey)
                 .setDisplaySize(this.size, this.size);
         }
