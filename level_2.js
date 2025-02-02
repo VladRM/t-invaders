@@ -182,9 +182,9 @@ export class Level2 extends Phaser.Scene {
                     enemy.weapon.destroyProjectile(projectile);
                     
                     const isGameOver = this.player.damage(false);
-                    if (isGameOver) {
+                    if (isGameOver && !this.isTransitioning) {
+                        this.isTransitioning = true;
                         this.gameState.won = false;
-                        this.gameState.lives = 3; // Reset lives
                         SceneManager.getInstance().goToNextScene(this);
                     }
                 }
@@ -196,8 +196,7 @@ export class Level2 extends Phaser.Scene {
         // Check if all enemies are destroyed
         if (this.enemyGroup.enemies.length === 0 && !this.isTransitioning) {
             this.isTransitioning = true;
-            this.gameState.won = true;  // Set won state
-            this.gameState.lives = 3; // Reset lives on victory
+            this.gameState.won = true;
             SceneManager.getInstance().goToNextScene(this);
         }
     }
