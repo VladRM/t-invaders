@@ -12,13 +12,9 @@ export class Enemy {
             this.minFireDelay = typeof config.minFireDelay === 'number' ? config.minFireDelay : 4000;
             this.maxFireDelay = typeof config.maxFireDelay === 'number' ? config.maxFireDelay : 8000;
             
-            // Record spawn time and initialize firing state with staggered delay
-            this.spawnTime = scene.time.now;
-            // Add random stagger between 0-2000ms to prevent synchronized firing
-            this.firstShotDelay = Math.max(this.getRandomFireDelay() + 1000, 5000) + Phaser.Math.Between(0, 2000);
-            this.hasFirstShot = false;
-            this.initialDelay = true; // Flag to track if this is the first delay period
-            console.log(`[Enemy] Created at ${scene.time.now}, firstShotDelay: ${this.firstShotDelay}`);
+            // Initialize firing state
+            this.nextShotTime = scene.time.now + this.getRandomFireDelay();
+            console.log(`[Enemy] Created at ${scene.time.now}, nextShotDelay: ${this.getRandomFireDelay()}`);
             
             // Create a new weapon instance for this enemy
             this.weapon = new Weapon(scene, {
@@ -36,16 +32,9 @@ export class Enemy {
         }
 
         resetFiringState(baseTime) {
-            if (baseTime !== undefined) {
-                this.spawnTime = baseTime;
-                this.hasFirstShot = false;
-                this.initialDelay = true;
-                // Recompute first shot delay with stagger on reset
-                this.firstShotDelay = Math.max(this.getRandomFireDelay() + 1000, 5000) + Phaser.Math.Between(0, 2000);
-            } else if (!this.initialDelay) {
-                // For subsequent shots, use normal delay without stagger
-                this.nextShotDelay = this.getRandomFireDelay();
-            }
+            // Reset next shot time based on provided time or current time
+            const base = baseTime !== undefined ? baseTime : this.scene.time.now;
+            this.nextShotTime = base + this.getRandomFireDelay();
         }
 
         getRandomFireDelay() {
@@ -53,30 +42,11 @@ export class Enemy {
         }
 
         update() {
-            const timeSinceSpawn = this.scene.time.now - this.spawnTime;
-            
-            if (this.weapon) {
-                if (!this.hasFirstShot) {
-                    // Handle first shot after spawn
-                    if (timeSinceSpawn >= this.firstShotDelay) {
-                        console.log(`[Enemy] Attempting first shot at ${this.scene.time.now}, timeSinceSpawn: ${timeSinceSpawn}, delay: ${this.firstShotDelay}`);
-                        if (this.weapon.fire(this.sprite.x, this.sprite.y)) {
-                            console.log(`[Enemy] First shot successful`);
-                            this.hasFirstShot = true;
-                            this.initialDelay = false;
-                            this.lastFireTime = this.scene.time.now;
-                            this.nextShotDelay = this.getRandomFireDelay();
-                        }
-                    }
-                } else {
-                    // Handle subsequent shots
-                    const timeSinceLastShot = this.scene.time.now - this.lastFireTime;
-                    if (timeSinceLastShot >= this.nextShotDelay) {
-                        if (this.weapon.fire(this.sprite.x, this.sprite.y)) {
-                            this.lastFireTime = this.scene.time.now;
-                            this.nextShotDelay = this.getRandomFireDelay();
-                        }
-                    }
+            if (this.weapon && this.scene.time.now >= this.nextShotTime) {
+                console.log(`[Enemy] Attempting shot at ${this.scene.time.now}`);
+                if (this.weapon.fire(this.sprite.x, this.sprite.y)) {
+                    console.log(`[Enemy] Shot successful`);
+                    this.nextShotTime = this.scene.time.now + this.getRandomFireDelay();
                 }
             }
         }
