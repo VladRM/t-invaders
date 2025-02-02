@@ -7,11 +7,8 @@ export class SceneManager {
         }
         SceneManager.instance = this;
         
-        this.sceneFlow = {
-            'SceneMenu': 'Level1',
-            'Level1': 'Level2',
-            'Level2': 'SceneMenu'
-        };
+        // Remove the fixed scene flow since we're handling transitions explicitly
+        this.isTransitioning = false;
     }
 
     static getInstance() {
@@ -22,19 +19,22 @@ export class SceneManager {
     }
 
     goToNextScene(currentScene) {
+        if (this.isTransitioning) return;
+        this.isTransitioning = true;
+
         const gameState = currentScene.gameState;
-        const isWin = gameState.won;  // Store win state before reset
-        console.log('[SceneManager] Before reset - GameState won:', gameState.won, 'isWin:', isWin);
-        gameState.reset(); // Ensure fresh state
-        console.log('[SceneManager] After reset - GameState won:', gameState.won, 'isWin:', isWin);
+        const isWin = gameState.won;
+        console.log('[SceneManager] Starting transition, won:', isWin);
         
         currentScene.cameras.main.fadeOut(1000);
         currentScene.cameras.main.once('camerafadeoutcomplete', () => {
             const nextState = isWin ? 'win' : 'gameover';
-            console.log('[SceneManager] Transitioning to SceneMenu with state:', nextState);
-            currentScene.scene.start('SceneMenu', {
-                state: nextState
-            });
+            console.log('[SceneManager] Fade complete, transitioning to menu with state:', nextState);
+            
+            // Start the menu scene and then reset game state
+            currentScene.scene.start('SceneMenu', { state: nextState });
+            gameState.reset();
+            this.isTransitioning = false;
         });
     }
 }
