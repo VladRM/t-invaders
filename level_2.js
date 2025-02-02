@@ -13,7 +13,6 @@ export class Level2 extends Phaser.Scene {
     init(data) {
         // Reset the local transition flag at every start of this scene
         this.isTransitioning = false;
-        console.log('[Level2] init: isTransitioning reset to', this.isTransitioning);
     }
 
     preload() {
@@ -94,7 +93,6 @@ export class Level2 extends Phaser.Scene {
     }
 
     update() {
-        console.log('[Level2] update: enemy count =', this.enemyGroup.enemies.length, 'isTransitioning =', this.isTransitioning);
         // Circle-based collision detection for player projectiles and enemies
         if (this.player.getWeapon()) {
             this.player.getWeapon().getProjectileGroup().getChildren().forEach(projectile => {
@@ -147,11 +145,8 @@ export class Level2 extends Phaser.Scene {
                                     duration: 250,
                                     ease: 'Power1',
                                     onComplete: () => {
-                                        console.log('[Level2] Tween complete – processing enemy removal.');
                                         this.enemyGroup.removeEnemy(enemySprite);
-                                        console.log('[Level2] Enemy count after removal:', this.enemyGroup.enemies.length);
                                         if (this.enemyGroup.enemies.length === 0 && !this.isTransitioning) {
-                                            console.log('[Level2] All enemies removed, triggering win transition.');
                                             this.isTransitioning = true;
                                             this.gameState.won = true;
                                             SceneManager.getInstance().goToNextScene(this);

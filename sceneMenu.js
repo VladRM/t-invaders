@@ -13,13 +13,6 @@ export class SceneMenu extends Phaser.Scene {
 
     init(data = {}) {
         this.sceneState = data.state || 'start'; // 'start', 'gameover', or 'win'
-        
-        // Do not override the singleton GameState – use its current values directly.
-        console.log('[SceneMenu] Initialized with state:', this.sceneState, 'data:', data, 'gameState:', {
-            currentLevel: GameState.getInstance().currentLevel,
-            lives: GameState.getInstance().lives,
-            won: GameState.getInstance().won
-        });
     }
 
     create() {
@@ -65,7 +58,6 @@ export class SceneMenu extends Phaser.Scene {
             start: {
                 text: 'Start Game',
                 onClick: () => {
-                    console.log('[SceneMenu] Starting new game from START state');
                     GameState.getInstance().reset();
                     this.scene.start('Level1');
                 }
@@ -73,7 +65,6 @@ export class SceneMenu extends Phaser.Scene {
             gameover: {
                 text: 'Try Again',
                 onClick: () => {
-                    console.log('[SceneMenu] Starting new game from GAMEOVER state');
                     GameState.getInstance().reset();
                     this.scene.start('Level1');
                 }
@@ -81,14 +72,7 @@ export class SceneMenu extends Phaser.Scene {
             win: {
                 text: 'Play Again',
                 onClick: () => {
-                    console.log('[SceneMenu] Starting new game from WIN state');
-                    // Reset the GameState so that won is false (and other defaults are restored)
                     GameState.getInstance().reset();
-                    console.debug('[SceneMenu] Game state after reset on WIN button:', {
-                        currentLevel: GameState.getInstance().currentLevel,
-                        lives: GameState.getInstance().lives,
-                        won: GameState.getInstance().won
-                    });
                     this.scene.start('Level1');
                 }
             }

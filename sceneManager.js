@@ -28,12 +28,6 @@ export class SceneManager {
         const gameState = currentScene.gameState;
         const isWin = gameState.won;
         const currentSceneKey = currentScene.scene.key;
-        console.log('[SceneManager]', Date.now(), 'Starting transition from scene:', currentSceneKey, 'won:', isWin, 'gameState:', {
-            currentLevel: gameState.currentLevel,
-            lives: gameState.lives,
-            won: gameState.won
-        });
-        
         currentScene.cameras.main.fadeOut(1000);
         currentScene.cameras.main.once('camerafadeoutcomplete', () => {
             const nextState = isWin ? 'win' : 'gameover';

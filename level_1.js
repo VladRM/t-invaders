@@ -32,11 +32,6 @@ export class Level1 extends Phaser.Scene {
         
         // Always reset the game state when starting a new game
         this.gameState.reset();
-        console.debug('[Level1] Game state after reset:', {
-            currentLevel: this.gameState.currentLevel,
-            lives: this.gameState.lives,
-            won: this.gameState.won
-        });
         
         const gameWidth = this.sys.game.config.width;
         const gameHeight = this.sys.game.config.height;
