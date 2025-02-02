@@ -69,7 +69,6 @@ export class Player {
             if (this.lives <= 0) {
                 this.active = false;
                 this.sprite.setActive(false);
-                this.scene.scene.start('SceneGameOver');
             }
 
             return this.lives <= 0;
