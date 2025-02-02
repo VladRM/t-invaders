@@ -30,8 +30,8 @@ export class Enemy {
         }
 
         resetFiringState() {
-            // New version: set nextShotTime in the future
-            this.nextShotTime = this.scene.time.now + this.getRandomFireDelay();
+            // New version: set nextShotTime in the future with extra delay to prevent immediate firing
+            this.nextShotTime = this.scene.time.now + this.getRandomFireDelay() + 1000;
         }
 
         getRandomFireDelay() {
