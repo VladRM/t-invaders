@@ -29,11 +29,10 @@ export class Enemy {
         }
 
         resetFiringState(baseTime) {
-            // Revised version: ensure enemy firing is delayed appropriately when starting a new game.
-            let now = this.scene.time.now;
-            this.weapon.lastFired = now;
-            // Enforce a minimum delay of 5000ms from current time
-            this.nextShotTime = now + Math.max(this.getRandomFireDelay() + 1000, 5000);
+            // Revised version: base firing timers on the enemy spawn time
+            let t0 = this.spawnTime;
+            this.weapon.lastFired = t0;
+            this.nextShotTime = t0 + Math.max(this.getRandomFireDelay() + 1000, 5000);
         }
 
         getRandomFireDelay() {
