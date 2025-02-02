@@ -14,14 +14,7 @@ export class SceneMenu extends Phaser.Scene {
     init(data = {}) {
         this.sceneState = data.state || 'start'; // 'start', 'gameover', or 'win'
         
-        // If we have gameState values from the previous scene, restore them
-        if (data.gameStateValues) {
-            const gameState = GameState.getInstance();
-            gameState.currentLevel = data.gameStateValues.currentLevel;
-            gameState.lives = data.gameStateValues.lives;
-            gameState.won = data.gameStateValues.won;
-        }
-        
+        // Do not override the singleton GameState – use its current values directly.
         console.log('[SceneMenu] Initialized with state:', this.sceneState, 'data:', data, 'gameState:', {
             currentLevel: GameState.getInstance().currentLevel,
             lives: GameState.getInstance().lives,
