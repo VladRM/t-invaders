@@ -30,10 +30,8 @@ export class Enemy {
         }
 
         resetFiringState() {
-            this.nextFireDelay = this.getRandomFireDelay();
-            // Set initial lastFired to current time
-            // This ensures enemies wait for their first delay period
-            this.lastFired = this.scene.time.now;
+            // New version: set nextShotTime in the future
+            this.nextShotTime = this.scene.time.now + this.getRandomFireDelay();
         }
 
         getRandomFireDelay() {
@@ -43,11 +41,10 @@ export class Enemy {
         update() {
             // Handle weapon firing
             const currentTime = this.scene.time.now;
-            if (this.weapon && currentTime > this.lastFired + this.nextFireDelay) {
+            if (this.weapon && currentTime > this.nextShotTime) {
                 if (this.weapon.fire(this.sprite.x, this.sprite.y)) {
-                    this.lastFired = currentTime;
-                    // Set new random delay for next shot
-                    this.nextFireDelay = this.getRandomFireDelay();
+                    // Schedule the next shot
+                    this.nextShotTime = currentTime + this.getRandomFireDelay();
                 }
             }
         }
