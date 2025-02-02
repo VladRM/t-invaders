@@ -118,8 +118,14 @@ export class Level2 extends Phaser.Scene {
                         // Find the enemy and reduce its hit points
                         const enemy = this.enemyGroup.enemies.find(e => e.sprite === enemySprite);
                         if (enemy) {
+                            // Prevent duplicate handling if enemy is already deactivated
+                            if (!enemySprite.active) return;
+                            
                             enemy.hitPoints--;
                             if (enemy.hitPoints <= 0) {
+                                // Mark enemy as inactive to avoid duplicate processing
+                                enemySprite.active = false;
+                                
                                 // Create centered explosion
                                 const bigExplosion = this.add.sprite(enemySprite.x, enemySprite.y, 'explosion');
                                 bigExplosion.setDisplaySize(192, 192);
