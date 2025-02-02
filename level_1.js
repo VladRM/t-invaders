@@ -3,6 +3,7 @@ import { Player } from './player.js';
 import { EnemyGroup } from './enemies.js';
 import { SceneManager } from './sceneManager.js';
 import { COLLISION } from './config.js';
+import { createBackground, updateBackground } from './background.js';
 
 export class Level1 extends Phaser.Scene {
     constructor() {
@@ -45,25 +46,8 @@ export class Level1 extends Phaser.Scene {
             hideOnComplete: true
         });
         
-        // Get the background texture
-        const bgTexture = this.textures.get('background');
-        const bgWidth = bgTexture.getSourceImage().width;
-        const bgHeight = bgTexture.getSourceImage().height;
-
-        // Calculate how many tiles we need to cover the screen width and height
-        const tilesX = Math.ceil(gameWidth / bgWidth) + 1;
-        const tilesY = Math.ceil(gameHeight / bgHeight) + 1; // +1 for seamless scrolling
-
-        // Create tiled background using original resolution
-        this.bgTiles = [];
-        for (let y = 0; y < tilesY; y++) {
-            for (let x = 0; x < tilesX; x++) {
-                const bg = this.add.image(x * bgWidth, y * bgHeight, 'background');
-                bg.setOrigin(0, 0);
-                bg.setAlpha(0.75);
-                this.bgTiles.push(bg);
-            }
-        }
+        // Create background
+        this.background = createBackground(this);
         
         // Initialize player
         this.player = new Player(this, {
@@ -178,17 +162,8 @@ export class Level1 extends Phaser.Scene {
             });
         }
 
-        // Scroll background tiles
-        for (let bg of this.bgTiles) {
-            bg.y += this.scrollSpeed;
-            
-            // Reset position when tile goes off screen
-            const bgHeight = this.textures.get('background').getSourceImage().height;
-            if (bg.y >= this.sys.game.config.height) {
-                // Move tile to top of the screen minus one tile height
-                bg.y = -bgHeight;
-            }
-        }
+        // Update background
+        updateBackground(this, this.background.bgTiles, this.background.scrollSpeed);
 
         // Update player
         this.player.update(this.cursors, this.spaceKey);

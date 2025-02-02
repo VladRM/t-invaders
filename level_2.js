@@ -3,6 +3,7 @@ import { Player } from './player.js';
 import { EnemyGroup } from './enemies.js';
 import { SceneManager } from './sceneManager.js';
 import { COLLISION } from './config.js';
+import { createBackground, updateBackground } from './background.js';
 
 export class Level2 extends Phaser.Scene {
     constructor() {
@@ -41,23 +42,8 @@ export class Level2 extends Phaser.Scene {
             hideOnComplete: true
         });
         
-        // Background setup
-        const bgTexture = this.textures.get('background');
-        const bgWidth = bgTexture.getSourceImage().width;
-        const bgHeight = bgTexture.getSourceImage().height;
-
-        const tilesX = Math.ceil(gameWidth / bgWidth) + 1;
-        const tilesY = Math.ceil(gameHeight / bgHeight) + 1;
-
-        this.bgTiles = [];
-        for (let y = 0; y < tilesY; y++) {
-            for (let x = 0; x < tilesX; x++) {
-                const bg = this.add.image(x * bgWidth, y * bgHeight, 'background');
-                bg.setOrigin(0, 0);
-                bg.setAlpha(0.75);
-                this.bgTiles.push(bg);
-            }
-        }
+        // Create background
+        this.background = createBackground(this);
         
         // Initialize player with current lives from game state
         this.player = new Player(this, {
@@ -168,15 +154,8 @@ export class Level2 extends Phaser.Scene {
             });
         }
 
-        // Scroll background
-        for (let bg of this.bgTiles) {
-            bg.y += this.scrollSpeed;
-            
-            const bgHeight = this.textures.get('background').getSourceImage().height;
-            if (bg.y >= this.sys.game.config.height) {
-                bg.y = -bgHeight;
-            }
-        }
+        // Update background
+        updateBackground(this, this.background.bgTiles, this.background.scrollSpeed);
 
         this.player.update(this.cursors, this.spaceKey);
         
