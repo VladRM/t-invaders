@@ -39,12 +39,15 @@ export class SceneManager {
             const nextState = isWin ? 'win' : 'gameover';
             console.log('[SceneManager] Fade complete, transitioning to menu with state:', nextState);
             
-            // Start the menu scene first
-            currentScene.scene.start('SceneMenu', { state: nextState });
-            
-            // Then reset game state
-            console.log('[SceneManager] Resetting game state after transition');
-            gameState.reset();
+            // Start the menu scene first, passing both state and current gameState values
+            currentScene.scene.start('SceneMenu', { 
+                state: nextState,
+                gameStateValues: {
+                    currentLevel: gameState.currentLevel,
+                    lives: gameState.lives,
+                    won: gameState.won
+                }
+            });
             
             this.isTransitioning = false;
             console.log('[SceneManager] Transition complete, ready for next transition');
