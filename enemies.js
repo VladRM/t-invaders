@@ -31,16 +31,9 @@ export class Enemy {
         }
 
         resetFiringState(baseTime) {
-            // If a baseTime is provided (e.g., from enemyGroup.resetEnemyFiringStates), reset spawnTime to it
-            if (baseTime !== undefined) {
-                this.spawnTime = baseTime;
-            } else {
-                this.spawnTime = this.scene.time.now;
-            }
-            // Reset the weapon's last fired time
+            let base = baseTime !== undefined ? baseTime : this.scene.time.now;
             this.weapon.lastFired = 0;
-            // Set nextShotDelay to a fixed delay relative to the (new) spawn time, ensuring at least 5000ms delay
-            this.nextShotDelay = Math.max(this.getRandomFireDelay() + 1000, 5000);
+            this.nextShotTime = base + Math.max(this.getRandomFireDelay() + 1000, 5000);
         }
 
         getRandomFireDelay() {
@@ -48,11 +41,8 @@ export class Enemy {
         }
 
         update() {
-            // Compute local time as the difference from the enemy's spawn time
-            let localTime = this.scene.time.now - this.spawnTime;
-            if (this.weapon && localTime >= this.nextShotDelay) {
+            if (this.weapon && this.scene.time.now >= this.nextShotTime) {
                 if (this.weapon.fire(this.sprite.x, this.sprite.y)) {
-                    // Reset the firing state so that the next shot is delayed relative to now
                     this.resetFiringState();
                 }
             }
