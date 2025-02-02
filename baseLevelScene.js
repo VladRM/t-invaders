@@ -2,6 +2,7 @@ import { GameState } from './gameState.js';
 import { Player } from './player.js';
 import { EnemyGroup } from './enemies.js';
 import { SceneManager } from './sceneManager.js';
+import { COLLISION, EXPLOSION } from './config.js';
 
 export class BaseLevelScene extends Phaser.Scene {
     constructor(config) {
@@ -60,6 +61,23 @@ export class BaseLevelScene extends Phaser.Scene {
         this.spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     }
 
+    // Helper: Create an explosion (handles sprite creation, animation, and cleanup)
+    createExplosion(x, y, explosionSize) {
+        const explosion = this.add.sprite(x, y, 'explosion');
+        explosion.setDisplaySize(explosionSize, explosionSize);
+        explosion.on('animationcomplete', function(animation, frame) {
+            this.destroy();
+        }, explosion);
+        explosion.play('explode');
+    }
+
+    // Helper: Check circular collision between two objects
+    checkCollision(obj1, obj2, radius1, radius2) {
+        const dx = obj1.x - obj2.x;
+        const dy = obj1.y - obj2.y;
+        return Math.sqrt(dx * dx + dy * dy) < (radius1 + radius2);
+    }
+
     handlePlayerProjectileCollisions() {
         if (this.player.getWeapon()) {
             this.player.getWeapon().getProjectileGroup().getChildren().forEach(projectile => {
@@ -68,39 +86,22 @@ export class BaseLevelScene extends Phaser.Scene {
                 this.enemyGroup.getSprites().forEach(enemySprite => {
                     if (!enemySprite.active) return;
                     
-                    const dx = projectile.x - enemySprite.x;
-                    const dy = projectile.y - enemySprite.y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-                    
-                    const projectileRadius = 10;
-                    const enemyRadius = 48;
-                    
-                    if (distance < projectileRadius + enemyRadius) {
-                        // Create impact explosion
-                        const explosion = this.add.sprite(projectile.x, projectile.y, 'explosion');
-                        explosion.setDisplaySize(64, 64);
-                        explosion.on('animationcomplete', function(animation, frame) {
-                            this.destroy();
-                        }, explosion);
-                        explosion.play('explode');
-
+                    if (this.checkCollision(projectile, enemySprite, COLLISION.PROJECTILE_RADIUS, COLLISION.ENEMY_RADIUS)) {
+                        // Create a small explosion for the projectile impact
+                        this.createExplosion(projectile.x, projectile.y, EXPLOSION.SMALL.size);
+                        
+                        // Destroy the projectile using the weapon method
                         this.player.getWeapon().destroyProjectile(projectile);
                         
+                        // Find enemy object via enemyGroup helper
                         const enemy = this.enemyGroup.enemies.find(e => e.sprite === enemySprite);
                         if (enemy) {
-                            if (!enemySprite.active) return;
-                            
                             enemy.hitPoints--;
                             if (enemy.hitPoints <= 0) {
-                                enemySprite.active = false;
+                                // Create a big explosion for enemy destruction
+                                this.createExplosion(enemySprite.x, enemySprite.y, EXPLOSION.BIG.size);
                                 
-                                const bigExplosion = this.add.sprite(enemySprite.x, enemySprite.y, 'explosion');
-                                bigExplosion.setDisplaySize(192, 192);
-                                bigExplosion.on('animationcomplete', function(animation, frame) {
-                                    this.destroy();
-                                }, bigExplosion);
-                                bigExplosion.play('explode');
-                            
+                                // Fade out and remove enemy sprite
                                 this.tweens.add({
                                     targets: enemySprite,
                                     alpha: 0,
@@ -113,7 +114,6 @@ export class BaseLevelScene extends Phaser.Scene {
                                 });
                             }
                         }
-                        return false;
                     }
                 });
             });
@@ -125,25 +125,13 @@ export class BaseLevelScene extends Phaser.Scene {
             enemy.weapon.getProjectileGroup().getChildren().forEach(projectile => {
                 if (!projectile.active || !this.player.getSprite().active) return;
                 
-                const playerSprite = this.player.getSprite();
-                const dx = projectile.x - playerSprite.x;
-                const dy = projectile.y - playerSprite.y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-                
-                const projectileRadius = 5;
-                const playerRadius = 32;
-                
-                if (distance < projectileRadius + playerRadius) {
-                    const explosion = this.add.sprite(projectile.x, projectile.y, 'explosion');
-                    explosion.setDisplaySize(64, 64);
-                    explosion.on('animationcomplete', function(animation, frame) {
-                        this.destroy();
-                    }, explosion);
-                    explosion.play('explode');
-
+                if (this.checkCollision(projectile, this.player.getSprite(), COLLISION.ENEMY_PROJECTILE_RADIUS, COLLISION.PLAYER_RADIUS)) {
+                    // Create a small explosion at impact
+                    this.createExplosion(projectile.x, projectile.y, EXPLOSION.SMALL.size);
+                    
                     enemy.weapon.destroyProjectile(projectile);
                     
-                    const isGameOver = this.player.damage(false);
+                    const isGameOver = this.player.damage();
                     if (isGameOver && !this.isTransitioning) {
                         this.isTransitioning = true;
                         this.gameState.won = false;
