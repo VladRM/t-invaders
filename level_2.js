@@ -10,6 +10,12 @@ export class Level2 extends Phaser.Scene {
         this.isTransitioning = false;
     }
 
+    init(data) {
+        // Reset the local transition flag at every start of this scene
+        this.isTransitioning = false;
+        console.log('[Level2] init: isTransitioning reset to', this.isTransitioning);
+    }
+
     preload() {
         this.load.image('player', 'assets/img/player/ship.png');
         this.load.image('background', 'assets/img/space/bg.jpg');
