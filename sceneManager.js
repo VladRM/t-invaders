@@ -22,28 +22,14 @@ export class SceneManager {
     }
 
     goToNextScene(currentScene) {
-        // Handle game over state
-        if (!currentScene.gameState?.won) {
-            currentScene.cameras.main.fadeOut(1000);
-            currentScene.cameras.main.once('camerafadeoutcomplete', () => {
-                currentScene.scene.start('SceneMenu', { state: 'gameover' });
-            });
-            return;
-        }
-
-        // Handle normal progression
-        const nextSceneKey = this.sceneFlow[currentScene.scene.key];
+        const gameState = currentScene.gameState;
+        gameState.reset(); // Ensure fresh state
         
-        if (nextSceneKey) {
-            currentScene.cameras.main.fadeOut(1000);
-            currentScene.cameras.main.once('camerafadeoutcomplete', () => {
-                const state = nextSceneKey === 'SceneMenu' && currentScene.gameState?.won ? 'win' : undefined;
-                currentScene.scene.stop();  // Stop the current scene first
-                currentScene.scene.start(nextSceneKey, { state: state });
-                if (nextSceneKey !== 'SceneMenu') {
-                    currentScene.cameras.main.fadeIn(1000);
-                }
+        currentScene.cameras.main.fadeOut(1000);
+        currentScene.cameras.main.once('camerafadeoutcomplete', () => {
+            currentScene.scene.start('SceneMenu', {
+                state: gameState.lives > 0 ? 'win' : 'gameover'
             });
-        }
+        });
     }
 }

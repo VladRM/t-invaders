@@ -14,6 +14,7 @@ export class GameState {
         this.highScore = localStorage.getItem('highScore') || 0;
         this.currentLevel = 1;
         this.lives = 3;  // Reset lives here instead
+        this.won = false; // Critical addition
     }
 
     static getInstance() {

@@ -54,15 +54,24 @@ export class SceneMenu extends Phaser.Scene {
         const menuConfig = {
             start: {
                 text: 'Start Game',
-                onClick: () => this.scene.start('Level1')
+                onClick: () => {
+                    GameState.getInstance().reset();
+                    this.scene.start('Level1');
+                }
             },
             gameover: {
                 text: 'Try Again',
-                onClick: () => SceneManager.getInstance().goToNextScene(this)
+                onClick: () => {
+                    GameState.getInstance().reset();
+                    this.scene.start('Level1');
+                }
             },
             win: {
                 text: 'Play Again',
-                onClick: () => SceneManager.getInstance().goToNextScene(this)
+                onClick: () => {
+                    GameState.getInstance().reset();
+                    this.scene.start('Level1');
+                }
             }
         };
 
