@@ -23,12 +23,13 @@ export class SceneManager {
 
     goToNextScene(currentScene) {
         const gameState = currentScene.gameState;
+        const isWin = gameState.won;  // Store win state before reset
         gameState.reset(); // Ensure fresh state
         
         currentScene.cameras.main.fadeOut(1000);
         currentScene.cameras.main.once('camerafadeoutcomplete', () => {
             currentScene.scene.start('SceneMenu', {
-                state: gameState.lives > 0 ? 'win' : 'gameover'
+                state: isWin ? 'win' : 'gameover'
             });
         });
     }
