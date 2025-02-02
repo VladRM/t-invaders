@@ -12,9 +12,10 @@ export class Enemy {
             this.minFireDelay = typeof config.minFireDelay === 'number' ? config.minFireDelay : 4000;
             this.maxFireDelay = typeof config.maxFireDelay === 'number' ? config.maxFireDelay : 8000;
             
-            // Record enemy spawn time and initialize last fire time
+            // Record spawn time and initialize firing state
             this.spawnTime = scene.time.now;
-            this.lastFireTime = scene.time.now;
+            this.firstShotDelay = Math.max(this.getRandomFireDelay() + 1000, 5000);
+            this.hasFirstShot = false;
             
             // Create a new weapon instance for this enemy
             this.weapon = new Weapon(scene, {
@@ -31,9 +32,14 @@ export class Enemy {
                 .setDisplaySize(this.size, this.size);
         }
 
-        resetFiringState() {
-            this.lastFireTime = this.scene.time.now;
-            this.nextShotTime = this.lastFireTime + Math.max(this.getRandomFireDelay() + 1000, 5000);
+        resetFiringState(baseTime) {
+            // If baseTime provided (e.g. on scene restart), update spawn time
+            if (baseTime !== undefined) {
+                this.spawnTime = baseTime;
+                this.hasFirstShot = false;
+            }
+            // Reset first shot delay
+            this.firstShotDelay = Math.max(this.getRandomFireDelay() + 1000, 5000);
         }
 
         getRandomFireDelay() {
@@ -41,9 +47,27 @@ export class Enemy {
         }
 
         update() {
-            if (this.weapon && this.scene.time.now >= this.nextShotTime) {
-                if (this.weapon.fire(this.sprite.x, this.sprite.y)) {
-                    this.resetFiringState();
+            const timeSinceSpawn = this.scene.time.now - this.spawnTime;
+            
+            if (this.weapon) {
+                if (!this.hasFirstShot) {
+                    // Handle first shot after spawn
+                    if (timeSinceSpawn >= this.firstShotDelay) {
+                        if (this.weapon.fire(this.sprite.x, this.sprite.y)) {
+                            this.hasFirstShot = true;
+                            this.lastFireTime = this.scene.time.now;
+                            this.nextShotDelay = this.getRandomFireDelay();
+                        }
+                    }
+                } else {
+                    // Handle subsequent shots
+                    const timeSinceLastShot = this.scene.time.now - this.lastFireTime;
+                    if (timeSinceLastShot >= this.nextShotDelay) {
+                        if (this.weapon.fire(this.sprite.x, this.sprite.y)) {
+                            this.lastFireTime = this.scene.time.now;
+                            this.nextShotDelay = this.getRandomFireDelay();
+                        }
+                    }
                 }
             }
         }
