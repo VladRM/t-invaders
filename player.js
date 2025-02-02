@@ -82,6 +82,8 @@ export class Player {
         }
 
         update(cursors, fireKey) {
+            if (!this.active || !this.sprite || !this.sprite.body) return;
+            
             // Handle movement
             if (cursors.left.isDown) {
                 this.sprite.setVelocityX(-160);
