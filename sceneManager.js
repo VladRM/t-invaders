@@ -38,6 +38,8 @@ export class SceneManager {
         currentScene.cameras.main.once('camerafadeoutcomplete', () => {
             const nextState = isWin ? 'win' : 'gameover';
             // Start the menu scene, passing state and gameState values
+            // Stop any existing instance of SceneMenu so that parameters aren't lost
+            currentScene.scene.stop('SceneMenu');
             currentScene.scene.start('SceneMenu', { 
                 state: nextState,
                 gameStateValues: {
