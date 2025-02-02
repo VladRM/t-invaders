@@ -135,6 +135,12 @@ export class Level2 extends Phaser.Scene {
                                     ease: 'Power1',
                                     onComplete: () => {
                                         this.enemyGroup.removeEnemy(enemySprite);
+                                        // Immediately check for win condition after removal
+                                        if (this.enemyGroup.enemies.length === 0 && !this.isTransitioning) {
+                                            this.isTransitioning = true;
+                                            this.gameState.won = true;
+                                            SceneManager.getInstance().goToNextScene(this);
+                                        }
                                     }
                                 });
                             }
