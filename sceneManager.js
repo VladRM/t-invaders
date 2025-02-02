@@ -28,7 +28,7 @@ export class SceneManager {
         const gameState = currentScene.gameState;
         const isWin = gameState.won;
         const currentSceneKey = currentScene.scene.key;
-        console.log('[SceneManager] Starting transition from scene:', currentSceneKey, 'won:', isWin, 'gameState:', {
+        console.log('[SceneManager]', Date.now(), 'Starting transition from scene:', currentSceneKey, 'won:', isWin, 'gameState:', {
             currentLevel: gameState.currentLevel,
             lives: gameState.lives,
             won: gameState.won

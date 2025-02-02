@@ -88,6 +88,7 @@ export class Level2 extends Phaser.Scene {
     }
 
     update() {
+        console.log('[Level2] update: enemy count =', this.enemyGroup.enemies.length, 'isTransitioning =', this.isTransitioning);
         // Circle-based collision detection for player projectiles and enemies
         if (this.player.getWeapon()) {
             this.player.getWeapon().getProjectileGroup().getChildren().forEach(projectile => {
@@ -134,9 +135,11 @@ export class Level2 extends Phaser.Scene {
                                     duration: 250,
                                     ease: 'Power1',
                                     onComplete: () => {
+                                        console.log('[Level2] Tween complete – processing enemy removal.');
                                         this.enemyGroup.removeEnemy(enemySprite);
-                                        // Immediately check for win condition after removal
+                                        console.log('[Level2] Enemy count after removal:', this.enemyGroup.enemies.length);
                                         if (this.enemyGroup.enemies.length === 0 && !this.isTransitioning) {
+                                            console.log('[Level2] All enemies removed, triggering win transition.');
                                             this.isTransitioning = true;
                                             this.gameState.won = true;
                                             SceneManager.getInstance().goToNextScene(this);
@@ -198,12 +201,5 @@ export class Level2 extends Phaser.Scene {
         });
 
         this.enemyGroup.update();
-
-        // Check if all enemies are destroyed
-        if (this.enemyGroup.enemies.length === 0 && !this.isTransitioning) {
-            this.isTransitioning = true;
-            this.gameState.won = true;
-            SceneManager.getInstance().goToNextScene(this);
-        }
     }
 }
