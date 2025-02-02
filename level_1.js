@@ -127,16 +127,22 @@ export class Level1 extends Phaser.Scene {
                     const enemyRadius = COLLISION.ENEMY_RADIUS;
                     
                     if (distance < projectileRadius + enemyRadius) {
-                        // Create small explosion at impact point
+                        // Create small explosion at impact for the projectile
                         createExplosion(this, projectile.x, projectile.y, EXPLOSION.SMALL.size);
-
+                        
                         // Destroy projectile
                         this.player.getWeapon().destroyProjectile(projectile);
                         
-                        // Create medium explosion for enemy destruction
+                        // Immediately mark the enemy as inactive and disable its physics body
+                        enemySprite.active = false;
+                        if (enemySprite.body) {
+                            enemySprite.body.enable = false;
+                        }
+                        
+                        // Create explosion for enemy
                         createExplosion(this, enemySprite.x, enemySprite.y, 128);
                         
-                        // Fade out enemy sprite
+                        // Start tweening to fade out enemy sprite, then remove it
                         this.tweens.add({
                             targets: enemySprite,
                             alpha: 0,
