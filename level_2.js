@@ -195,8 +195,10 @@ export class Level2 extends Phaser.Scene {
 
         // Check if all enemies are destroyed
         if (this.enemyGroup.enemies.length === 0 && !this.isTransitioning) {
+            console.log('[Level2] All enemies destroyed, transitioning with win state');
             this.isTransitioning = true;
             this.gameState.won = true;
+            console.log('[Level2] GameState won:', this.gameState.won);
             SceneManager.getInstance().goToNextScene(this);
         }
     }
