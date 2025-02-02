@@ -12,7 +12,6 @@ export class SceneMenu extends Phaser.Scene {
 
     init(data = {}) {
         this.sceneState = data.state || 'start'; // 'start', 'gameover', or 'win'
-        console.log('SceneMenu init with state:', this.sceneState); // Debug log
     }
 
     create() {

@@ -198,7 +198,6 @@ export class Level2 extends Phaser.Scene {
             this.isTransitioning = true;
             this.gameState.won = true;  // Set won state
             this.gameState.lives = 3; // Reset lives on victory
-            console.log('Level 2 complete, transitioning to win screen'); // Debug log
             SceneManager.getInstance().goToNextScene(this);
         }
     }
