@@ -89,7 +89,6 @@ export class SceneMenu extends Phaser.Scene {
                 text: 'Play Again',
                 onClick: () => {
                     console.log('[SceneMenu] Starting new game from WIN state');
-                    GameState.getInstance().reset();
                     this.scene.start('Level1');
                 }
             }
