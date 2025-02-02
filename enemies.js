@@ -25,6 +25,7 @@ export class Enemy {
             // Initialize firing state with random delay from spawn time
             const initialDelay = this.getRandomFireDelay();
             this.nextShotTime = scene.time.now + initialDelay;
+            this.creationTime = scene.time.now;
             console.log(`[Enemy] Created at ${scene.time.now}, initialDelay: ${initialDelay}, will fire at: ${this.nextShotTime}`);
             
             this.sprite = scene.physics.add.sprite(this.x, this.y, this.imageKey)
@@ -42,11 +43,13 @@ export class Enemy {
         }
 
         update() {
-            if (this.weapon && this.scene.time.now >= this.nextShotTime) {
-                console.log(`[Enemy] Attempting shot at ${this.scene.time.now}`);
+            const currentTime = this.scene.time.now;
+            if (this.weapon && currentTime >= this.nextShotTime) {
+                console.log(`[Enemy] Attempting shot at ${currentTime}, time since creation: ${currentTime - this.creationTime}`);
                 if (this.weapon.fire(this.sprite.x, this.sprite.y)) {
-                    console.log(`[Enemy] Shot successful`);
-                    this.nextShotTime = this.scene.time.now + this.getRandomFireDelay();
+                    const nextDelay = this.getRandomFireDelay();
+                    this.nextShotTime = currentTime + nextDelay;
+                    console.log(`[Enemy] Shot successful, next shot in ${nextDelay}ms at ${this.nextShotTime}`);
                 }
             }
         }

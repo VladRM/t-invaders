@@ -113,9 +113,7 @@ export class Level1 extends Phaser.Scene {
             }
         });
 
-        // Reset enemy firing states to prevent immediate firing
-        // This ensures all enemies get fresh timing based on current scene time
-        this.enemyGroup.resetEnemyFiringStates();
+        // Don't reset enemy firing states here - let each enemy maintain its own initial delay
 
         // Add spacebar for firing
         this.spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
