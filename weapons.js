@@ -29,6 +29,7 @@ export class Weapon {
             } else {
                 this.projectiles = scene.physics.add.group({
                     classType: Phaser.Physics.Arcade.Sprite,
+                    runChildUpdate: true,
                     createCallback: (projectile) => {
                         projectile.setActive(true);
                         projectile.setVisible(true);
@@ -55,10 +56,16 @@ export class Weapon {
 
         fire(x, y) {
             if (this.canFire) {
-                const projectile = this.projectiles.create(x, y, this.imageKey);
-                projectile.setActive(true);
-                projectile.setVisible(true);
-                projectile.body.enable = true;
+                let projectile = this.projectiles.getFirstDead();
+                if (projectile) {
+                    projectile.setPosition(x, y);
+                    projectile.setActive(true);
+                    projectile.setVisible(true);
+                    projectile.body.enable = true;
+                } else {
+                    projectile = this.projectiles.create(x, y, this.imageKey);
+                }
+                
                 projectile.setVelocityY(this.projectileSpeed);
                 this.canFire = false;
                 
@@ -97,40 +104,27 @@ export class Weapon {
             const gameWidth = this.scene.sys.game.config.width;
 
             this.projectiles.children.each((projectile) => {
-                // Check if projectile is out of bounds in any direction
-                if (projectile.y < -projectile.height || // Top
-                    projectile.y > gameHeight + projectile.height || // Bottom
-                    projectile.x < -projectile.width || // Left
-                    projectile.x > gameWidth + projectile.width) { // Right
-
-                    // Use the same thorough cleanup as destroyProjectile
-                    projectile.setActive(false);
-                    projectile.setVisible(false);
-                    projectile.body.enable = false;
-                    this.scene.physics.world.disable(projectile);
-                    projectile.body.destroy();
-                    this.projectiles.remove(projectile, true, true);
-                    projectile.destroy();
+                if (projectile.active) {
+                    if (projectile.y < -projectile.height || // Top
+                        projectile.y > gameHeight + projectile.height || // Bottom
+                        projectile.x < -projectile.width || // Left
+                        projectile.x > gameWidth + projectile.width) { // Right
+                        
+                        // Instead of destroying, recycle the projectile
+                        this.destroyProjectile(projectile);
+                    }
                 }
             });
         }
 
         destroyProjectile(projectile) {
-            // Immediately set inactive and invisible
+            // Instead of fully destroying, reset the projectile for reuse
             projectile.setActive(false);
             projectile.setVisible(false);
-
-            // Disable physics and remove from world
+            projectile.body.stop();
             projectile.body.enable = false;
-            this.scene.physics.world.disable(projectile);
-            projectile.body.destroy();
-
-            // Remove from group first
-            this.projectiles.killAndHide(projectile);
-            this.projectiles.remove(projectile, true, true);
-
-            // Finally destroy the sprite
-            projectile.destroy();
+            // Reset position out of view
+            projectile.setPosition(-100, -100);
         }
 
         getProjectileGroup() {
