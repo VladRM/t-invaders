@@ -89,6 +89,8 @@ export class SceneMenu extends Phaser.Scene {
                 text: 'Play Again',
                 onClick: () => {
                     console.log('[SceneMenu] Starting new game from WIN state');
+                    // Reset the game state to clear won flag and other persistent values
+                    GameState.getInstance().reset();
                     this.scene.start('Level1');
                 }
             }
