@@ -1,6 +1,7 @@
 import { Weapon } from './weapons.js';
 import { SceneManager } from './sceneManager.js';
-import { COLLISION } from './config.js';
+import { COLLISION, EXPLOSION } from './config.js';
+import { createExplosion } from './explosion.js';
 
 export class Player {
         constructor(scene, config) {
@@ -68,10 +69,8 @@ export class Player {
             }
 
             if (this.lives <= 0) {
-                // Create a big explosion at the player's current location  
-                const explosion = this.scene.add.sprite(this.sprite.x, this.sprite.y, 'explosion');
-                explosion.setScale(2); // Adjust scale as needed for a big explosion  
-                explosion.play('explode');  
+                // Create a big explosion at the player's current location
+                createExplosion(this.scene, this.sprite.x, this.sprite.y, EXPLOSION.BIG.size);
                 
                 // Remove the player ship from the scene  
                 this.sprite.destroy();  

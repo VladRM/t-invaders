@@ -2,7 +2,8 @@ import { GameState } from './gameState.js';
 import { Player } from './player.js';
 import { EnemyGroup } from './enemies.js';
 import { SceneManager } from './sceneManager.js';
-import { COLLISION } from './config.js';
+import { COLLISION, EXPLOSION } from './config.js';
+import { createExplosion } from './explosion.js';
 import { createBackground, updateBackground } from './background.js';
 
 export class Level1 extends Phaser.Scene {
@@ -127,23 +128,13 @@ export class Level1 extends Phaser.Scene {
                     
                     if (distance < projectileRadius + enemyRadius) {
                         // Create small explosion at impact point
-                        const explosion = this.add.sprite(projectile.x, projectile.y, 'explosion');
-                        explosion.setDisplaySize(64, 64);
-                        explosion.on('animationcomplete', function(animation, frame) {
-                            this.destroy();
-                        }, explosion);
-                        explosion.play('explode');
+                        createExplosion(this, projectile.x, projectile.y, EXPLOSION.SMALL.size);
 
                         // Destroy projectile
                         this.player.getWeapon().destroyProjectile(projectile);
                         
                         // Create medium explosion for enemy destruction
-                        const bigExplosion = this.add.sprite(enemySprite.x, enemySprite.y, 'explosion');
-                        bigExplosion.setDisplaySize(128, 128);
-                        bigExplosion.on('animationcomplete', function(animation, frame) {
-                            this.destroy();
-                        }, bigExplosion);
-                        bigExplosion.play('explode');
+                        createExplosion(this, enemySprite.x, enemySprite.y, EXPLOSION.BIG.size);
                         
                         // Fade out enemy sprite
                         this.tweens.add({
