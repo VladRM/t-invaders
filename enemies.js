@@ -30,14 +30,13 @@ export class Enemy {
                 .setDisplaySize(this.size, this.size);
         }
 
-        resetFiringState(baseTime) {
-            // Use baseTime if provided; otherwise default to the recorded spawnTime.
-            let t0 = baseTime || this.spawnTime;
-            // Update the spawnTime to ensure it's based on the current scene time
-            this.spawnTime = t0;
-            this.weapon.lastFired = t0;
-            // Set nextShotTime to t0 plus a delay (ensuring at least 5000ms delay)
-            this.nextShotTime = t0 + Math.max(this.getRandomFireDelay() + 1000, 5000);
+        resetFiringState() {
+            // Calculate local time (milliseconds) relative to enemy spawn
+            let localTime = this.scene.time.now - this.spawnTime;
+            // Record the last fired time in local terms
+            this.weapon.lastFired = localTime;
+            // Compute nextShotDelay (relative to spawn) ensuring at least 5000ms delay
+            this.nextShotDelay = localTime + Math.max(this.getRandomFireDelay() + 1000, 5000);
         }
 
         getRandomFireDelay() {
@@ -45,12 +44,12 @@ export class Enemy {
         }
 
         update() {
-            // Handle weapon firing
-            const currentTime = this.scene.time.now;
-            if (this.weapon && currentTime > this.nextShotTime) {
+            // Compute local time as the difference from the enemy's spawn time
+            let localTime = this.scene.time.now - this.spawnTime;
+            if (this.weapon && localTime >= this.nextShotDelay) {
                 if (this.weapon.fire(this.sprite.x, this.sprite.y)) {
-                    // Schedule the next shot
-                    this.nextShotTime = currentTime + this.getRandomFireDelay();
+                    // Reset the firing state so that the next shot is delayed relative to now
+                    this.resetFiringState();
                 }
             }
         }
