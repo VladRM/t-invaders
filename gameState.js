@@ -6,6 +6,15 @@ export class GameState {
             return GameState.instance;
         }
         GameState.instance = this;
+        
+        // Initialize default values
+        this.score = 0;
+        this.highScore = localStorage.getItem('highScore') || 0;
+        this.currentLevel = 1;
+        this.lives = 3;
+        this.won = false;
+        
+        // Ensure we're properly initialized
         this.reset();
     }
 

@@ -1,5 +1,6 @@
 import { UI } from './ui.js';
 import { SceneManager } from './sceneManager.js';
+import { GameState } from './gameState.js';
 
 export class SceneMenu extends Phaser.Scene {
     constructor() {
@@ -15,6 +16,8 @@ export class SceneMenu extends Phaser.Scene {
     }
 
     create() {
+        // Ensure GameState is initialized
+        GameState.getInstance();
         this.cameras.main.fadeIn(1000);
         // Add background
         this.add.image(0, 0, 'background')
