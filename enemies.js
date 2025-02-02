@@ -16,6 +16,7 @@ export class Enemy {
             this.spawnTime = scene.time.now;
             this.firstShotDelay = Math.max(this.getRandomFireDelay() + 1000, 5000);
             this.hasFirstShot = false;
+            console.log(`[Enemy] Created at ${scene.time.now}, firstShotDelay: ${this.firstShotDelay}`);
             
             // Create a new weapon instance for this enemy
             this.weapon = new Weapon(scene, {
@@ -53,7 +54,9 @@ export class Enemy {
                 if (!this.hasFirstShot) {
                     // Handle first shot after spawn
                     if (timeSinceSpawn >= this.firstShotDelay) {
+                        console.log(`[Enemy] Attempting first shot at ${this.scene.time.now}, timeSinceSpawn: ${timeSinceSpawn}, delay: ${this.firstShotDelay}`);
                         if (this.weapon.fire(this.sprite.x, this.sprite.y)) {
+                            console.log(`[Enemy] First shot successful`);
                             this.hasFirstShot = true;
                             this.lastFireTime = this.scene.time.now;
                             this.nextShotDelay = this.getRandomFireDelay();

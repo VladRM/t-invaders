@@ -6,6 +6,7 @@ export class Weapon {
             this.fireDelay = config.fireDelay || 200;
             this.projectileSpeed = config.projectileSpeed || -400;
             this.lastFired = 0;
+            console.log(`[Weapon] Created at ${scene.time.now}, lastFired: ${this.lastFired}`);
 
             // Store collision config
             this.collisionType = config.collisionType || 'circle';
