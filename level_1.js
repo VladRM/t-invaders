@@ -76,7 +76,7 @@ export class Level1 extends Phaser.Scene {
         
         // Create first row of enemies
         this.enemyGroup.createEnemyRow({
-            count: 5,
+            count: 7,
             spacing: spacing,
             startX: startX,
             y: enemySize,
@@ -91,7 +91,7 @@ export class Level1 extends Phaser.Scene {
 
         // Create second row of enemies
         this.enemyGroup.createEnemyRow({
-            count: 5,
+            count: 7,
             spacing: spacing,
             startX: startX,
             y: enemySize * 2.5, // Position slightly below first row
