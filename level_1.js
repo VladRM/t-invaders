@@ -99,7 +99,11 @@ export class Level1 extends Phaser.Scene {
                 imageKey: 'enemy',
                 size: enemySize,
                 minFireDelay: 4000,  // 4 seconds minimum
-                maxFireDelay: 5000   // 5 seconds maximum
+                maxFireDelay: 5000,   // 5 seconds maximum
+                multiShotCount: 3,
+                shotAngle: 15,
+                shotXOffset: 10,
+                isEnemy: true
             }
         });
 
