@@ -85,10 +85,12 @@ export class Level1 extends Phaser.Scene {
                 size: enemySize,
                 minFireDelay: 4000,  // 4 seconds minimum
                 maxFireDelay: 5000,   // 5 seconds maximum
-                multiShotCount: 3,
-                shotAngle: 15,
-                shotXOffset: 10,
-                isEnemy: true
+                isEnemy: true,
+                weaponConfig: {
+                    multiShotCount: 3,
+                    shotAngle: 15,
+                    shotXOffset: 10
+                }
             }
         });
 
@@ -103,10 +105,12 @@ export class Level1 extends Phaser.Scene {
                 size: enemySize,
                 minFireDelay: 4000,  // 4 seconds minimum
                 maxFireDelay: 5000,   // 5 seconds maximum
-                multiShotCount: 3,
-                shotAngle: 15,
-                shotXOffset: 10,
-                isEnemy: true
+                isEnemy: true,
+                weaponConfig: {
+                    multiShotCount: 3,
+                    shotAngle: 15,
+                    shotXOffset: 10
+                }
             }
         });
 
