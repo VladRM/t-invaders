@@ -81,7 +81,8 @@ export class Level2 extends Phaser.Scene {
                 isEnemy: true,
                 multiShotCount: 3,
                 shotAngle: 15,
-                shotXOffset: 10
+                shotXOffset: 10,
+                projectileSpeed: 400
             }
         });
 
