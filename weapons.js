@@ -7,6 +7,9 @@ export class Weapon {
             this.damage = config.damage || 1;
             this.fireDelay = config.fireDelay || 200;
             this.projectileSpeed = config.projectileSpeed || -400;
+            this.multiShotCount = config.multiShotCount || 1;
+            this.shotAngle = config.shotAngle || 0;
+            this.shotXOffset = config.shotXOffset || 0;
             this.canFire = true;
             
             if (config.isEnemy) {
@@ -56,27 +59,44 @@ export class Weapon {
 
         fire(x, y) {
             if (this.canFire) {
-                let projectile = this.projectiles.getFirstDead();
-                if (projectile) {
-                    projectile.setPosition(x, y);
-                    projectile.setActive(true);
-                    projectile.setVisible(true);
-                    projectile.body.enable = true;
-                } else {
-                    projectile = this.projectiles.create(x, y, this.imageKey);
+                const count = this.multiShotCount;
+                const shots = [];
+                for (let i = 0; i < count; i++) {
+                    let angleOffset = 0;
+                    let xOffset = 0;
+                    if (count > 1) {
+                        if (count % 2 === 1) {
+                            const centerIndex = Math.floor(count / 2);
+                            angleOffset = (i - centerIndex) * this.shotAngle;
+                            xOffset = (i - centerIndex) * this.shotXOffset;
+                        } else {
+                            angleOffset = (i - (count / 2 - 0.5)) * this.shotAngle;
+                            xOffset = (i - (count / 2 - 0.5)) * this.shotXOffset;
+                        }
+                    }
+                    const shotX = x + xOffset;
+                    let projectile = this.projectiles.getFirstDead();
+                    if (projectile) {
+                        projectile.setPosition(shotX, y);
+                        projectile.setActive(true);
+                        projectile.setVisible(true);
+                        projectile.body.enable = true;
+                    } else {
+                        projectile = this.projectiles.create(shotX, y, this.imageKey);
+                    }
+                    const rad = Phaser.Math.DegToRad(angleOffset);
+                    projectile.body.velocity.x = this.projectileSpeed * Math.sin(rad);
+                    projectile.body.velocity.y = this.projectileSpeed * Math.cos(rad);
+                    shots.push(projectile);
                 }
-                
-                projectile.setVelocityY(this.projectileSpeed);
                 this.canFire = false;
-                
                 if (!this.isEnemy) {
                     // For player, use the fixed delay to allow next shot
-                    this.scene.time.delayedCall(this.fireDelay, () => { 
-                        this.canFire = true; 
+                    this.scene.time.delayedCall(this.fireDelay, () => {
+                        this.canFire = true;
                     });
                 }
-                
-                return true;
+                return (count === 1) ? shots[0] : shots;
             }
             return false;
         }
