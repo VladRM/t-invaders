@@ -68,7 +68,7 @@ export class Level2 extends Phaser.Scene {
         const spacing = gameWidth / 3;
         
         this.enemyGroup.createEnemyRow({
-            count: 2,
+            count: 3,
             spacing: spacing,
             startX: spacing,
             y: bossSize,
@@ -83,7 +83,7 @@ export class Level2 extends Phaser.Scene {
                     multiShotCount: 3,
                     shotAngle: 30,
                     shotXOffset: 20,
-                    projectileSpeed: 400
+                    projectileSpeed: 300
                 }
             }
         });
