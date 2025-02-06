@@ -138,13 +138,8 @@ export class Level2 extends Phaser.Scene {
                                     ease: 'Power1',
                                     onComplete: () => {
                                         this.enemyGroup.removeEnemy(enemySprite);
-                                        if (this.enemyGroup.enemies.length === 0 && !this.isTransitioning) {
-                                            this.isTransitioning = true;
-                                            this.gameState.won = true;
-                                            this.cameras.main.fadeOut(500, 0, 0, 0);
-                                            this.cameras.main.once('camerafadeoutcomplete', () => {
-                                                SceneManager.getInstance().goToNextScene(this);
-                                            });
+                                        if (this.enemyGroup.enemies.length === 0) {
+                                            this.triggerTransition(true);
                                         }
                                     }
                                 });
@@ -183,17 +178,22 @@ export class Level2 extends Phaser.Scene {
                 projectile.setVisible(false);
                 projectile.destroy();
                 const isGameOver = this.player.damage(false);
-                if (isGameOver && !this.isTransitioning) {
-                    this.isTransitioning = true;
-                    this.gameState.won = false;
-                    this.cameras.main.fadeOut(500, 0, 0, 0);
-                    this.cameras.main.once('camerafadeoutcomplete', () => {
-                        SceneManager.getInstance().goToNextScene(this);
-                    });
+                if (isGameOver) {
+                    this.triggerTransition(false);
                 }
             }
         });
 
         this.enemyGroup.update();
+    }
+
+    triggerTransition(win) {
+        if (this.isTransitioning) return;
+        this.isTransitioning = true;
+        this.gameState.won = win;
+        this.cameras.main.fadeOut(500, 0, 0, 0);
+        this.cameras.main.once('camerafadeoutcomplete', () => {
+            SceneManager.getInstance().goToNextScene(this);
+        });
     }
 }
