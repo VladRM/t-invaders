@@ -191,9 +191,13 @@ export class Level2 extends Phaser.Scene {
         if (this.isTransitioning) return;
         this.isTransitioning = true;
         this.gameState.won = win;
-        this.cameras.main.fadeOut(500, 0, 0, 0);
-        this.cameras.main.once('camerafadeoutcomplete', () => {
+        if (win) {
             SceneManager.getInstance().goToNextScene(this);
-        });
+        } else {
+            this.cameras.main.fadeOut(500, 0, 0, 0);
+            this.cameras.main.once('camerafadeoutcomplete', () => {
+                SceneManager.getInstance().goToNextScene(this);
+            });
+        }
     }
 }
