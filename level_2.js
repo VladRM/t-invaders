@@ -79,10 +79,12 @@ export class Level2 extends Phaser.Scene {
                 minFireDelay: 1000,  // 1 second minimum delay
                 maxFireDelay: 2000,   // 2 second maximum delay
                 isEnemy: true,
-                multiShotCount: 3,
-                shotAngle: 30,
-                shotXOffset: 20,
-                projectileSpeed: 400
+                weaponConfig: {
+                    multiShotCount: 3,
+                    shotAngle: 30,
+                    shotXOffset: 20,
+                    projectileSpeed: 400
+                }
             }
         });
 
