@@ -141,7 +141,10 @@ export class Level2 extends Phaser.Scene {
                                         if (this.enemyGroup.enemies.length === 0 && !this.isTransitioning) {
                                             this.isTransitioning = true;
                                             this.gameState.won = true;
-                                            SceneManager.getInstance().goToNextScene(this);
+                                            this.cameras.main.fadeOut(500, 0, 0, 0);
+                                            this.cameras.main.once('camerafadeoutcomplete', () => {
+                                                SceneManager.getInstance().goToNextScene(this);
+                                            });
                                         }
                                     }
                                 });
@@ -183,7 +186,10 @@ export class Level2 extends Phaser.Scene {
                 if (isGameOver && !this.isTransitioning) {
                     this.isTransitioning = true;
                     this.gameState.won = false;
-                    SceneManager.getInstance().goToNextScene(this);
+                    this.cameras.main.fadeOut(500, 0, 0, 0);
+                    this.cameras.main.once('camerafadeoutcomplete', () => {
+                        SceneManager.getInstance().goToNextScene(this);
+                    });
                 }
             }
         });

@@ -201,7 +201,10 @@ export class Level1 extends Phaser.Scene {
         if (this.enemyGroup.enemies.length === 0) {
             this.gameState.won = true;
             this.gameState.currentLevel = 2;  // Update current level
-            this.scene.start('Level2');
+            this.cameras.main.fadeOut(500, 0, 0, 0);
+            this.cameras.main.once('camerafadeoutcomplete', () => {
+                this.scene.start('Level2');
+            });
         }
     }
 }
