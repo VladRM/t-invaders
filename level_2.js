@@ -65,7 +65,7 @@ export class Level2 extends Phaser.Scene {
         
         // Add two boss enemies
         const bossSize = 96;
-        const spacing = gameWidth / 3;
+        const spacing = gameWidth / 4;
         
         this.enemyGroup.createEnemyRow({
             count: 3,
