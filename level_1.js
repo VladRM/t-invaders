@@ -10,6 +10,7 @@ export class Level1 extends Phaser.Scene {
     constructor() {
         super({ key: 'Level1' });
         this.gameState = GameState.getInstance();
+        this.isTransitioning = false;
     }
 
     preload() {
@@ -198,7 +199,8 @@ export class Level1 extends Phaser.Scene {
         this.enemyGroup.update();
 
         // Check if all enemies are destroyed to advance to Level 2
-        if (this.enemyGroup.enemies.length === 0) {
+        if (this.enemyGroup.enemies.length === 0 && !this.isTransitioning) {
+            this.isTransitioning = true;
             this.gameState.won = true;
             this.gameState.currentLevel = 2;  // Update current level
             this.cameras.main.fadeOut(500, 0, 0, 0);
