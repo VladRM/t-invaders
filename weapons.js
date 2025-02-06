@@ -74,6 +74,7 @@ export class Weapon {
                             xOffset = (i - (count / 2 - 0.5)) * this.shotXOffset;
                         }
                     }
+                    console.log("Firing shot", i + 1, "of", count, "angleOffset:", angleOffset, "shotXOffset:", xOffset);
                     const shotX = x + xOffset;
                     let projectile = this.projectiles.getFirstDead();
                     if (projectile) {

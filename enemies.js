@@ -17,17 +17,25 @@ export class Enemy {
             this.minFireDelay = typeof config.minFireDelay === 'number' ? config.minFireDelay : 4000;
             this.maxFireDelay = typeof config.maxFireDelay === 'number' ? config.maxFireDelay : 8000;
             
-            // Then create the weapon using the already-created sprite as owner
-            this.weapon = new Weapon(scene, {
-                imageKey: 'enemy_projectile',
-                damage: 1,
-                projectileSpeed: 300,
-                collisionType: 'circle',
-                collisionRadius: COLLISION.ENEMY_PROJECTILE_RADIUS,
-                isEnemy: true,
-                minFireDelay: this.minFireDelay,
-                maxFireDelay: this.maxFireDelay
-            });
+            // Merge default weapon settings with any provided weaponConfig
+            const weaponSettings = Object.assign(
+                {
+                    imageKey: 'enemy_projectile',
+                    damage: 1,
+                    projectileSpeed: 300,
+                    collisionType: 'circle',
+                    collisionRadius: COLLISION.ENEMY_PROJECTILE_RADIUS,
+                    isEnemy: true,
+                    minFireDelay: this.minFireDelay,
+                    maxFireDelay: this.maxFireDelay,
+                    multiShotCount: 1, // default is one shot
+                    shotAngle: 0,
+                    shotXOffset: 0
+                },
+                config.weaponConfig || {} // override defaults if provided
+            );
+            console.log("Enemy weapon config:", weaponSettings);
+            this.weapon = new Weapon(scene, weaponSettings);
             this.weapon.owner = this.sprite;
             if (this.weapon.isEnemy) {
                 this.weapon.startAutoFire();
