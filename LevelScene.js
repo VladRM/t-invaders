@@ -16,6 +16,7 @@ export class LevelScene extends BaseLevelScene {
         
         if (this.levelConfig.enemyGroups) {
             // Process multiple enemy groups from config
+            const groups = [];
             this.levelConfig.enemyGroups.forEach(groupConfig => {
                 const enemyGroup = new EnemyGroup(this, groupConfig.config || {});
                 groupConfig.enemyRows.forEach(rowConfig => {
@@ -36,8 +37,9 @@ export class LevelScene extends BaseLevelScene {
                         }
                     });
                 });
-                this.enemyGroups.push(enemyGroup);
+                groups.push(enemyGroup);
             });
+            this.enemyGroups = groups;
         } else if (this.levelConfig.enemyRows) {
             // Fallback for previous config structure using a single enemy group
             this.enemyGroup = new EnemyGroup(this, {});
