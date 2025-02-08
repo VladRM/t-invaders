@@ -13,26 +13,49 @@ export class LevelScene extends BaseLevelScene {
         
         const gameWidth = this.sys.game.config.width;
         
-        // Instantiate a single enemy group for levels that use enemyRows
-        this.enemyGroup = new EnemyGroup(this, {});
-        this.enemyGroups.push(this.enemyGroup);
-        
-        // Create enemy rows from config
-        this.levelConfig.enemyRows.forEach(rowConfig => {
-            const spacing = typeof rowConfig.spacing === 'string' ? 
-                eval(rowConfig.spacing.replace('gameWidth', gameWidth)) : 
-                rowConfig.spacing;
-            const startX = (gameWidth - (spacing * (rowConfig.count - 1))) / 2;
-            
-            this.enemyGroup.createEnemyRow({
-                ...rowConfig,
-                startX: startX,
-                enemyConfig: {
-                    ...rowConfig.enemyConfig,
-                    isEnemy: true
-                }
+        if (this.levelConfig.enemyGroups) {
+            // Process multiple enemy groups from config
+            this.levelConfig.enemyGroups.forEach(groupConfig => {
+                const enemyGroup = new EnemyGroup(this, groupConfig.config || {});
+                groupConfig.enemyRows.forEach(rowConfig => {
+                    const spacing = typeof rowConfig.spacing === 'string'
+                        ? eval(rowConfig.spacing.replace('gameWidth', gameWidth))
+                        : rowConfig.spacing;
+                    const startX = typeof rowConfig.startX === 'string'
+                        ? eval(rowConfig.startX.replace('gameWidth', gameWidth))
+                        : (rowConfig.startX || ((gameWidth - (spacing * (rowConfig.count - 1))) / 2));
+                    
+                    enemyGroup.createEnemyRow({
+                        ...rowConfig,
+                        startX,
+                        enemyConfig: {
+                            ...rowConfig.enemyConfig,
+                            isEnemy: true
+                        }
+                    });
+                });
+                this.enemyGroups.push(enemyGroup);
             });
-        });
+        } else if (this.levelConfig.enemyRows) {
+            // Fallback for previous config structure using a single enemy group
+            this.enemyGroup = new EnemyGroup(this, {});
+            this.enemyGroups.push(this.enemyGroup);
+
+            this.levelConfig.enemyRows.forEach(rowConfig => {
+                const spacing = typeof rowConfig.spacing === 'string' ? 
+                    eval(rowConfig.spacing.replace('gameWidth', gameWidth)) : rowConfig.spacing;
+                const startX = (gameWidth - (spacing * (rowConfig.count - 1))) / 2;
+
+                this.enemyGroup.createEnemyRow({
+                    ...rowConfig,
+                    startX: startX,
+                    enemyConfig: {
+                        ...rowConfig.enemyConfig,
+                        isEnemy: true
+                    }
+                });
+            });
+        }
     }
 
     handleEnemyDefeated() {

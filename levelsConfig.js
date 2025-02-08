@@ -67,7 +67,7 @@ export const levelsConfig = {
     },
     level3: {
         key: 'Level3',
-        nextLevel: null,
+        nextLevel: 'Level4',
         enemyRows: [
             {
                 count: 2,
@@ -86,6 +86,55 @@ export const levelsConfig = {
                         projectileSpeed: 300
                     }
                 }
+            }
+        ]
+    },
+    level4: {
+        key: 'Level4',
+        nextLevel: null,  // Final level
+        enemyGroups: [
+            {
+                config: { moveSpeed: 75, yOffset: 100 },
+                enemyRows: [
+                    {
+                        count: 2,
+                        spacing: 'gameWidth / 2',
+                        startX: 'gameWidth / 4',
+                        y: 100,
+                        enemyConfig: {
+                            imageKey: 'boss',
+                            size: 128,
+                            hitPoints: 5,
+                            weaponConfig: {
+                                multiShotCount: 3,
+                                shotAngle: 15,
+                                minFireDelay: 2000,
+                                maxFireDelay: 4000
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                config: { moveSpeed: 150, yOffset: 250 },
+                enemyRows: [
+                    {
+                        count: 7,
+                        spacing: 80,
+                        startX: '(gameWidth - (80 * 6)) / 2',
+                        y: 250,
+                        enemyConfig: {
+                            imageKey: 'enemy',
+                            size: 48,
+                            hitPoints: 1,
+                            weaponConfig: {
+                                multiShotCount: 1,
+                                minFireDelay: 3000,
+                                maxFireDelay: 6000
+                            }
+                        }
+                    }
+                ]
             }
         ]
     }
