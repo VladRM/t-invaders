@@ -174,7 +174,7 @@ export class BaseLevelScene extends Phaser.Scene {
     }
 
     updateBackground() {
-        for (let bg of this.bgTiles) {
+        for (const bg of this.bgTiles) {
             bg.y += this.scrollSpeed;
             
             const bgHeight = this.textures.get('background').getSourceImage().height;
