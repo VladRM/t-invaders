@@ -12,6 +12,20 @@ export class BaseLevelScene extends Phaser.Scene {
         this.isTransitioning = false;
     }
 
+    preload() {
+        this.load.image('player', 'assets/img/player/ship.png');
+        this.load.image('background', 'assets/img/space/bg.jpg');
+        this.load.image('projectile', 'assets/img/player/weapons/laser_mini_yellow.png');
+        this.load.image('enemy_projectile', 'assets/img/enemies/weapons/red_dot.png');
+        this.load.image('enemy', 'assets/img/enemies/ships/1.png');
+        this.load.image('boss', 'assets/img/enemies/ships/boss_1.png');
+        
+        this.load.spritesheet('explosion', 'assets/img/space/explosion.png', {
+            frameWidth: 192,
+            frameHeight: 192
+        });
+    }
+
     init(data) {
         this.isTransitioning = false;
     }

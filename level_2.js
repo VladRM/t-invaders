@@ -14,20 +14,6 @@ export class Level1 extends Phaser.Scene {
         this.isTransitioning = false;
     }
 
-    preload() {
-        // Load image assets
-        this.load.image('player', 'assets/img/player/ship.png');
-        this.load.image('background', 'assets/img/space/bg.jpg');
-        this.load.image('projectile', 'assets/img/player/weapons/laser_mini_yellow.png');
-        this.load.image('enemy_projectile', 'assets/img/enemies/weapons/red_dot.png');
-        this.load.image('enemy', 'assets/img/enemies/ships/1.png');
-        
-        // Load explosion spritesheet
-        this.load.spritesheet('explosion', 'assets/img/space/explosion.png', {
-            frameWidth: 192,
-            frameHeight: 192
-        });
-    }
 
     create() {
         this.isTransitioning = false;
