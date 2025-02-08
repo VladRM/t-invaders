@@ -15,6 +15,7 @@ export class LevelScene extends BaseLevelScene {
         
         // Instantiate a single enemy group for levels that use enemyRows
         this.enemyGroup = new EnemyGroup(this, {});
+        this.enemyGroups.push(this.enemyGroup);
         
         // Create enemy rows from config
         this.levelConfig.enemyRows.forEach(rowConfig => {
