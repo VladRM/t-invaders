@@ -150,6 +150,11 @@ export class BaseLevelScene extends Phaser.Scene {
         });
     }
 
+    /**
+     * Handles collisions between enemy projectiles and the player
+     * Checks each enemy's projectiles against the player hitbox
+     * Creates explosions and handles player damage on collision
+     */
     handleEnemyProjectileCollisions() {
         this.enemyGroups.forEach(group => {
             group.enemies.forEach(enemy => {
@@ -174,6 +179,10 @@ export class BaseLevelScene extends Phaser.Scene {
         });
     }
 
+    /**
+     * Updates the scrolling background position
+     * Resets background tiles when they move off screen
+     */
     updateBackground() {
         for (const bg of this.bgTiles) {
             bg.y += this.scrollSpeed;
@@ -185,6 +194,10 @@ export class BaseLevelScene extends Phaser.Scene {
         }
     }
 
+    /**
+     * Called when an enemy is defeated
+     * Meant to be overridden by child classes to add custom behavior
+     */
     handleEnemyDefeated() {
         // Override in child classes
     }
