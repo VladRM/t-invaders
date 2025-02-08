@@ -28,20 +28,24 @@ export class LevelScene extends BaseLevelScene {
                     let startX = typeof rowConfig.startX === 'string'
                         ? eval(startXExpr.replace('gameWidth', gameWidth))
                         : (rowConfig.startX || ((gameWidth - (spacing * (rowConfig.count - 1))) / 2));
-                
-                    console.log("For enemy row of type " + rowConfig.enemyConfig.imageKey + ", spacingExpr: " + spacingExpr + ", evaluated spacing: " + spacing);
-                    console.log("For enemy row of type " + rowConfig.enemyConfig.imageKey + ", startXExpr: " + startXExpr + ", evaluated startX: " + startX);
-                
-                    if (isNaN(startX)) {
-                        startX = (gameWidth - (spacing * (rowConfig.count - 1))) / 2;
-                        console.warn("Recomputed startX for enemy row of type " + rowConfig.enemyConfig.imageKey + " as: " + startX);
+                    
+                    // Ensure values are numbers
+                    const numSpacing = Number(spacing);
+                    let numStartX = Number(startX);
+                    
+                    console.log("For enemy row of type " + rowConfig.enemyConfig.imageKey + ", spacingExpr: " + spacingExpr + ", evaluated spacing: " + numSpacing);
+                    console.log("For enemy row of type " + rowConfig.enemyConfig.imageKey + ", startXExpr: " + startXExpr + ", evaluated startX: " + numStartX);
+                    
+                    if (isNaN(numStartX)) {
+                        numStartX = (gameWidth - (numSpacing * (rowConfig.count - 1))) / 2;
+                        console.warn("Recomputed startX for enemy row of type " + rowConfig.enemyConfig.imageKey + " as: " + numStartX);
                     }
-                
+                    
                     enemyGroup.createEnemyRow({
                         ...rowConfig,
-                        spacing: spacing,
+                        spacing: numSpacing,
                         y: rowConfig.y + (groupConfig.config.yOffset || 0),
-                        startX,
+                        startX: numStartX,
                         enemyConfig: {
                             ...rowConfig.enemyConfig,
                             isEnemy: true
