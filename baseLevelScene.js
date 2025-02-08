@@ -145,7 +145,7 @@ export class BaseLevelScene extends Phaser.Scene {
                                 }
                             }
                         }
-                });
+                    });
             });
         });
     }
