@@ -3,11 +3,17 @@ export function createExplosion(scene, x, y, explosionSize) {
     const explosion = scene.add.sprite(x, y, 'explosion');
     explosion.setDisplaySize(explosionSize, explosionSize);
     
-    // Play the explosion animation (assumes the animation 'explode' is defined)
-    explosion.play('explode');
-    
     // When the animation completes, destroy the explosion sprite
     explosion.on('animationcomplete', () => {
         explosion.destroy();
     });
+
+    // Play the explosion animation with specific config
+    explosion.play({ 
+        key: 'explode',
+        frameRate: 20,
+        repeat: 0
+    });
+    
+    return explosion;
 }
