@@ -61,7 +61,7 @@ export class LevelScene extends BaseLevelScene {
     handleEnemyDefeated() {
         // Add a small delay before checking if all enemies are defeated
         this.time.delayedCall(100, () => {
-            if (this.enemyGroup.enemies.length === 0) {
+            if (this.enemyGroups.every(group => group.enemies.length === 0)) {
                 this.triggerTransition();
             }
         });
