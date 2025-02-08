@@ -1,4 +1,5 @@
 import { BaseLevelScene } from './baseLevelScene.js';
+import { SceneManager } from './sceneManager.js';
 
 export class LevelScene extends BaseLevelScene {
     constructor(levelConfig) {
@@ -43,11 +44,15 @@ export class LevelScene extends BaseLevelScene {
         
         const nextLevel = this.levelConfig.nextLevel;
         if (!nextLevel) {
-            // Game complete
-            SceneManager.getInstance().goToNextScene(this);
+            // Game complete - fade out and transition to win screen
+            this.cameras.main.fadeOut(500, 0, 0, 0);
+            this.cameras.main.once('camerafadeoutcomplete', () => {
+                SceneManager.getInstance().goToNextScene(this);
+            });
             return;
         }
 
+        // Normal level transition
         this.cameras.main.fadeOut(500, 0, 0, 0);
         this.cameras.main.once('camerafadeoutcomplete', () => {
             this.scene.start(nextLevel);
