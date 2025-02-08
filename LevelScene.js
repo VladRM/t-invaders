@@ -1,6 +1,7 @@
 import { BaseLevelScene } from './baseLevelScene.js';
 import { SceneManager } from './sceneManager.js';
 import { EnemyGroup } from './enemies.js';
+import { levelsConfig } from './levelsConfig.js';
 
 export class LevelScene extends BaseLevelScene {
     constructor(levelConfig) {
@@ -73,9 +74,9 @@ export class LevelScene extends BaseLevelScene {
         this.isTransitioning = true;
         this.gameState.won = true;
         this.gameState.currentLevel++;
-        
-        const nextLevel = this.levelConfig.nextLevel;
-        if (!nextLevel) {
+
+        const nextLevelKey = this.levelConfig.nextLevel;
+        if (!nextLevelKey) {
             // Game complete - let SceneManager handle the transition
             SceneManager.getInstance().goToNextScene(this);
             return;
@@ -84,7 +85,12 @@ export class LevelScene extends BaseLevelScene {
         // Normal level transition
         this.cameras.main.fadeOut(500, 0, 0, 0);
         this.cameras.main.once('camerafadeoutcomplete', () => {
-            this.scene.start(nextLevel);
+            const nextLevelConfig = levelsConfig[nextLevelKey.toLowerCase()];
+            if (nextLevelConfig) {
+                this.scene.start(nextLevelConfig.key, nextLevelConfig);
+            } else {
+                console.error("Next level config not found for key:", nextLevelKey);
+            }
         });
     }
 }
