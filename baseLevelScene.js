@@ -98,11 +98,11 @@ export class BaseLevelScene extends Phaser.Scene {
         if (this.player.getWeapon()) {
             const projectiles = this.player.getWeapon().getProjectileGroup().getChildren();
             projectiles.forEach(projectile => {
-                if (!projectile.active) return;
+                if (!projectile.active) { return; }
                 
                 this.enemyGroups.forEach(group => {
                     group.getSprites().forEach(enemySprite => {
-                        if (!enemySprite.active) return;
+                        if (!enemySprite.active) { return; }
                         
                         // Use different collision radius based on enemy type
                     const enemyRadius = enemySprite.texture.key === 'boss' ? 
@@ -153,7 +153,7 @@ export class BaseLevelScene extends Phaser.Scene {
         this.enemyGroups.forEach(group => {
             group.enemies.forEach(enemy => {
                 enemy.weapon.getProjectileGroup().getChildren().forEach(projectile => {
-                    if (!projectile.active || !this.player.getSprite().active) return;
+                    if (!projectile.active || !this.player.getSprite().active) { return; }
                     
                     if (this.checkCollision(projectile, this.player.getSprite(), COLLISION.ENEMY_PROJECTILE_RADIUS, COLLISION.PLAYER_RADIUS)) {
                         // Create a small explosion at impact
