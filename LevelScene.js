@@ -20,7 +20,7 @@ export class LevelScene extends BaseLevelScene {
             this.levelConfig.enemyGroups.forEach(groupConfig => {
                 const enemyGroup = new EnemyGroup(this, groupConfig.config || {});
                 groupConfig.enemyRows.forEach(rowConfig => {
-                    const spacingExpr = rowConfig.spacing.trim();
+                    const spacingExpr = typeof rowConfig.spacing === 'string' ? rowConfig.spacing.trim() : "";
                     const spacing = typeof rowConfig.spacing === 'string'
                         ? eval(spacingExpr.replace('gameWidth', gameWidth))
                         : rowConfig.spacing;
@@ -39,6 +39,7 @@ export class LevelScene extends BaseLevelScene {
                 
                     enemyGroup.createEnemyRow({
                         ...rowConfig,
+                        spacing: spacing,
                         y: rowConfig.y + (groupConfig.config.yOffset || 0),
                         startX,
                         enemyConfig: {
