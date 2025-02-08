@@ -13,6 +13,15 @@ export class Enemy {
             this.sprite = scene.physics.add.sprite(this.x, this.y, this.imageKey)
                 .setDisplaySize(this.size, this.size);
             
+            // Add custom hitbox - different sizes for boss vs regular enemies
+            const hitboxPercent = this.imageKey === 'boss' ? 0.8 : 0.6;
+            const hitboxSize = this.size * hitboxPercent;
+            this.sprite.body.setCircle(
+                hitboxSize / 2,
+                (this.size - hitboxSize) / 2,
+                (this.size - hitboxSize) / 2
+            );
+            
             // Ensure firing delays are present
             this.minFireDelay = typeof config.minFireDelay === 'number' ? config.minFireDelay : 4000;
             this.maxFireDelay = typeof config.maxFireDelay === 'number' ? config.maxFireDelay : 8000;

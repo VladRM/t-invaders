@@ -34,6 +34,13 @@ export class BaseLevelScene extends Phaser.Scene {
         const gameWidth = this.sys.game.config.width;
         const gameHeight = this.sys.game.config.height;
 
+        // Enable debug graphics in development
+        if (process.env.NODE_ENV === 'development') {
+            this.physics.world.createDebugGraphic();
+            const debugGraphics = this.add.graphics().setAlpha(0.75);
+            this.physics.world.debugGraphic = debugGraphics;
+        }
+
         // Create explosion animation if it doesn't exist
         if (!this.anims.exists('explode')) {
             this.anims.create({

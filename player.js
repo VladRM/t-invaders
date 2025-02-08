@@ -21,6 +21,14 @@ export class Player {
                 'player'
             ).setDisplaySize(this.playerSize, this.playerSize);
 
+            // Add custom hitbox - 80% of sprite size for player
+            const hitboxSize = this.playerSize * 0.8;
+            this.sprite.body.setCircle(
+                hitboxSize / 2,
+                (this.playerSize - hitboxSize) / 2,
+                (this.playerSize - hitboxSize) / 2
+            );
+
             // Set collision bounds
             this.sprite.setCollideWorldBounds(true);
 

@@ -36,22 +36,17 @@ export class Weapon {
                     createCallback: (projectile) => {
                         projectile.setActive(true);
                         projectile.setVisible(true);
-                        if (this.collisionType === 'circle') {
-                            const radius = this.collisionRadius || COLLISION.PROJECTILE_RADIUS;
-                            projectile.body.setCircle(radius);
-                            projectile.body.setOffset(
-                                (projectile.width - radius * 2) / 2,
-                                (projectile.height - radius * 2) / 2
-                            );
-                        } else if (this.collisionType === 'rectangle') {
-                            const width = this.collisionWidth || projectile.width;
-                            const height = this.collisionHeight || projectile.height;
-                            projectile.body.setSize(width, height);
-                            projectile.body.setOffset(
-                                (projectile.width - width) / 2,
-                                (projectile.height - height) / 2
-                            );
-                        }
+                        
+                        // Set hitbox size - 90% for enemy projectiles, 60% for player projectiles
+                        const hitboxPercent = this.isEnemy ? 0.9 : 0.6;
+                        const spriteSize = projectile.width;
+                        const hitboxSize = spriteSize * hitboxPercent;
+                        
+                        projectile.body.setCircle(
+                            hitboxSize / 2,
+                            (spriteSize - hitboxSize) / 2,
+                            (spriteSize - hitboxSize) / 2
+                        );
                     }
                 });
             }
