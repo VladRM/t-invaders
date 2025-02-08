@@ -214,7 +214,14 @@ export class BaseLevelScene extends Phaser.Scene {
         // Override in child classes
     }
 
+    /**
+     * Main update loop called by Phaser each frame
+     * Handles all collision checks, player updates, and enemy movement
+     */
     update() {
+        if (!this.player || !this.cursors || !this.spaceKey) {
+            return;
+        }
         this.handlePlayerProjectileCollisions();
         this.updateBackground();
         this.player.update(this.cursors, this.spaceKey);
