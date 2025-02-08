@@ -41,7 +41,7 @@ export const levelsConfig = {
         enemyRows: [
             {
                 count: 3,
-                spacing: "gameWidth/4",
+                spacing: 160,
                 y: 120,
                 enemyConfig: {
                     imageKey: 'boss',
