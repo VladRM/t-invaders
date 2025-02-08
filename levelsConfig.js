@@ -1,4 +1,53 @@
 export const levelsConfig = {
+    level0: {
+        key: 'Level0',
+        nextLevel: 'Level1',
+        enemyGroups: [
+            {
+                config: { moveSpeed: 75, yOffset: 50 },
+                enemyRows: [
+                    {
+                        count: 2,
+                        spacing: 'gameWidth / 2',
+                        startX: 'gameWidth / 4',
+                        y: 50,
+                        enemyConfig: {
+                            imageKey: 'boss',
+                            size: 128,
+                            hitPoints: 5,
+                            weaponConfig: {
+                                multiShotCount: 3,
+                                shotAngle: 15,
+                                minFireDelay: 2000,
+                                maxFireDelay: 4000
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                config: { moveSpeed: 150, yOffset: 150 },
+                enemyRows: [
+                    {
+                        count: 7,
+                        spacing: 80,
+                        startX: '(gameWidth - (80 * 6)) / 2',
+                        y: 150,
+                        enemyConfig: {
+                            imageKey: 'enemy',
+                            size: 48,
+                            hitPoints: 1,
+                            weaponConfig: {
+                                multiShotCount: 1,
+                                minFireDelay: 3000,
+                                maxFireDelay: 6000
+                            }
+                        }
+                    }
+                ]
+            }
+        ],
+    },
     level1: {
         key: 'Level1',
         nextLevel: 'Level2',
