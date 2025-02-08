@@ -63,7 +63,10 @@ export class Level1 extends Phaser.Scene {
         // Generate level from config
         const levelConfig = levelsConfig.level1;
         levelConfig.enemyRows.forEach(rowConfig => {
-            const startX = (gameWidth - (rowConfig.spacing * (rowConfig.count - 1))) / 2;
+            const spacing = typeof rowConfig.spacing === 'string' ? 
+                eval(rowConfig.spacing.replace('gameWidth', gameWidth)) : 
+                rowConfig.spacing;
+            const startX = (gameWidth - (spacing * (rowConfig.count - 1))) / 2;
             this.enemyGroup.createEnemyRow({
                 ...rowConfig,
                 startX: startX,
