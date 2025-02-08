@@ -6,7 +6,12 @@ import { levelsConfig } from './levelsConfig.js';
 export class LevelScene extends BaseLevelScene {
     constructor() {
         super({ key: 'Level1' });
-        this.levelConfig = levelsConfig.level0;
+    }
+    
+    init(data) {
+        super.init(data);
+        // Use the config passed in via scene.start, or default to level0 if none provided
+        this.levelConfig = (data && data.key) ? data : levelsConfig.level0;
     }
 
     create() {
