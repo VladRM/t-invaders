@@ -64,29 +64,18 @@ export class Level2 extends Phaser.Scene {
         // Create enemy group
         this.enemyGroup = new EnemyGroup(this);
         
-        // Add two boss enemies
-        const bossSize = 96;
-        const spacing = gameWidth / 4;
-        
-        this.enemyGroup.createEnemyRow({
-            count: 3,
-            spacing: spacing,
-            startX: spacing,
-            y: bossSize,
-            enemyConfig: {
-                imageKey: 'boss',
-                size: bossSize,
-                hitPoints: 10,
-                minFireDelay: 1000,  // 1 second minimum delay
-                maxFireDelay: 2000,   // 2 second maximum delay
-                isEnemy: true,
-                weaponConfig: {
-                    multiShotCount: 3,
-                    shotAngle: 30,
-                    shotXOffset: 20,
-                    projectileSpeed: 300
+        // Generate level from config
+        const levelConfig = levelsConfig.level2;
+        levelConfig.enemyRows.forEach(rowConfig => {
+            const startX = (gameWidth - (rowConfig.spacing * (rowConfig.count - 1))) / 2;
+            this.enemyGroup.createEnemyRow({
+                ...rowConfig,
+                startX: startX,
+                enemyConfig: {
+                    ...rowConfig.enemyConfig,
+                    isEnemy: true
                 }
-            }
+            });
         });
 
         this.spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
