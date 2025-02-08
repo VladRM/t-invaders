@@ -27,6 +27,7 @@ export class LevelScene extends BaseLevelScene {
                     
                     enemyGroup.createEnemyRow({
                         ...rowConfig,
+                        y: rowConfig.y + (groupConfig.config.yOffset || 0),
                         startX,
                         enemyConfig: {
                             ...rowConfig.enemyConfig,
