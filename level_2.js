@@ -5,6 +5,7 @@ import { SceneManager } from './sceneManager.js';
 import { COLLISION, EXPLOSION } from './config.js';
 import { createExplosion } from './explosion.js';
 import { createBackground, updateBackground } from './background.js';
+import { levelsConfig } from './levelsConfig.js';
 
 export class Level2 extends Phaser.Scene {
     constructor() {

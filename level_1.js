@@ -5,6 +5,7 @@ import { SceneManager } from './sceneManager.js';
 import { COLLISION, EXPLOSION } from './config.js';
 import { createExplosion } from './explosion.js';
 import { createBackground, updateBackground } from './background.js';
+import { levelsConfig } from './levelsConfig.js';
 
 export class Level1 extends Phaser.Scene {
     constructor() {
@@ -30,18 +31,15 @@ export class Level1 extends Phaser.Scene {
 
     create() {
         this.isTransitioning = false;
-        // If we have an existing enemy group, destroy it properly
         if (this.enemyGroup) {
             this.enemyGroup.destroy();
         }
         
-        // Always reset the game state when starting a new game
         this.gameState.reset();
         
         const gameWidth = this.sys.game.config.width;
         const gameHeight = this.sys.game.config.height;
 
-        // Create explosion animation
         this.anims.create({
             key: 'explode',
             frames: this.anims.generateFrameNumbers('explosion', { start: 0, end: 19 }),
@@ -49,61 +47,31 @@ export class Level1 extends Phaser.Scene {
             hideOnComplete: true
         });
         
-        // Create background
         this.background = createBackground(this);
         
-        // Initialize player
         this.player = new Player(this, {
             size: 64,
             lives: 3
         });
-        // Set bounds to full game width
+        
         this.physics.world.setBounds(0, 0, gameWidth, gameHeight);
-        
-        // Initialize global enemy bullets group
         this.enemyBullets = this.physics.add.group();
-        
         this.cursors = this.input.keyboard.createCursorKeys();
-        
-        // Set scroll speed (positive for downward scroll)
         this.scrollSpeed = 1;
-
-        // Create enemy group
         this.enemyGroup = new EnemyGroup(this);
-        
-        // Add row of enemies
-        const enemySize = 48;
-        const spacing = 100;
-        const startX = (gameWidth - (spacing * 4)) / 2;
-        
-        // Create first row of enemies
-        this.enemyGroup.createEnemyRow({
-            count: 6,
-            spacing: spacing,
-            startX: startX,
-            y: enemySize,
-            enemyConfig: {
-                imageKey: 'enemy',
-                size: enemySize,
-                minFireDelay: 2000,  // 2 seconds minimum
-                maxFireDelay: 5000,   // 5 seconds maximum
-                isEnemy: true
-            }
-        });
 
-        // Create second row of enemies
-        this.enemyGroup.createEnemyRow({
-            count: 6,
-            spacing: spacing,
-            startX: startX,
-            y: enemySize * 2.5, // Position slightly below first row
-            enemyConfig: {
-                imageKey: 'enemy',
-                size: enemySize,
-                minFireDelay: 2000,  // 2 seconds minimum
-                maxFireDelay: 5000,   // 5 seconds maximum
-                isEnemy: true
-            }
+        // Generate level from config
+        const levelConfig = levelsConfig.level1;
+        levelConfig.enemyRows.forEach(rowConfig => {
+            const startX = (gameWidth - (rowConfig.spacing * (rowConfig.count - 1))) / 2;
+            this.enemyGroup.createEnemyRow({
+                ...rowConfig,
+                startX: startX,
+                enemyConfig: {
+                    ...rowConfig.enemyConfig,
+                    isEnemy: true
+                }
+            });
         });
 
         // Don't reset enemy firing states here - let each enemy maintain its own initial delay
