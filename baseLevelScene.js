@@ -108,43 +108,43 @@ export class BaseLevelScene extends Phaser.Scene {
                         const enemyRadius = enemySprite.texture.key === 'boss'
                             ? COLLISION.ENEMY_RADIUS
                             : COLLISION.ENEMY_RADIUS * 0.6;
-                    if (this.checkCollision(projectile, enemySprite, COLLISION.PROJECTILE_RADIUS, enemyRadius)) {
-                        // Create a small explosion for the projectile impact
-                        createExplosion(this, projectile.x, projectile.y, EXPLOSION.SMALL.size);
-                            
-                        // Destroy the projectile using the weapon method
-                        this.player.getWeapon().destroyProjectile(projectile);
-                        
-                        // Find enemy object via the current group
-                        const enemy = group.enemies.find(e => e.sprite === enemySprite);
-                        if (enemy) {
-                            enemy.hitPoints--;
-                            if (enemy.hitPoints <= 0) {
-                                // Immediately disable enemy collisions
-                                enemySprite.active = false;
-                                if (enemySprite.body) {
-                                    enemySprite.body.enable = false;
-                                }
-                                    
-                                // Create appropriately sized explosion based on enemy type
-                                const explosionSize = enemy.sprite.texture.key === 'boss' ? 
-                                    EXPLOSION.BIG.size : EXPLOSION.SMALL.size;
-                                createExplosion(this, enemySprite.x, enemySprite.y, explosionSize);
+                        if (this.checkCollision(projectile, enemySprite, COLLISION.PROJECTILE_RADIUS, enemyRadius)) {
+                            // Create a small explosion for the projectile impact
+                            createExplosion(this, projectile.x, projectile.y, EXPLOSION.SMALL.size);
                                 
-                                // Fade out and remove enemy sprite
-                                this.tweens.add({
-                                    targets: enemySprite,
-                                    alpha: 0,
-                                    duration: 250,
-                                    ease: 'Power1',
-                                    onComplete: () => {
-                                        group.removeEnemy(enemySprite);
-                                        this.handleEnemyDefeated();
+                            // Destroy the projectile using the weapon method
+                            this.player.getWeapon().destroyProjectile(projectile);
+                            
+                            // Find enemy object via the current group
+                            const enemy = group.enemies.find(e => e.sprite === enemySprite);
+                            if (enemy) {
+                                enemy.hitPoints--;
+                                if (enemy.hitPoints <= 0) {
+                                    // Immediately disable enemy collisions
+                                    enemySprite.active = false;
+                                    if (enemySprite.body) {
+                                        enemySprite.body.enable = false;
                                     }
-                                });
+                                        
+                                    // Create appropriately sized explosion based on enemy type
+                                    const explosionSize = enemy.sprite.texture.key === 'boss' ? 
+                                        EXPLOSION.BIG.size : EXPLOSION.SMALL.size;
+                                    createExplosion(this, enemySprite.x, enemySprite.y, explosionSize);
+                                    
+                                    // Fade out and remove enemy sprite
+                                    this.tweens.add({
+                                        targets: enemySprite,
+                                        alpha: 0,
+                                        duration: 250,
+                                        ease: 'Power1',
+                                        onComplete: () => {
+                                            group.removeEnemy(enemySprite);
+                                            this.handleEnemyDefeated();
+                                        }
+                                    });
+                                }
                             }
                         }
-                    }
                 });
             });
         });
