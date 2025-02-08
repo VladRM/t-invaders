@@ -47,11 +47,8 @@ export class LevelScene extends BaseLevelScene {
         
         const nextLevel = this.levelConfig.nextLevel;
         if (!nextLevel) {
-            // Game complete - fade out and transition to win screen
-            this.cameras.main.fadeOut(500, 0, 0, 0);
-            this.cameras.main.once('camerafadeoutcomplete', () => {
-                SceneManager.getInstance().goToNextScene(this);
-            });
+            // Game complete - let SceneManager handle the transition
+            SceneManager.getInstance().goToNextScene(this);
             return;
         }
 
