@@ -12,6 +12,9 @@ export class LevelScene extends BaseLevelScene {
         
         const gameWidth = this.sys.game.config.width;
         
+        // Instantiate a single enemy group for levels that use enemyRows
+        this.enemyGroup = new EnemyGroup(this, {});
+        
         // Create enemy rows from config
         this.levelConfig.enemyRows.forEach(rowConfig => {
             const spacing = typeof rowConfig.spacing === 'string' ? 
