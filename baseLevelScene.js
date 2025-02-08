@@ -153,21 +153,22 @@ export class BaseLevelScene extends Phaser.Scene {
         this.enemyGroups.forEach(group => {
             group.enemies.forEach(enemy => {
                 enemy.weapon.getProjectileGroup().getChildren().forEach(projectile => {
-                if (!projectile.active || !this.player.getSprite().active) return;
-                
-                if (this.checkCollision(projectile, this.player.getSprite(), COLLISION.ENEMY_PROJECTILE_RADIUS, COLLISION.PLAYER_RADIUS)) {
-                    // Create a small explosion at impact
-                    createExplosion(this, projectile.x, projectile.y, EXPLOSION.SMALL.size);
+                    if (!projectile.active || !this.player.getSprite().active) return;
                     
-                    enemy.weapon.destroyProjectile(projectile);
-                    
-                    const isGameOver = this.player.damage();
-                    if (isGameOver && !this.isTransitioning) {
-                        this.isTransitioning = true;
-                        this.gameState.won = false;
-                        SceneManager.getInstance().goToNextScene(this);
+                    if (this.checkCollision(projectile, this.player.getSprite(), COLLISION.ENEMY_PROJECTILE_RADIUS, COLLISION.PLAYER_RADIUS)) {
+                        // Create a small explosion at impact
+                        createExplosion(this, projectile.x, projectile.y, EXPLOSION.SMALL.size);
+                        
+                        enemy.weapon.destroyProjectile(projectile);
+                        
+                        const isGameOver = this.player.damage();
+                        if (isGameOver && !this.isTransitioning) {
+                            this.isTransitioning = true;
+                            this.gameState.won = false;
+                            SceneManager.getInstance().goToNextScene(this);
+                        }
                     }
-                }
+                });
             });
         });
     }
