@@ -80,8 +80,8 @@ export class BaseLevelScene extends Phaser.Scene {
         this.cursors = this.input.keyboard.createCursorKeys();
         this.scrollSpeed = 1;
 
-        // Create enemy group
-        this.enemyGroup = new EnemyGroup(this);
+        // Initialize enemy groups array
+        this.enemyGroups = [];
         
         this.spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     }
@@ -100,7 +100,8 @@ export class BaseLevelScene extends Phaser.Scene {
             projectiles.forEach(projectile => {
                 if (!projectile.active) return;
                 
-                this.enemyGroup.getSprites().forEach(enemySprite => {
+                this.enemyGroups.forEach(group => {
+                    group.getSprites().forEach(enemySprite => {
                     if (!enemySprite.active) return;
                     
                     // Use different collision radius based on enemy type
@@ -136,7 +137,7 @@ export class BaseLevelScene extends Phaser.Scene {
                                     duration: 250,
                                     ease: 'Power1',
                                     onComplete: () => {
-                                        this.enemyGroup.removeEnemy(enemySprite);
+                                        group.removeEnemy(enemySprite);
                                         this.handleEnemyDefeated();
                                     }
                                 });
@@ -145,11 +146,13 @@ export class BaseLevelScene extends Phaser.Scene {
                     }
                 });
             });
-        }
-    }
+        });
+    });
+}
 
     handleEnemyProjectileCollisions() {
-        this.enemyGroup.enemies.forEach(enemy => {
+        this.enemyGroups.forEach(group => {
+            group.enemies.forEach(enemy => {
             enemy.weapon.getProjectileGroup().getChildren().forEach(projectile => {
                 if (!projectile.active || !this.player.getSprite().active) return;
                 
@@ -190,6 +193,6 @@ export class BaseLevelScene extends Phaser.Scene {
         this.updateBackground();
         this.player.update(this.cursors, this.spaceKey);
         this.handleEnemyProjectileCollisions();
-        this.enemyGroup.update();
+        this.enemyGroups.forEach(group => group.update());
     }
 }

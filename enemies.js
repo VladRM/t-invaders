@@ -77,12 +77,13 @@ export class Enemy {
     }
 
 export class EnemyGroup {
-        constructor(scene) {
+        constructor(scene, config = {}) {
             this.scene = scene;
             this.enemies = [];
             this.direction = 1; // 1 for right, -1 for left
-            this.moveSpeed = 100; // pixels per second
-            this.padding = 50; // padding from screen edges
+            this.moveSpeed = config.moveSpeed || 100; // pixels per second
+            this.padding = config.padding || 50; // padding from screen edges
+            this.yOffset = config.yOffset || 0; // vertical offset for group movement
         }
 
         createEnemyRow(config) {
