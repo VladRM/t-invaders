@@ -12,6 +12,11 @@ export class Enemy {
             // Create sprite first
             this.sprite = scene.physics.add.sprite(this.x, this.y, this.imageKey)
                 .setDisplaySize(this.size, this.size);
+            if (this.imageKey === 'boss') {
+                this.sprite.setDepth(2); // Bosses get a higher depth so they are visible
+            } else {
+                this.sprite.setDepth(1);
+            }
             
             // Add custom hitbox - different sizes for boss vs regular enemies
             const hitboxPercent = this.imageKey === 'boss' ? 0.8 : 0.6;
