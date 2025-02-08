@@ -180,10 +180,10 @@ export class Level1 extends Phaser.Scene {
         if (this.isTransitioning) return;
         this.isTransitioning = true;
         this.gameState.won = true;
-        this.gameState.currentLevel = 2;  // Update current level
+        this.gameState.currentLevel = 3;  // Update current level
         this.cameras.main.fadeOut(500, 0, 0, 0);
         this.cameras.main.once('camerafadeoutcomplete', () => {
-            this.scene.start('Level2');
+            this.scene.start('Level3');
         });
     }
 }

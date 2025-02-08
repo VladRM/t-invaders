@@ -6,9 +6,9 @@ import { COLLISION, EXPLOSION } from './config.js';
 import { createExplosion } from './explosion.js';
 import { createBackground, updateBackground } from './background.js';
 
-export class Tutorial extends Phaser.Scene {
+export class Level1 extends Phaser.Scene {
     constructor() {
-        super({ key: 'Tutorial' });
+        super({ key: 'Level1' });
         this.gameState = GameState.getInstance();
         this.isTransitioning = false;
     }

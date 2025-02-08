@@ -59,7 +59,7 @@ export class SceneMenu extends Phaser.Scene {
                 text: 'Start Game',
                 onClick: () => {
                     GameState.getInstance().reset();
-                    this.scene.start('Tutorial');
+                    this.scene.start('Level1');
                 }
             },
             gameover: {
