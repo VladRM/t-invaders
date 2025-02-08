@@ -97,15 +97,14 @@ export class BaseLevelScene extends Phaser.Scene {
                     if (!enemySprite.active) return;
                     
                     if (this.checkCollision(projectile, enemySprite, COLLISION.PROJECTILE_RADIUS, COLLISION.ENEMY_RADIUS)) {
-
-                    // Create a small explosion for the projectile impact
-                    createExplosion(this, projectile.x, projectile.y, EXPLOSION.SMALL.size);
+                        // Create a small explosion for the projectile impact
+                        createExplosion(this, projectile.x, projectile.y, EXPLOSION.SMALL.size);
+                            
+                        // Destroy the projectile using the weapon method
+                        this.player.getWeapon().destroyProjectile(projectile);
                         
-                    // Destroy the projectile using the weapon method
-                    this.player.getWeapon().destroyProjectile(projectile);
-                    
-                    // Find enemy object via enemyGroup helper
-                    const enemy = this.enemyGroup.enemies.find(e => e.sprite === enemySprite);
+                        // Find enemy object via enemyGroup helper
+                        const enemy = this.enemyGroup.enemies.find(e => e.sprite === enemySprite);
                     if (enemy) {
                         enemy.hitPoints--;
                         if (enemy.hitPoints <= 0) {
@@ -133,10 +132,10 @@ export class BaseLevelScene extends Phaser.Scene {
                             });
                         }
                     }
-                }
-            );
+                    });
+                });
+            }
         }
-    }
 
     handleEnemyProjectileCollisions() {
         this.enemyGroup.enemies.forEach(enemy => {
