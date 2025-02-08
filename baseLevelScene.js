@@ -156,6 +156,10 @@ export class BaseLevelScene extends Phaser.Scene {
      * Creates explosions and handles player damage on collision
      */
     handleEnemyProjectileCollisions() {
+        if (!this.enemyGroups || !this.player) {
+            return;
+        }
+        
         this.enemyGroups.forEach(group => {
             group.enemies.forEach(enemy => {
                 enemy.weapon.getProjectileGroup().getChildren().forEach(projectile => {
@@ -184,6 +188,10 @@ export class BaseLevelScene extends Phaser.Scene {
      * Resets background tiles when they move off screen
      */
     updateBackground() {
+        if (!this.bgTiles || !this.textures) {
+            return;
+        }
+        
         for (const bg of this.bgTiles) {
             bg.y += this.scrollSpeed;
             
@@ -199,6 +207,10 @@ export class BaseLevelScene extends Phaser.Scene {
      * Meant to be overridden by child classes to add custom behavior
      */
     handleEnemyDefeated() {
+        if (!this.gameState) {
+            console.warn('GameState not initialized in handleEnemyDefeated');
+            return;
+        }
         // Override in child classes
     }
 
