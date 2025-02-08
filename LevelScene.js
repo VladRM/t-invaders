@@ -36,10 +36,13 @@ export class LevelScene extends BaseLevelScene {
                             isEnemy: true
                         }
                     });
+                    console.log("Created enemy row: type " + rowConfig.enemyConfig.imageKey + ", count " + rowConfig.count + ", effective y " + (rowConfig.y + (groupConfig.config.yOffset || 0)));
                 });
                 groups.push(enemyGroup);
+                console.log("Created enemy group with total enemies: " + enemyGroup.enemies.length);
             });
             this.enemyGroups = groups;
+            console.log("Total enemy groups created: " + groups.length);
         } else if (this.levelConfig.enemyRows) {
             // Fallback for previous config structure using a single enemy group
             this.enemyGroup = new EnemyGroup(this, {});

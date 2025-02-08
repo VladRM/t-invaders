@@ -12,6 +12,7 @@ export class Enemy {
             // Create sprite first
             this.sprite = scene.physics.add.sprite(this.x, this.y, this.imageKey)
                 .setDisplaySize(this.size, this.size);
+            console.log("Created enemy: type " + this.imageKey + " at (" + this.x + ", " + this.y + ")");
             if (this.imageKey === 'boss') {
                 this.sprite.setDepth(2); // Bosses get a higher depth so they are visible
             } else {
