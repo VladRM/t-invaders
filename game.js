@@ -1,7 +1,10 @@
 import { SceneMenu } from './sceneMenu.js';
-import { Level1 } from './level_1.js';
-import { Level2 } from './level_2.js';
-import { Level3 } from './level_3.js';
+import { LevelScene } from './LevelScene.js';
+import { levelsConfig } from './levelsConfig.js';
+
+const levelScenes = Object.values(levelsConfig).map(config => 
+    new LevelScene(config)
+);
 
 const config = {
     type: Phaser.AUTO,
@@ -9,7 +12,7 @@ const config = {
     height: 600,
     parent: 'game',
     backgroundColor: '#000000',
-    scene: [SceneMenu, Level1, Level2, Level3],
+    scene: [SceneMenu, ...levelScenes],
     physics: {
         default: 'arcade',
         arcade: {

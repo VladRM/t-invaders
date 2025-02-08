@@ -1,5 +1,31 @@
 export const levelsConfig = {
     level1: {
+        key: 'Level1',
+        nextLevel: 'Level2',
+        enemyRows: [
+            {
+                count: 4,
+                spacing: 100,
+                y: 100,
+                enemyConfig: {
+                    imageKey: 'enemy',
+                    size: 48,
+                    hitPoints: 1,
+                    minFireDelay: 2000,
+                    maxFireDelay: 5000,
+                    weaponConfig: {
+                        multiShotCount: 1,
+                        shotAngle: 0,
+                        shotXOffset: 0,
+                        projectileSpeed: 300
+                    }
+                }
+            }
+        ]
+    },
+    level2: {
+        key: 'Level2',
+        nextLevel: 'Level3',
         enemyRows: [
             {
                 count: 6,
@@ -8,6 +34,7 @@ export const levelsConfig = {
                 enemyConfig: {
                     imageKey: 'enemy',
                     size: 48,
+                    hitPoints: 1,
                     minFireDelay: 2000,
                     maxFireDelay: 5000,
                     weaponConfig: {
@@ -25,6 +52,7 @@ export const levelsConfig = {
                 enemyConfig: {
                     imageKey: 'enemy',
                     size: 48,
+                    hitPoints: 1,
                     minFireDelay: 2000,
                     maxFireDelay: 5000,
                     weaponConfig: {
@@ -37,7 +65,9 @@ export const levelsConfig = {
             }
         ]
     },
-    level2: {
+    level3: {
+        key: 'Level3',
+        nextLevel: null,
         enemyRows: [
             {
                 count: 2,
