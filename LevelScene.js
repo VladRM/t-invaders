@@ -4,10 +4,9 @@ import { EnemyGroup } from './enemies.js';
 import { levelsConfig } from './levelsConfig.js';
 
 export class LevelScene extends BaseLevelScene {
-    constructor(levelConfig) {
-        levelConfig = levelsConfig.level0;
-        super({ key: levelConfig.key });
-        this.levelConfig = levelConfig;
+    constructor() {
+        super({ key: 'Level1' });
+        this.levelConfig = levelsConfig.level0;
     }
 
     create() {
