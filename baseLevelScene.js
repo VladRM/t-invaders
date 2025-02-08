@@ -20,13 +20,16 @@ export class BaseLevelScene extends Phaser.Scene {
         const gameWidth = this.sys.game.config.width;
         const gameHeight = this.sys.game.config.height;
 
-        // Create explosion animation
-        this.anims.create({
-            key: 'explode',
-            frames: this.anims.generateFrameNumbers('explosion', { start: 0, end: 19 }),
-            frameRate: 32,
-            hideOnComplete: true
-        });
+        // Create explosion animation if it doesn't exist
+        if (!this.anims.exists('explode')) {
+            this.anims.create({
+                key: 'explode',
+                frames: this.anims.generateFrameNumbers('explosion', { start: 0, end: 16 }),
+                frameRate: 20,
+                repeat: 0,
+                hideOnComplete: true
+            });
+        }
         
         // Background setup
         const bgTexture = this.textures.get('background');

@@ -8,12 +8,8 @@ export function createExplosion(scene, x, y, explosionSize) {
         explosion.destroy();
     });
 
-    // Play the explosion animation with specific config
-    explosion.play({ 
-        key: 'explode',
-        frameRate: 20,
-        repeat: 0
-    });
+    // Play the explosion animation
+    explosion.play('explode');
     
     return explosion;
 }
