@@ -7,25 +7,22 @@ import { createExplosion } from './explosion.js';
 import { createBackground, updateBackground } from './background.js';
 import { levelsConfig } from './levelsConfig.js';
 
-export class Level2 extends Phaser.Scene {
+export class Level1 extends Phaser.Scene {
     constructor() {
-        super({ key: 'Level2' });
+        super({ key: 'Level1' });
         this.gameState = GameState.getInstance();
         this.isTransitioning = false;
     }
 
-    init(data) {
-        // Reset the local transition flag at every start of this scene
-        this.isTransitioning = false;
-    }
-
     preload() {
+        // Load image assets
         this.load.image('player', 'assets/img/player/ship.png');
         this.load.image('background', 'assets/img/space/bg.jpg');
         this.load.image('projectile', 'assets/img/player/weapons/laser_mini_yellow.png');
         this.load.image('enemy_projectile', 'assets/img/enemies/weapons/red_dot.png');
-        this.load.image('boss', 'assets/img/enemies/ships/boss_1.png');
+        this.load.image('enemy', 'assets/img/enemies/ships/1.png');
         
+        // Load explosion spritesheet
         this.load.spritesheet('explosion', 'assets/img/space/explosion.png', {
             frameWidth: 192,
             frameHeight: 192
@@ -33,10 +30,16 @@ export class Level2 extends Phaser.Scene {
     }
 
     create() {
+        this.isTransitioning = false;
+        if (this.enemyGroup) {
+            this.enemyGroup.destroy();
+        }
+        
+        this.gameState.reset();
+        
         const gameWidth = this.sys.game.config.width;
         const gameHeight = this.sys.game.config.height;
 
-        // Create explosion animation
         this.anims.create({
             key: 'explode',
             frames: this.anims.generateFrameNumbers('explosion', { start: 0, end: 19 }),
@@ -44,28 +47,21 @@ export class Level2 extends Phaser.Scene {
             hideOnComplete: true
         });
         
-        // Create background
         this.background = createBackground(this);
         
-        // Initialize player with current lives from game state
         this.player = new Player(this, {
             size: 64,
-            lives: this.gameState.lives
+            lives: 3
         });
         
         this.physics.world.setBounds(0, 0, gameWidth, gameHeight);
-        
-        // Initialize global enemy bullets group
         this.enemyBullets = this.physics.add.group();
-        
         this.cursors = this.input.keyboard.createCursorKeys();
         this.scrollSpeed = 1;
-
-        // Create enemy group
         this.enemyGroup = new EnemyGroup(this);
-        
+
         // Generate level from config
-        const levelConfig = levelsConfig.level2;
+        const levelConfig = levelsConfig.level1;
         levelConfig.enemyRows.forEach(rowConfig => {
             const spacing = typeof rowConfig.spacing === 'string' ? 
                 eval(rowConfig.spacing.replace('gameWidth', gameWidth)) : 
@@ -81,6 +77,9 @@ export class Level2 extends Phaser.Scene {
             });
         });
 
+        // Don't reset enemy firing states here - let each enemy maintain its own initial delay
+
+        // Add spacebar for firing
         this.spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     }
 
@@ -93,6 +92,7 @@ export class Level2 extends Phaser.Scene {
                 this.enemyGroup.getSprites().forEach(enemySprite => {
                     if (!enemySprite.active) return;
                     
+                    // Check for intersection using circle collision
                     const dx = projectile.x - enemySprite.x;
                     const dy = projectile.y - enemySprite.y;
                     const distance = Math.sqrt(dx * dx + dy * dy);
@@ -101,45 +101,33 @@ export class Level2 extends Phaser.Scene {
                     const enemyRadius = COLLISION.ENEMY_RADIUS;
                     
                     if (distance < projectileRadius + enemyRadius) {
-                        // Create small explosion at impact point
+                        // Create small explosion at impact for the projectile
                         createExplosion(this, projectile.x, projectile.y, EXPLOSION.SMALL.size);
-
+                        
+                        // Destroy projectile
                         this.player.getWeapon().destroyProjectile(projectile);
                         
-                        // Find the enemy and reduce its hit points
-                        const enemy = this.enemyGroup.enemies.find(e => e.sprite === enemySprite);
-                        if (enemy) {
-                            // Prevent duplicate handling if enemy is already deactivated
-                            if (!enemySprite.active) return;
-                            
-                            enemy.hitPoints--;
-                            if (enemy.hitPoints <= 0) {
-                                // Mark enemy as inactive to avoid duplicate processing
-                                enemySprite.active = false;
-                                if (enemySprite.body) {
-                                    enemySprite.body.enable = false;
-                                }
-                                
-                                // Create centered explosion
-                                createExplosion(this, enemySprite.x, enemySprite.y, EXPLOSION.BIG.size);
-                            
-                                // Fade out enemy sprite
-                                this.tweens.add({
-                                    targets: enemySprite,
-                                    alpha: 0,
-                                    duration: 250,
-                                    ease: 'Power1',
-                                    onComplete: () => {
-                                        this.enemyGroup.removeEnemy(enemySprite);
-                                        if (this.enemyGroup.enemies.length === 0) {
-                                            this.triggerTransition(true);
-                                        }
-                                    }
-                                });
-                            }
+                        // Immediately mark the enemy as inactive and disable its physics body
+                        enemySprite.active = false;
+                        if (enemySprite.body) {
+                            enemySprite.body.enable = false;
                         }
                         
-                        return false;
+                        // Create explosion for enemy
+                        createExplosion(this, enemySprite.x, enemySprite.y, 128);
+                        
+                        // Start tweening to fade out enemy sprite, then remove it
+                        this.tweens.add({
+                            targets: enemySprite,
+                            alpha: 0,
+                            duration: 250,
+                            ease: 'Power1',
+                            onComplete: () => {
+                                this.enemyGroup.removeEnemy(enemySprite);
+                            }
+                        });
+                        
+                        return false; // Break the inner loop since we've handled this projectile
                     }
                 });
             });
@@ -148,6 +136,7 @@ export class Level2 extends Phaser.Scene {
         // Update background
         updateBackground(this, this.background.bgTiles, this.background.scrollSpeed);
 
+        // Update player
         this.player.update(this.cursors, this.spaceKey);
         
         // Check for enemy projectile collisions with player
@@ -157,8 +146,8 @@ export class Level2 extends Phaser.Scene {
             const dx = projectile.x - playerSprite.x;
             const dy = projectile.y - playerSprite.y;
             const distance = Math.sqrt(dx * dx + dy * dy);
-            const projectileRadius = COLLISION.ENEMY_PROJECTILE_RADIUS;
-            const playerRadius = COLLISION.PLAYER_RADIUS;
+            const projectileRadius = 5;  // Use same values as before
+            const playerRadius = 32;
             if (distance < projectileRadius + playerRadius) {
                 const explosion = this.add.sprite(projectile.x, projectile.y, 'explosion');
                 explosion.setDisplaySize(64, 64);
@@ -172,25 +161,29 @@ export class Level2 extends Phaser.Scene {
                 projectile.destroy();
                 const isGameOver = this.player.damage(false);
                 if (isGameOver) {
-                    this.triggerTransition(false);
+                    this.gameState.won = false;
+                    SceneManager.getInstance().goToNextScene(this);
                 }
             }
         });
 
+        // Update enemies
         this.enemyGroup.update();
+
+        // Check if all enemies are destroyed to advance to Level 2
+        if (this.enemyGroup.enemies.length === 0) {
+            this.triggerTransition();
+        }
     }
 
-    triggerTransition(win) {
+    triggerTransition() {
         if (this.isTransitioning) return;
         this.isTransitioning = true;
-        this.gameState.won = win;
-        if (win) {
-            SceneManager.getInstance().goToNextScene(this);
-        } else {
-            this.cameras.main.fadeOut(500, 0, 0, 0);
-            this.cameras.main.once('camerafadeoutcomplete', () => {
-                SceneManager.getInstance().goToNextScene(this);
-            });
-        }
+        this.gameState.won = true;
+        this.gameState.currentLevel = 3;  // Update current level
+        this.cameras.main.fadeOut(500, 0, 0, 0);
+        this.cameras.main.once('camerafadeoutcomplete', () => {
+            this.scene.start('Level3');
+        });
     }
 }
