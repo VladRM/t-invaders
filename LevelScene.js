@@ -38,7 +38,6 @@ export class LevelScene extends BaseLevelScene {
                     
                     if (isNaN(numStartX)) {
                         numStartX = (gameWidth - (numSpacing * (rowConfig.count - 1))) / 2;
-                        console.warn("Recomputed startX for enemy row of type " + rowConfig.enemyConfig.imageKey + " as: " + numStartX);
                     }
                     
                     enemyGroup.createEnemyRow({
