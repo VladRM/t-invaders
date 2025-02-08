@@ -33,8 +33,8 @@ export class LevelScene extends BaseLevelScene {
                     const numSpacing = Number(spacing);
                     let numStartX = Number(startX);
                     
-                    console.log("For enemy row of type " + rowConfig.enemyConfig.imageKey + ", spacingExpr: " + spacingExpr + ", evaluated spacing: " + numSpacing);
-                    console.log("For enemy row of type " + rowConfig.enemyConfig.imageKey + ", startXExpr: " + startXExpr + ", evaluated startX: " + numStartX);
+                    
+                    
                     
                     if (isNaN(numStartX)) {
                         numStartX = (gameWidth - (numSpacing * (rowConfig.count - 1))) / 2;
@@ -51,13 +51,13 @@ export class LevelScene extends BaseLevelScene {
                             isEnemy: true
                         }
                     });
-                    console.log("Created enemy row: type " + rowConfig.enemyConfig.imageKey + ", count " + rowConfig.count + ", effective y " + (rowConfig.y + (groupConfig.config.yOffset || 0)));
+                    
                 });
                 groups.push(enemyGroup);
-                console.log("Created enemy group with total enemies: " + enemyGroup.enemies.length);
+                
             });
             this.enemyGroups = groups;
-            console.log("Total enemy groups created: " + groups.length);
+            
         } else if (this.levelConfig.enemyRows) {
             // Fallback for previous config structure using a single enemy group
             this.enemyGroup = new EnemyGroup(this, {});
@@ -94,6 +94,8 @@ export class LevelScene extends BaseLevelScene {
         this.isTransitioning = true;
         this.gameState.won = true;
         this.gameState.currentLevel++;
+        console.log("triggerTransition: current level config:", this.levelConfig);
+        console.log("triggerTransition: nextLevelKey: " + this.levelConfig.nextLevel);
 
         const nextLevelKey = this.levelConfig.nextLevel;
         if (!nextLevelKey) {
@@ -106,6 +108,7 @@ export class LevelScene extends BaseLevelScene {
         this.cameras.main.fadeOut(500, 0, 0, 0);
         this.cameras.main.once('camerafadeoutcomplete', () => {
             const nextLevelConfig = levelsConfig[nextLevelKey.toLowerCase()];
+            console.log("triggerTransition: nextLevelConfig:", nextLevelConfig);
             if (nextLevelConfig) {
                 this.scene.start(nextLevelConfig.key, nextLevelConfig);
             } else {
