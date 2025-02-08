@@ -104,20 +104,21 @@ export class EnemyGroup {
             const leftmost = Math.min(...positions);
             const rightmost = Math.max(...positions);
 
-            // Move the entire group
+            // Calculate the next position before moving
             const moveAmount = this.moveSpeed * this.direction * (this.scene.game.loop.delta / 1000);
-            
-            // Check boundaries and change direction if needed
             const gameWidth = this.scene.sys.game.config.width;
-            if (this.direction > 0 && rightmost + moveAmount > gameWidth - this.padding) {
-                this.direction = -1;
-            } else if (this.direction < 0 && leftmost + moveAmount < this.padding) {
-                this.direction = 1;
+            
+            // Check if the next move would exceed boundaries
+            if ((this.direction > 0 && (rightmost + moveAmount) >= gameWidth - this.padding) ||
+                (this.direction < 0 && (leftmost + moveAmount) <= this.padding)) {
+                // Change direction
+                this.direction *= -1;
             }
-
-            // Apply movement to all enemies
+            
+            // Apply movement with the possibly updated direction
+            const finalMoveAmount = this.moveSpeed * this.direction * (this.scene.game.loop.delta / 1000);
             this.enemies.forEach(enemy => {
-                enemy.sprite.x += moveAmount;
+                enemy.sprite.x += finalMoveAmount;
             });
         }
 

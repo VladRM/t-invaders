@@ -89,11 +89,14 @@ export class BaseLevelScene extends Phaser.Scene {
 
     handlePlayerProjectileCollisions() {
         if (this.player.getWeapon()) {
-            this.physics.overlap(
-                this.player.getWeapon().getProjectileGroup(),
-                this.enemyGroup.getSprites(),
-                (projectile, enemySprite) => {
-                    if (!projectile.active || !enemySprite.active) return;
+            const projectiles = this.player.getWeapon().getProjectileGroup().getChildren();
+            projectiles.forEach(projectile => {
+                if (!projectile.active) return;
+                
+                this.enemyGroup.getSprites().forEach(enemySprite => {
+                    if (!enemySprite.active) return;
+                    
+                    if (this.checkCollision(projectile, enemySprite, COLLISION.PROJECTILE_RADIUS, COLLISION.ENEMY_RADIUS)) {
 
                     // Create a small explosion for the projectile impact
                     createExplosion(this, projectile.x, projectile.y, EXPLOSION.SMALL.size);
