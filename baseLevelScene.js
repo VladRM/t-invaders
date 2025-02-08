@@ -132,10 +132,11 @@ export class BaseLevelScene extends Phaser.Scene {
                                 });
                             }
                         }
-                    });
+                    }
                 });
-            }
+            });
         }
+    }
 
     handleEnemyProjectileCollisions() {
         this.enemyGroup.enemies.forEach(enemy => {
