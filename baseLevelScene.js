@@ -102,9 +102,9 @@ export class BaseLevelScene extends Phaser.Scene {
                 
                 this.enemyGroups.forEach(group => {
                     group.getSprites().forEach(enemySprite => {
-                    if (!enemySprite.active) return;
-                    
-                    // Use different collision radius based on enemy type
+                        if (!enemySprite.active) return;
+                        
+                        // Use different collision radius based on enemy type
                     const enemyRadius = enemySprite.texture.key === 'boss' ? 
                         COLLISION.ENEMY_RADIUS : COLLISION.ENEMY_RADIUS * 0.6;
                     if (this.checkCollision(projectile, enemySprite, COLLISION.PROJECTILE_RADIUS, enemyRadius)) {
