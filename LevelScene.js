@@ -1,5 +1,6 @@
 import { BaseLevelScene } from './baseLevelScene.js';
 import { SceneManager } from './sceneManager.js';
+import { EnemyGroup } from './enemies.js';
 
 export class LevelScene extends BaseLevelScene {
     constructor(levelConfig) {
