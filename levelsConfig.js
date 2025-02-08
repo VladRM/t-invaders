@@ -42,7 +42,7 @@ export const levelsConfig = {
             {
                 count: 3,
                 spacing: "gameWidth/4",
-                y: 96,
+                y: 120,
                 enemyConfig: {
                     imageKey: 'boss',
                     size: 96,
