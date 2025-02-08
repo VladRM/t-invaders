@@ -20,13 +20,23 @@ export class LevelScene extends BaseLevelScene {
             this.levelConfig.enemyGroups.forEach(groupConfig => {
                 const enemyGroup = new EnemyGroup(this, groupConfig.config || {});
                 groupConfig.enemyRows.forEach(rowConfig => {
+                    const spacingExpr = rowConfig.spacing.trim();
                     const spacing = typeof rowConfig.spacing === 'string'
-                        ? eval(rowConfig.spacing.replace('gameWidth', gameWidth))
+                        ? eval(spacingExpr.replace('gameWidth', gameWidth))
                         : rowConfig.spacing;
-                    const startX = typeof rowConfig.startX === 'string'
-                        ? eval(rowConfig.startX.replace('gameWidth', gameWidth))
+                    const startXExpr = rowConfig.startX.trim();
+                    let startX = typeof rowConfig.startX === 'string'
+                        ? eval(startXExpr.replace('gameWidth', gameWidth))
                         : (rowConfig.startX || ((gameWidth - (spacing * (rowConfig.count - 1))) / 2));
-                    
+                
+                    console.log("For enemy row of type " + rowConfig.enemyConfig.imageKey + ", spacingExpr: " + spacingExpr + ", evaluated spacing: " + spacing);
+                    console.log("For enemy row of type " + rowConfig.enemyConfig.imageKey + ", startXExpr: " + startXExpr + ", evaluated startX: " + startX);
+                
+                    if (isNaN(startX)) {
+                        startX = (gameWidth - (spacing * (rowConfig.count - 1))) / 2;
+                        console.warn("Recomputed startX for enemy row of type " + rowConfig.enemyConfig.imageKey + " as: " + startX);
+                    }
+                
                     enemyGroup.createEnemyRow({
                         ...rowConfig,
                         y: rowConfig.y + (groupConfig.config.yOffset || 0),
