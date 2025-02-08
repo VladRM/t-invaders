@@ -39,7 +39,7 @@ export class BaseLevelScene extends Phaser.Scene {
             this.anims.create({
                 key: 'explode',
                 frames: this.anims.generateFrameNumbers('explosion', { start: 0, end: 16 }),
-                frameRate: 20,
+                frameRate: 30,
                 repeat: 0,
                 hideOnComplete: true
             });
@@ -113,8 +113,10 @@ export class BaseLevelScene extends Phaser.Scene {
                                     enemySprite.body.enable = false;
                                 }
                                 
-                                // Create a big explosion for enemy destruction
-                                createExplosion(this, enemySprite.x, enemySprite.y, EXPLOSION.BIG.size);
+                                // Create appropriately sized explosion based on enemy type
+                                const explosionSize = enemy.sprite.texture.key === 'boss' ? 
+                                    EXPLOSION.BIG.size : EXPLOSION.SMALL.size;
+                                createExplosion(this, enemySprite.x, enemySprite.y, explosionSize);
                                 
                                 // Fade out and remove enemy sprite
                                 this.tweens.add({

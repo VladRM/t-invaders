@@ -1,7 +1,10 @@
 export function createExplosion(scene, x, y, explosionSize) {
     // Create the explosion sprite at the given coordinates
     const explosion = scene.add.sprite(x, y, 'explosion');
-    explosion.setDisplaySize(explosionSize, explosionSize);
+    
+    // Scale based on size, but maintain aspect ratio
+    const scale = explosionSize / explosion.width;
+    explosion.setScale(scale);
     
     // When the animation completes, destroy the explosion sprite
     explosion.on('animationcomplete', () => {
