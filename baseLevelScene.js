@@ -26,7 +26,7 @@ export class BaseLevelScene extends Phaser.Scene {
         });
     }
 
-    init(data) {
+    init(_data) {
         this.isTransitioning = false;
     }
 
@@ -105,8 +105,9 @@ export class BaseLevelScene extends Phaser.Scene {
                         if (!enemySprite.active) { return; }
                         
                         // Use different collision radius based on enemy type
-                    const enemyRadius = enemySprite.texture.key === 'boss' ? 
-                        COLLISION.ENEMY_RADIUS : COLLISION.ENEMY_RADIUS * 0.6;
+                        const enemyRadius = enemySprite.texture.key === 'boss'
+                            ? COLLISION.ENEMY_RADIUS
+                            : COLLISION.ENEMY_RADIUS * 0.6;
                     if (this.checkCollision(projectile, enemySprite, COLLISION.PROJECTILE_RADIUS, enemyRadius)) {
                         // Create a small explosion for the projectile impact
                         createExplosion(this, projectile.x, projectile.y, EXPLOSION.SMALL.size);
