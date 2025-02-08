@@ -40,7 +40,7 @@ export const levelsConfig = {
     level2: {
         enemyRows: [
             {
-                count: 3,
+                count: 2,
                 spacing: 160,
                 y: 120,
                 enemyConfig: {
