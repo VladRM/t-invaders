@@ -79,5 +79,9 @@ export class SceneMenu extends Phaser.Scene {
         };
 
         UI.createMenu(this, [menuConfig[this.sceneState]]);
+        this.input.keyboard.on('keydown-ENTER', () => {
+            GameState.getInstance().reset();
+            this.scene.start('Level1');
+        });
     }
 }
