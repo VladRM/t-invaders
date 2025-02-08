@@ -94,13 +94,13 @@ export const levelsConfig = {
         nextLevel: null,  // Final level
         enemyGroups: [
             {
-                config: { moveSpeed: 75, yOffset: 100 },
+                config: { moveSpeed: 75, yOffset: 50 },
                 enemyRows: [
                     {
                         count: 2,
                         spacing: 'gameWidth / 2',
                         startX: 'gameWidth / 4',
-                        y: 100,
+                        y: 50,
                         enemyConfig: {
                             imageKey: 'boss',
                             size: 128,
@@ -116,13 +116,13 @@ export const levelsConfig = {
                 ]
             },
             {
-                config: { moveSpeed: 150, yOffset: 250 },
+                config: { moveSpeed: 150, yOffset: 150 },
                 enemyRows: [
                     {
                         count: 7,
                         spacing: 80,
                         startX: '(gameWidth - (80 * 6)) / 2',
-                        y: 250,
+                        y: 150,
                         enemyConfig: {
                             imageKey: 'enemy',
                             size: 48,
