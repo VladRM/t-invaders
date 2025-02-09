@@ -183,7 +183,7 @@ export const levelsConfig = {
             },
             // Group 2: One row of 7 smaller enemies, positioned just below the bosses with a bit of padding.
             {
-                config: { moveSpeed: 120, yOffset: 126 },
+                config: { moveSpeed: 120, yOffset: 210 },
                 enemyRows: [
                     {
                         count: 7,
