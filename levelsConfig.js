@@ -159,7 +159,7 @@ export const levelsConfig = {
         enemyGroups: [
             // Group 1: Bosses near the top, same size and hp as in the previous level.
             {
-                config: { moveSpeed: 100, yOffset: 20 },
+                config: { moveSpeed: 100, yOffset: 60 },
                 enemyRows: [
                     {
                         count: 2,
