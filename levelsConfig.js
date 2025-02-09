@@ -4,7 +4,7 @@ export const levelsConfig = {
         nextLevel: 'Level1',
         enemyGroups: [
             {
-                config: { moveSpeed: 75, yOffset: 50 },
+                config: { moveSpeed: 75, yOffset: 100 },
                 enemyRows: [
                     {
                         count: 2,
@@ -26,7 +26,7 @@ export const levelsConfig = {
                 ]
             },
             {
-                config: { moveSpeed: 150, yOffset: 228 },
+                config: { moveSpeed: 150, yOffset: 328 },
                 enemyRows: [
                     {
                         count: 7,
