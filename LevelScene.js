@@ -87,7 +87,8 @@ export class LevelScene extends BaseLevelScene {
                 });
             });
         }
-    }
+    this.cameras.main.fadeIn(500, 0, 0, 0);
+}
 
     handleEnemyDefeated() {
         // Add a small delay before checking if all enemies are defeated
