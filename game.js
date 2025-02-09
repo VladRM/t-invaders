@@ -4,9 +4,9 @@ import { levelsConfig } from './levelsConfig.js';
 
 console.log('Starting game initialization');
 
-const levelScenes = Object.values(levelsConfig).map(config => {
+const levelScenes = Object.entries(levelsConfig).map(([key, config]) => {
     console.log('Creating level scene with config:', config.key);
-    return new LevelScene(config);
+    return new LevelScene({...config, key: config.key});
 });
 
 console.log('Level scenes created:', levelScenes.length);
