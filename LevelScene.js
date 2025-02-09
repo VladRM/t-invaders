@@ -39,10 +39,15 @@ export class LevelScene extends BaseLevelScene {
                     const spacing = typeof rowConfig.spacing === 'string'
                         ? eval(spacingExpr.replace('gameWidth', gameWidth))
                         : rowConfig.spacing;
-                    const startXExpr = rowConfig.startX.trim();
-                    let startX = typeof rowConfig.startX === 'string'
-                        ? eval(startXExpr.replace('gameWidth', gameWidth))
-                        : (rowConfig.startX || ((gameWidth - (spacing * (rowConfig.count - 1))) / 2));
+                    let startX;
+                    if (typeof rowConfig.startX === 'string') {
+                        const startXExpr = rowConfig.startX.trim();
+                        startX = eval(startXExpr.replace('gameWidth', gameWidth));
+                    } else if (typeof rowConfig.startX === 'number') {
+                        startX = rowConfig.startX;
+                    } else {
+                        startX = (gameWidth - (spacing * (rowConfig.count - 1))) / 2;
+                    }
                     
                     // Ensure values are numbers
                     const numSpacing = Number(spacing);
