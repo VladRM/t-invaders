@@ -5,7 +5,7 @@ import { levelsConfig } from './levelsConfig.js';
 
 export class LevelScene extends BaseLevelScene {
     constructor() {
-        super({ key: 'Level1' });
+        super({ key: 'GameLevel' });
     }
     
     init(data) {
@@ -114,7 +114,7 @@ export class LevelScene extends BaseLevelScene {
             const nextLevelConfig = levelsConfig[nextLevelKey.toLowerCase()];
             console.log("triggerTransition: nextLevelConfig:", nextLevelConfig);
             if (nextLevelConfig) {
-                this.scene.start(nextLevelConfig.key, nextLevelConfig);
+                this.scene.start('GameLevel', nextLevelConfig);
             } else {
                 console.error("Next level config not found for key:", nextLevelKey);
             }
