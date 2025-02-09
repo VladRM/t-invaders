@@ -13,9 +13,11 @@ export class LevelScene extends BaseLevelScene {
         super.init(data);
         console.log("LevelScene: init called with data:", data);
         // Use the levelKey from data if available; otherwise, use gameState.currentLevel to determine which level to load.
-        const levelKey = (data && data.levelKey) ? data.levelKey : ("level" + this.gameState.currentLevel);
+        // Use the provided levelKey or default to "Level" + current level.
+        const levelKey = (data && data.levelKey) ? data.levelKey : ("Level" + this.gameState.currentLevel);
         console.log("LevelScene: Using levelKey =", levelKey);
-        this.levelConfig = levelsConfig[levelKey] || levelsConfig.level0;
+        // Find the config that has the matching 'key' property
+        this.levelConfig = Object.values(levelsConfig).find(cfg => cfg.key === levelKey) || levelsConfig.level0;
         console.log("LevelScene: Level config set to:", this.levelConfig);
         if (!this.levelConfig) {
             console.error("LevelScene: No level configuration found for key:", levelKey);
@@ -128,8 +130,8 @@ export class LevelScene extends BaseLevelScene {
         // Normal level transition
         this.cameras.main.fadeOut(500, 0, 0, 0);
         this.cameras.main.once('camerafadeoutcomplete', () => {
-            console.log("triggerTransition: starting scene with levelKey:", nextLevelKey.toLowerCase());
-            this.scene.start('GameLevel', { levelKey: nextLevelKey.toLowerCase() });
+            console.log("triggerTransition: starting scene with levelKey:", nextLevelKey);
+            this.scene.start(nextLevelKey, { levelKey: nextLevelKey });
         });
     }
 }
