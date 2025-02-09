@@ -11,11 +11,9 @@ export class LevelScene extends BaseLevelScene {
     init(data) {
         super.init(data);
         console.log("LevelScene init data:", data);
-        if (data && data.levelKey) {
-            this.levelConfig = levelsConfig[data.levelKey];
-        } else {
-            this.levelConfig = levelsConfig.level0;
-        }
+        // Use the levelKey from data if available; otherwise, use gameState.currentLevel to determine which level to load.
+        const levelKey = (data && data.levelKey) ? data.levelKey : ("level" + this.gameState.currentLevel);
+        this.levelConfig = levelsConfig[levelKey] || levelsConfig.level0;
         console.log("LevelScene init, levelConfig set to:", this.levelConfig);
     }
 
