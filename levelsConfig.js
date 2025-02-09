@@ -53,12 +53,12 @@ export const levelsConfig = {
         nextLevel: 'Level2',
         enemyGroups: [
             {
-                config: { moveSpeed: 150, yOffset: 100 },
+                config: { moveSpeed: 150, yOffset: 48 },
                 enemyRows: [
                     {
                         count: 4,
                         spacing: 100,
-                        y: 100,
+                        y: 48,
                         enemyConfig: {
                             imageKey: 'enemy',
                             size: 48,
@@ -129,12 +129,12 @@ export const levelsConfig = {
         nextLevel: 'Level4',
         enemyGroups: [
             {
-                config: { moveSpeed: 100, yOffset: 120 },
+                config: { moveSpeed: 100, yOffset: 48 },
                 enemyRows: [
                     {
                         count: 2,
                         spacing: 160,
-                        y: 120,
+                        y: 48,
                         enemyConfig: {
                             imageKey: 'boss',
                             size: 96,
@@ -159,7 +159,7 @@ export const levelsConfig = {
         enemyGroups: [
             // Group 1: Bosses near the top, same size and hp as in the previous level.
             {
-                config: { moveSpeed: 100, yOffset: 60 },
+                config: { moveSpeed: 100, yOffset: 100 },
                 enemyRows: [
                     {
                         count: 2,
