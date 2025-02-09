@@ -153,4 +153,33 @@ export const levelsConfig = {
             }
         ]
     },
+    level4: {
+        key: 'Level4',
+        nextLevel: '',
+        enemyGroups: [
+            {
+                config: { moveSpeed: 120, yOffset: 80 },
+                enemyRows: [
+                    {
+                        count: 8,
+                        spacing: 100,
+                        y: 0,
+                        enemyConfig: {
+                            imageKey: 'enemy',
+                            size: 48,
+                            hitPoints: 2,
+                            minFireDelay: 2000,
+                            maxFireDelay: 4000,
+                            weaponConfig: {
+                                multiShotCount: 1,
+                                shotAngle: 0,
+                                shotXOffset: 0,
+                                projectileSpeed: 300
+                            }
+                        }
+                    }
+                ]
+            }
+        ]
+    }
 };
