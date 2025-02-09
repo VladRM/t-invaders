@@ -10,8 +10,13 @@ export class LevelScene extends BaseLevelScene {
     
     init(data) {
         super.init(data);
-        // Use the config passed in via scene.start, or default to level0 if none provided
-        this.levelConfig = (data && data.key) ? data : levelsConfig.level0;
+        console.log("LevelScene init data:", data);
+        if (data && data.levelKey) {
+            this.levelConfig = levelsConfig[data.levelKey];
+        } else {
+            this.levelConfig = levelsConfig.level0;
+        }
+        console.log("LevelScene init, levelConfig set to:", this.levelConfig);
     }
 
     create() {
@@ -111,13 +116,8 @@ export class LevelScene extends BaseLevelScene {
         // Normal level transition
         this.cameras.main.fadeOut(500, 0, 0, 0);
         this.cameras.main.once('camerafadeoutcomplete', () => {
-            const nextLevelConfig = levelsConfig[nextLevelKey.toLowerCase()];
-            console.log("triggerTransition: nextLevelConfig:", nextLevelConfig);
-            if (nextLevelConfig) {
-                this.scene.start('GameLevel', nextLevelConfig);
-            } else {
-                console.error("Next level config not found for key:", nextLevelKey);
-            }
+            console.log("triggerTransition: starting scene with levelKey:", nextLevelKey.toLowerCase());
+            this.scene.start('GameLevel', { levelKey: nextLevelKey.toLowerCase() });
         });
     }
 }
