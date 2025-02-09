@@ -157,17 +157,42 @@ export const levelsConfig = {
         key: 'Level4',
         nextLevel: '',
         enemyGroups: [
+            // Group 1: Bosses near the top (2x larger than previous bosses)
             {
-                config: { moveSpeed: 120, yOffset: 80 },
+                config: { moveSpeed: 100, yOffset: 20 },
                 enemyRows: [
                     {
-                        count: 8,
+                        count: 2,
+                        spacing: 300,
+                        y: 0,
+                        enemyConfig: {
+                            imageKey: 'boss',
+                            size: 192,      // 2x bigger than the 96 size used in Level3
+                            hitPoints: 20,  // 2x the hit points
+                            minFireDelay: 1000,
+                            maxFireDelay: 2000,
+                            weaponConfig: {
+                                multiShotCount: 3,
+                                shotAngle: 30,
+                                shotXOffset: 20,
+                                projectileSpeed: 300
+                            }
+                        }
+                    }
+                ]
+            },
+            // Group 2: One row of 7 smaller enemies
+            {
+                config: { moveSpeed: 120, yOffset: 300 },
+                enemyRows: [
+                    {
+                        count: 7,
                         spacing: 100,
                         y: 0,
                         enemyConfig: {
                             imageKey: 'enemy',
                             size: 48,
-                            hitPoints: 2,
+                            hitPoints: 1,
                             minFireDelay: 2000,
                             maxFireDelay: 4000,
                             weaponConfig: {
