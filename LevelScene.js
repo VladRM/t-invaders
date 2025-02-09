@@ -10,19 +10,25 @@ export class LevelScene extends BaseLevelScene {
     
     init(data) {
         super.init(data);
-        console.log("LevelScene init data:", data);
+        console.log("LevelScene: init called with data:", data);
         // Use the levelKey from data if available; otherwise, use gameState.currentLevel to determine which level to load.
         const levelKey = (data && data.levelKey) ? data.levelKey : ("level" + this.gameState.currentLevel);
+        console.log("LevelScene: Using levelKey =", levelKey);
         this.levelConfig = levelsConfig[levelKey] || levelsConfig.level0;
-        console.log("LevelScene init, levelConfig set to:", this.levelConfig);
+        console.log("LevelScene: Level config set to:", this.levelConfig);
+        if (!this.levelConfig) {
+            console.error("LevelScene: No level configuration found for key:", levelKey);
+        }
     }
 
     create() {
+        console.log("LevelScene: create method entered.");
         super.createCommonElements();
         
         const gameWidth = this.sys.game.config.width;
         
         if (this.levelConfig.enemyGroups) {
+            console.log("LevelScene: Processing enemy groups:", this.levelConfig.enemyGroups);
             // Process multiple enemy groups from config
             const groups = [];
             this.levelConfig.enemyGroups.forEach(groupConfig => {
@@ -66,6 +72,7 @@ export class LevelScene extends BaseLevelScene {
             this.enemyGroups = groups;
             
         } else if (this.levelConfig.enemyRows) {
+            console.log("LevelScene: Using legacy enemyRows configuration");
             // Fallback for previous config structure using a single enemy group
             this.enemyGroup = new EnemyGroup(this, {});
             this.enemyGroups.push(this.enemyGroup);
