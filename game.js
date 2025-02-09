@@ -2,9 +2,14 @@ import { SceneMenu } from './sceneMenu.js';
 import { LevelScene } from './LevelScene.js';
 import { levelsConfig } from './levelsConfig.js';
 
-const levelScenes = Object.values(levelsConfig).map(config => 
-    new LevelScene(config)
-);
+console.log('Starting game initialization');
+
+const levelScenes = Object.values(levelsConfig).map(config => {
+    console.log('Creating level scene with config:', config.key);
+    return new LevelScene(config);
+});
+
+console.log('Level scenes created:', levelScenes.length);
 
 const config = {
     type: Phaser.AUTO,
@@ -22,4 +27,6 @@ const config = {
     }
 };
 
+console.log('Initializing game with config:', config);
 const game = new Phaser.Game(config);
+console.log('Phaser.Game instance created');
