@@ -121,8 +121,10 @@ export class LevelScene extends BaseLevelScene {
         console.log("triggerTransition: nextLevelKey: " + this.levelConfig.nextLevel);
 
         const nextLevelKey = this.levelConfig.nextLevel;
-        if (!nextLevelKey) {
-            // Game complete - let SceneManager handle the transition
+        // Check if a scene with the nextLevelKey exists in levelsConfig.
+        const nextLevelExists = Object.values(levelsConfig).some(cfg => cfg.key === nextLevelKey);
+        if (!nextLevelKey || !nextLevelExists) {
+            // No valid next level found, so the game is complete (win state).
             SceneManager.getInstance().goToNextScene(this);
             return;
         }
