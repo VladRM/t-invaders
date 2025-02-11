@@ -93,9 +93,11 @@ export class Player {
             if (!this.active || !this.sprite || !this.sprite.body) return;
             
             // Handle movement
+            const gameWidth = this.scene.sys.game.config.width;
+            
             if (cursors.left.isDown) {
                 this.sprite.setVelocityX(-160);
-            } else if (cursors.right.isDown) {
+            } else if (cursors.right.isDown && this.sprite.x < gameWidth - this.playerSize/2) {
                 this.sprite.setVelocityX(160);
             } else {
                 this.sprite.setVelocityX(0);
